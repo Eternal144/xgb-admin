@@ -13,8 +13,8 @@ class BasicAnimations extends React.Component {
     animatedAll = (checked) => {
         checked && this.setState({animated: true});
         !checked && this.setState({animated: false});
-
     };
+    
     animatedOne = (i) => {
         this.setState({animatedOne: i});
     };
