@@ -22,8 +22,8 @@ import Drags from './ui/Draggable';
 import Edit from './edit/Edit';
 import Dashboard from './dashboard/Dashboard';
 import Gallery from './ui/Gallery';
-import BasicAnimations from './animation/BasicAnimations';
-import ExampleAnimations from './animation/ExampleAnimations';
+// import BasicAnimations from './animation/BasicAnimations';
+// import ExampleAnimations from './animation/ExampleAnimations';
 import AuthBasic from './auth/Basic';
 import RouterEnter from './auth/RouterEnter';
 import Cssmodule from './cssmodule';
@@ -38,7 +38,7 @@ const WysiwygBundle = Loadable({ // 按需加载富文本配置
 export default {
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Recharts, Icons, Buttons, Spins, Notifications,
-    Tabs, Banners, Drags, Dashboard, Gallery, BasicAnimations,
-    ExampleAnimations, AuthBasic, RouterEnter, WysiwygBundle,
+    Tabs, Banners, Drags, Dashboard, Gallery,
+     AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, MapUi, QueryParams,Edit,NaviManage
 }
