@@ -11,6 +11,7 @@ class LocalizedModal extends React.Component {
   };
 
   hideModal = () => {
+    this.props.onConfirm();
     this.setState({
       visible: false,
     });
