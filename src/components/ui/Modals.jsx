@@ -9,9 +9,16 @@ class LocalizedModal extends React.Component {
       visible: true,
     });
   };
-
-  hideModal = () => {
-    this.props.onConfirm();
+  handleOK =  () => {
+    if(this.props.onConfirm){
+      this.props.onConfirm();
+    }
+    this.hideModal();
+  }
+  handleCancel = () => {
+    this.hideModal();
+  }
+  hideModal = (e) => {
     this.setState({
       visible: false,
     });
@@ -21,32 +28,29 @@ class LocalizedModal extends React.Component {
     return (
       <div>
         <Button type="primary" onClick={this.showModal}>
-          Modal
+          确认修改
         </Button>
         <Modal
-          title="Modal"
           visible={this.state.visible}
-          onOk={this.hideModal}
-          onCancel={this.hideModal}
+          onOk={this.handleOK}
+          onCancel={this.handleCancel}
           okText="确认"
           cancelText="取消"
         >
-          <p>Bla bla ...</p>
-          <p>Bla bla ...</p>
-          <p>Bla bla ...</p>
+          {this.props.content}
         </Modal>
       </div>
     );
   }
 }
 
-function confirm() {
-  Modal.confirm({
-    title: 'Confirm',
-    content: 'Bla bla ...',
-    okText: '确认',
-    cancelText: '取消',
-  });
-}
+// function confirm() {
+//   Modal.confirm({
+//     title: 'Confirm',
+//     content: 'Bla bla ...',
+//     okText: '确认',
+//     cancelText: '取消',
+//   });
+// }
 
 export default LocalizedModal;

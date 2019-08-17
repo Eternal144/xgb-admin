@@ -2,11 +2,14 @@ import React from 'react';
 import { Form, Input, Icon, Button,Card} from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // import NaviAdd from './NaviAdd';
-import NaviData from '../../test/Navi';
+import NaviData from '../../test/Nav';
 import NaviCardForm from './NaviCard';
+import {fetchApi} from '../../callApi'
+import {getNaviInfo} from '../../constants/api/navi'
+
 //当个容器吧
 
-let data = NaviData.data;
+// let data = NaviData.data;
 //在这里渲染已有数据，并且可以添加和修改
 class NaviManage extends React.Component {
     constructor(props){
@@ -35,6 +38,7 @@ class NaviManage extends React.Component {
         })
     }
   render() {
+      let data = this.state.data
       const formItemLayoutWithOutLabel = {
         wrapperCol: {
           xs: { span: 24, offset: 0 },
@@ -45,7 +49,7 @@ class NaviManage extends React.Component {
         //根据接口获取以后的
         <div>
             <BreadcrumbCustom first="导航栏管理" />
-                {data.length > 0 ? data.map((x,i)=>{
+                {data && data.length > 0 ? data.map((x,i)=>{
                   return <NaviCardForm data={x} length={data.length} key={i} />
                 }) : null}
             <Card>
@@ -62,9 +66,19 @@ class NaviManage extends React.Component {
     );
   }
   componentDidMount(){
-      this.setState({
-          data:NaviData.data,
-      })
+      const {apiPath,request} = getNaviInfo();
+      //这里是异步的妈耶。
+      console.log(fetchApi(apiPath,request))
+      fetchApi(apiPath,request)
+      .then(res=>res.json())
+      .then(data=>{
+          console.log(data.data)
+        this.setState({
+            data:data.data,
+        })
+      });
+      
+
   }
 }
 

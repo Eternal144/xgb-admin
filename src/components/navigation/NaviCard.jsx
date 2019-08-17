@@ -8,6 +8,8 @@ import {
     Card,
   } from 'antd';
   import LocalizedModal from '../ui/Modals'
+  import {CONFIRM_MODIFY} from '../../constants/common'
+ 
   
 const { Option } = Select;
 class RegistrationForm extends React.Component {
@@ -35,7 +37,7 @@ class RegistrationForm extends React.Component {
     };
 
     handleConfirm = ()=>{
-        console.log("wobeizhudianla !")
+        
     }
     getOptions = (length)=>{
         let OptionArr = [];
@@ -194,7 +196,7 @@ class RegistrationForm extends React.Component {
                         {/* <Button type="primary" htmlType="submit">
                         确定
                         </Button> */}
-                        <LocalizedModal onConfirm={this.handleConfirm} />
+                        <LocalizedModal onConfirm={this.handleConfirm} content={CONFIRM_MODIFY} />
                     </Form.Item>
             </Form>
         </Card>

@@ -52,9 +52,4 @@ export default{
         }
     ],
     "tips":"成功",
-    // "default":{
-    //     "id":null,
-    //     "title":null,
-    //     "rank":
-    // }
 }
