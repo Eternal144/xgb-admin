@@ -18,32 +18,32 @@ class NormalLoginForm extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} style={{maxWidth: '300px'}}>
-                <FormItem>
-                    {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: '请输入用户名!' }],
+                <Form.Item label={"aaa"}>
+                    {getFieldDecorator('previous', {
+                        rules: [{ required: true, message: '请输入旧密码!' }],
                     })(
-                        <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
+                        <Input placeholder="请输入旧密码" />
                     )}
-                </FormItem>
+                </Form.Item>
+
                 <FormItem>
                     {getFieldDecorator('password', {
                         rules: [{ required: true, message: '请输入密码!' }],
                     })(
-                        <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
+                        <Input type="password" placeholder="请输入密码" />
                     )}
                 </FormItem>
                 <FormItem>
-                    {getFieldDecorator('remember', {
-                        valuePropName: 'checked',
-                        initialValue: true,
+                    {getFieldDecorator('confirmPass', {
+                        rules: [{ required: true, message: '请再次输入新密码!' }],
                     })(
-                        <Checkbox>记住我</Checkbox>
+                        <Input  type="password" placeholder="请再次输入新密码" />
                     )}
-                    <span className="login-form-forgot" style={{float: 'right'}}>忘记密码</span>
-                    <Button type="primary" htmlType="submit" className="login-form-button" style={{width: '100%'}}>
-                        登录
+                </FormItem>
+                <FormItem>
+                    <Button type="primary" htmlType="submit" className="login-form-button" style={{width: '50%'}}>
+                        确定
                     </Button>
-                    或 <span>现在就去注册!</span>
                 </FormItem>
             </Form>
         );

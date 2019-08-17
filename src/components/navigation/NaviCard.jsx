@@ -65,6 +65,7 @@ class RegistrationForm extends React.Component {
                     ],
                     initialValue:data.title,
                 })(<Input placeholder="10字以内" style={{ width: '60%' }}/>)}
+                <Icon type="close-circle" className="iconHover" style={{marginLeft:"20px"}} />
             </Form.Item>
   
             <Form.Item label="展示位置">
