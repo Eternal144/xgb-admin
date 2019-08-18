@@ -17,7 +17,7 @@ export default {
             ],
         },
         {
-            key: '/app/animation', title: '发帖编辑', icon: 'rocket',component:'Edit',
+            key: '/app/edit', title: '发帖编辑', icon: 'rocket',component:'Edit',
             // subs: [
             //     { key: '/app/animation/basicAnimations', title: '基础动画', component: 'BasicAnimations'},
             //     { key: '/app/animation/exampleAnimations', title: '动画案例', component: 'ExampleAnimations'},

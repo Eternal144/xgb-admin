@@ -18,7 +18,8 @@ class Login extends React.Component {
         // const { history } = this.props;
         if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
             localStorage.setItem('user', JSON.stringify(nextAuth.data));
-            history.push('/');
+            // console.log("aaa");
+            history.push('/app/dashboard/index');
         }
     }
     handleSubmit = (e) => {
@@ -27,14 +28,14 @@ class Login extends React.Component {
             if (!err) {
                 console.log('Received values of form: ', values);
                 const { setAlitaState } = this.props;
-                if (values.userName === 'admin' && values.password === 'admin') setAlitaState({ funcName: 'admin', stateName: 'auth' });
-                if (values.userName === 'guest' && values.password === 'guest') setAlitaState({ funcName: 'guest', stateName: 'auth' });
+                if (values.userName === '芝麻糊' && values.password === '123123') setAlitaState({ funcName: 'admin', stateName: 'auth' });
+                // if (values.userName === 'guest' && values.password === 'guest') setAlitaState({ funcName: 'guest', stateName: 'auth' });
             }
         });
     };
-    gitHub = () => {
-        window.location.href = 'https://github.com/login/oauth/authorize?client_id=792cdcd244e98dcd2dee&redirect_uri=http://localhost:3006/&scope=user&state=reactAdmin';
-    };
+    // gitHub = () => {
+    //     window.location.href = 'https://github.com/login/oauth/authorize?client_id=792cdcd244e98dcd2dee&redirect_uri=http://localhost:3006/&scope=user&state=reactAdmin';
+    // };
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -48,32 +49,34 @@ class Login extends React.Component {
                         <FormItem>
                             {getFieldDecorator('userName', {
                                 rules: [{ required: true, message: '请输入用户名!' }],
+                                initialValue:'芝麻糊'
                             })(
-                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="管理员输入admin, 游客输入guest" />
+                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="芝麻糊" />
                             )}
                         </FormItem>
                         <FormItem>
                             {getFieldDecorator('password', {
                                 rules: [{ required: true, message: '请输入密码!' }],
+                                initialValue:"123123"
                             })(
-                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="管理员输入admin, 游客输入guest" />
+                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="123123" />
                             )}
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('remember', {
+                            {/* {getFieldDecorator('remember', {
                                 valuePropName: 'checked',
                                 initialValue: true,
                             })(
                                 <Checkbox>记住我</Checkbox>
-                            )}
-                            <span className="login-form-forgot" href="" style={{float: 'right'}}>忘记密码</span>
+                            )} */}
+                            {/* <span className="login-form-forgot" href="" style={{float: 'right'}}>忘记密码</span> */}
                             <Button type="primary" htmlType="submit" className="login-form-button" style={{width: '100%'}}>
                                 登录
                             </Button>
-                            <p style={{display: 'flex', justifyContent: 'space-between'}}>
+                            {/* <p style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <span >或 现在就去注册!</span>
                                 <span onClick={this.gitHub} ><Icon type="github" />(第三方登录)</span>
-                            </p>
+                            </p> */}
                         </FormItem>
                     </Form>
                 </div>

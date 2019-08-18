@@ -5,7 +5,6 @@ import {Card,Input,Button,Form, Select,DatePicker,TimePicker,Upload,Icon,message
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // 引入编辑器样式
 import 'braft-editor/dist/index.css'
-import FormItem from 'antd/lib/form/FormItem';
 
 const { Option } = Select;
 const { MonthPicker } = DatePicker;
@@ -201,7 +200,7 @@ class EditorDemo extends React.Component {
                           </Upload>)
                         }
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="正文">
+                    {/* <Form.Item {...formItemLayout} label="正文">
                         {getFieldDecorator('article',{
                             rules:[{
                                 required: true,
@@ -209,9 +208,8 @@ class EditorDemo extends React.Component {
                         })()
 
                         }
-                    </Form.Item> 
-                </Form>
-                
+                    </Form.Item>  */}
+                </Form>       
                 </Card>
             </div>
         )

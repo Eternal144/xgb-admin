@@ -25,7 +25,7 @@ class Dashboard extends React.Component {
     render() {
         return (
             <div >
-                <BreadcrumbCustom />
+                <BreadcrumbCustom first="账号管理"/>
                 <Row  type="flex" justify="space-around" align="middle">
                 <Col md={4} offset={6}>
                     <span className="avatar">
