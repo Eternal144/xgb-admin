@@ -9,7 +9,7 @@ import BasicTable from './tables/BasicTables';
 import AdvancedTable from './tables/AdvancedTables';
 import AsynchronousTable from './tables/AsynchronousTable';
 import Echarts from './charts/Echarts';
-import Recharts from './charts/Recharts';
+// import Recharts from './charts/Recharts';
 // import Icons from './ui/Icons';
 import Buttons from './ui/Buttons';
 import Spins from './ui/Spins';
@@ -27,6 +27,7 @@ import RouterEnter from './auth/RouterEnter';
 import Cssmodule from './cssmodule';
 import QueryParams from './extension/QueryParams';
 
+
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
     loader: () => import('./ui/Wysiwyg'),
     loading: Loading,
@@ -34,7 +35,7 @@ const WysiwygBundle = Loadable({ // 按需加载富文本配置
 
 export default {
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
-    Echarts, Recharts, Buttons, Spins, Notifications,
+    Echarts, Buttons, Spins, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery,
      AuthBasic, RouterEnter, WysiwygBundle,
     Cssmodule, QueryParams,Edit,NaviManage

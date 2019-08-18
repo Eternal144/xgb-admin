@@ -1,11 +1,10 @@
 import React from 'react';
-import { Form, Input, Icon, Button,Card} from 'antd';
+import { Form, Input, Icon, Button,Card,Spin} from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // import NaviAdd from './NaviAdd';
-import NaviData from '../../test/Nav';
 import NaviCardForm from './NaviCard';
 import {fetchApi} from '../../callApi'
-import {getNaviInfo} from '../../constants/api/navi'
+ import {getNaviInfo} from '../../constants/api/navi'
 
 //当个容器吧
 
@@ -21,18 +20,28 @@ class NaviManage extends React.Component {
     handleAddItem = ()=>{
         let { data } = this.state;
         let lastData = data[data.length-1];
+        const body = {
+            
+        } 
         data.push({
             "id":lastData.id+1,
             "title":null,
-            "rank":lastData.rank+1,
+            "rank":parseInt(lastData.rank)+1,
             "grade":1,
             "parents_id":0,
             "module":1,
             "contentType":null,
             "listType":null,
             "children":[
-            ]
+            ],
+            "confirm":false
         })
+        //const {apiPath,request} = addNav();
+        // fetchApi(apiPath,request)
+        // .then(res => res.json())
+        // .then(data => {
+            
+        // })
         this.setState({
             data:data,
         })
@@ -51,7 +60,7 @@ class NaviManage extends React.Component {
             <BreadcrumbCustom first="导航栏管理" />
                 {data && data.length > 0 ? data.map((x,i)=>{
                   return <NaviCardForm data={x} length={data.length} key={i} />
-                }) : null}
+                }) : <Spin size="large" />}
             <Card>
                 {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}
                 <Form onSubmit={this.handleSubmit}>
@@ -67,12 +76,9 @@ class NaviManage extends React.Component {
   }
   componentDidMount(){
       const {apiPath,request} = getNaviInfo();
-      //这里是异步的妈耶。
-      console.log(fetchApi(apiPath,request))
       fetchApi(apiPath,request)
       .then(res=>res.json())
       .then(data=>{
-          console.log(data.data)
         this.setState({
             data:data.data,
         })

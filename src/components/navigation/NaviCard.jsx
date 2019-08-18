@@ -9,18 +9,18 @@ import {
   } from 'antd';
   import LocalizedModal from '../ui/Modals'
   import {CONFIRM_MODIFY} from '../../constants/common'
+  import {fetchApi} from '../../callApi'
+  import {addNav} from '../../constants/api/navi'
  
   
 const { Option } = Select;
 class RegistrationForm extends React.Component {
     componentDidMount = ()=>{
         this.id = this.props.data.children.length;
-        console.log(`初始化完成后里面的this.is${this.id}`)
     }
     add = ()=>{
         const { form } = this.props;
         const keys = form.getFieldValue('keys');
-        console.log(`add里面的this.is${this.id}`)
         const nextKeys = keys.concat(++this.id);
         form.setFieldsValue({
         keys: nextKeys,
@@ -113,7 +113,6 @@ class RegistrationForm extends React.Component {
       const { getFieldDecorator,getFieldValue } = this.props.form;
       const data = this.props.data;
       const length = this.props.length;
-    //   let id = 0;
       const formItemLayout = {
         labelCol: {
           xs: { span: 24 },

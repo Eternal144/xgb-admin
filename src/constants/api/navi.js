@@ -1,10 +1,20 @@
 
 export const getNaviInfo = ()=> {
     return{
-        apiPath:`admin/nav`,
+        apiPath:`nav`,
         request:{
             method:"GET",
             mode:'no-cors',
+        }
+    }
+}
+
+export const addNav = (body)=>{
+    return{
+        apiPath:'addnav',
+        request:{
+            body:body,
+            method:"POST",
         }
     }
 }
