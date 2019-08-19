@@ -2,55 +2,46 @@
  * Created by hao.cheng on 2017/4/26.
  */
 import React from 'react';
-import BannerAnim, { Element } from 'rc-banner-anim';
-import TweenOne from 'rc-tween-one';
+import { Carousel } from 'antd';
 import 'rc-banner-anim/assets/index.css';
-const BgElement = Element.BgElement;
+import './customize.css';
+import { Spin } from 'antd';
+// import { url } from 'inspector';
 class AutoPlay extends React.Component {
-    render(){
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
+    }
+
+    render() {
+        let data = this.props.bannerData;
+        let elements = [];
+        // console.log(data);
+        if (this.props.isLoaded) {
+            if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    elements.push(
+                        <div className="bg-element" key="BgElement" style={{ backgroundImage: `url(${"https://xuegong.twtstudio.com/" + data[i].picture})` }}>
+                            <img key="bg-img" className="bg-img" alt="轮播图预览" src={"https://xuegong.twtstudio.com/" + data[i].picture} />
+                            {/* <div className="bg-text">{data[i].title}</div> */}
+                            {/* <div className="bg-info">
+                                <p>{"第" + data[i].rank + "张"}</p>
+                            </div> */}
+                        </div>
+                    )
+                }
+            }
+        } else {
+            elements.push(
+                <Spin />
+            )
+        }
         return (
-            <BannerAnim prefixCls="banner-user" autoPlay>
-                <Element
-                    prefixCls="banner-user-elem"
-                    key="0"
-                >
-                    <BgElement
-                        key="bg"
-                        className="bg"
-                        style={{
-                            background: '#364D79',
-                        }}
-                    />
-                    <TweenOne className="banner-user-title" animation={{ y: 30, opacity: 0, type: 'from' }}>
-                        Ant Motion Banner
-                    </TweenOne>
-                    <TweenOne className="banner-user-text"
-                              animation={{ y: 30, opacity: 0, type: 'from', delay: 100 }}
-                    >
-                        The Fast Way Use Animation In React
-                    </TweenOne>
-                </Element>
-                <Element
-                    prefixCls="banner-user-elem"
-                    key="1"
-                >
-                    <BgElement
-                        key="bg"
-                        className="bg"
-                        style={{
-                            background: '#64CBCC',
-                        }}
-                    />
-                    <TweenOne className="banner-user-title" animation={{ y: 30, opacity: 0, type: 'from' }}>
-                        Ant Motion Banner
-                    </TweenOne>
-                    <TweenOne className="banner-user-text"
-                              animation={{ y: 30, opacity: 0, type: 'from', delay: 100 }}
-                    >
-                        The Fast Way Use Animation In React
-                    </TweenOne>
-                </Element>
-            </BannerAnim>);
+            <Carousel autoplay>
+                {elements}
+            </Carousel>
+        );
     }
 }
 

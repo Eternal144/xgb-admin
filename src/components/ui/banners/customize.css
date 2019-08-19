@@ -1,0 +1,26 @@
+.bg-element {}
+
+.bg-img {
+    width: 100%;
+    height: auto;
+    z-index: -1;
+}
+
+.bg-text {
+    position: inherit;
+    z-index: 99;
+    font-size: 42px;
+    top:-10%;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    /* color: rgba(255, 255, 255, 1); */
+}
+
+.bg-info{
+    text-align: center;
+    font-size: 16px;
+}
+
+.banner-edit-card{
+    margin-top: 1rem;
+}
