@@ -60,6 +60,7 @@
     "react-app-polyfill": "^0.1.3",
     "react-beautiful-dnd": "^11.0.3",
     "react-color": "^2.14.1",
+    "react-content-loader": "^4.2.2",
     "react-dev-utils": "^6.0.4",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.8.6",
