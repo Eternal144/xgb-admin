@@ -34,7 +34,7 @@ class AutoPlay extends React.Component {
             }
         } else {
             elements.push(
-                <Spin />
+                <Spin key="spinner" />
             )
         }
         return (

@@ -2,254 +2,165 @@
  * Created by hao.cheng on 2017/4/13.
  */
 import React, { Component } from 'react';
-import { Card, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd';
+import { Card, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, BackTop, Skeleton, notification } from 'antd';
 import LoginForm from './LoginForm';
 import ModalForm from './ModalForm';
 import HorizontalForm from './HorizontalForm';
 import BreadcrumbCustom from '../BreadcrumbCustom';
+import { Collapse, Result } from 'antd';
+import './customize.css';
+import Preview from './PreviewModel';
+import { lowwerModelPreview, upperModelPreview } from '../../constants/api/model';
+import { fetchApi } from '../../callApi';
+import ModelManager from "./ModelManager";
+import ModelHelp from './help';
+
+const { Panel } = Collapse;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-const residences = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
+const openNotification = (index) => {
+    const key = `open${Date.now()}`;
+    const btn = (
+        <Button type="primary" size="small" onClick={() => notification.close(key)}>
+            知道了
+      </Button>
+    );
+    notification.open({
+        message: "使用说明",
+        description: <div>
+            <p>名称：{ModelHelp[index].name}<br />
+                类型：{ModelHelp[index].type}<br />
+                包含：{ModelHelp[index].include}<br />
+                备注：{ModelHelp[index].tip}</p>
+        </div>,
+        btn,
+        key,
+        duration: 0,
+        icon: <Icon type="info-circle" />,
+    });
+};
 
 class BasicForms extends Component {
-    state = {
-        confirmDirty: false,
-    };
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    };
-    handleConfirmBlur = (e) => {
-        const value = e.target.value;
-        this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-    };
-    checkPassword = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
-        } else {
-            callback();
+    constructor(props) {
+        super(props);
+        this.state = {
+            modelA: null,
+            modelB: null,
+            modelC: null,
+            modelD: null,
+            readyUpperModel: false,
+            readyLowwerModel: false,
+            isUpperLoaded: false,
+            isLowwerLoaded: false,
+            bindInfo: null,
         }
-    };
-    checkConfirm = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && this.state.confirmDirty) {
-            form.validateFields(['confirm'], { force: true });
-        }
-        callback();
-    };
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 14 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 14,
-                    offset: 8,
-                },
-            },
-        };
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
-        })(
-            <Select className="icp-selector" style={{width: '60px'}}>
-                <Option value="86">+86</Option>
-            </Select>
-        );
-        return (
-        <div className="gutter-example">
-            <BreadcrumbCustom first="表单" second="基础表单" />
-            <Row gutter={16}>
-                <Col className="gutter-row" md={12}>
-                    <div className="gutter-box">
-                        <Card title="注册表单" bordered={false}>
-                            <Form onSubmit={this.handleSubmit}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="邮箱"
-                                    hasFeedback
-                                >
-                                    {getFieldDecorator('email', {
-                                        rules: [{
-                                            type: 'email', message: '请输入合理的邮箱地址!',
-                                        }, {
-                                            required: true, message: '请输入邮箱地址!',
-                                        }],
-                                    })(
-                                        <Input />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="密码"
-                                    hasFeedback
-                                >
-                                    {getFieldDecorator('password', {
-                                        rules: [{
-                                            required: true, message: '请输入密码!',
-                                        }, {
-                                            validator: this.checkConfirm,
-                                        }],
-                                    })(
-                                        <Input type="password" />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="确认密码"
-                                    hasFeedback
-                                >
-                                    {getFieldDecorator('confirm', {
-                                        rules: [{
-                                            required: true, message: '请确认你的密码!',
-                                        }, {
-                                            validator: this.checkPassword,
-                                        }],
-                                    })(
-                                        <Input type="password" onBlur={this.handleConfirmBlur} />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(
-                                        <span>
-                                            昵称&nbsp;
-                                            <Tooltip title="别人怎么称呼你?">
-                                            <Icon type="question-circle-o" />
-                                          </Tooltip>
-                                        </span>
-                                    )}
-                                    hasFeedback
-                                >
-                                    {getFieldDecorator('nickname', {
-                                        rules: [{ required: true, message: '请输入昵称!', whitespace: true }],
-                                    })(
-                                        <Input />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="常住地址"
-                                >
-                                    {getFieldDecorator('residence', {
-                                        initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-                                        rules: [{ type: 'array', required: true, message: '请选择你的常住地址!' }],
-                                    })(
-                                        <Cascader options={residences} />
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="电话号码"
-                                >
-                                    {getFieldDecorator('phone', {
-                                        rules: [{ required: true, message: '请输入你的电话号码!' }],
-                                    })(
-                                        <Input addonBefore={prefixSelector} />
+    }
 
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label="验证码"
-                                    extra="我们必须确认你不是机器人."
-                                >
-                                    <Row gutter={8}>
-                                        <Col span={12}>
-                                            {getFieldDecorator('captcha', {
-                                                rules: [{ required: true, message: '请输入你获取的验证码!' }],
-                                            })(
-                                                <Input size="large" />
-                                            )}
-                                        </Col>
-                                        <Col span={12}>
-                                            <Button size="large">获取验证码</Button>
-                                        </Col>
-                                    </Row>
-                                </FormItem>
-                                <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
-                                    {getFieldDecorator('agreement', {
-                                        valuePropName: 'checked',
-                                    })(
-                                        <Checkbox>我已经阅读过 <span>协议</span></Checkbox>
-                                    )}
-                                </FormItem>
-                                <FormItem {...tailFormItemLayout}>
-                                    <Button type="primary" htmlType="submit" size="large">注册</Button>
-                                </FormItem>
-                            </Form>
-                        </Card>
-                    </div>
-                </Col>
-                <Col className="gutter-row" md={12}>
-                    <div className="gutter-box">
-                        <Card title="登录表单" bordered={false}>
-                            <LoginForm />
-                        </Card>
-                    </div>
-                </Col>
-            </Row>
-            <Row gutter={16}>
-                <Col className="gutter-row" md={14}>
-                    <div className="gutter-box">
-                        <Card title="水平表单" bordered={false}>
-                            <HorizontalForm />
-                        </Card>
-                    </div>
-                </Col>
-                <Col className="gutter-row" md={10}>
-                    <div className="gutter-box">
-                        <Card title="弹层表单" bordered={false}>
-                            <ModalForm />
-                        </Card>
-                    </div>
-                </Col>
-            </Row>
-        </div>
+    componentDidMount = () => {
+        if (!this.state.isUpperLoaded) {
+            let { apiPath, request } = upperModelPreview();
+            fetchApi(apiPath, request)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.data.length === 4) {
+                        this.setState({
+                            readyUpperModel: true,
+                        })
+                    }
+                    this.setState({
+                        modelA: data.data[0],
+                        modelB: data.data[1],
+                        modelC: data.data[2],
+                        modelD: data.data[3],
+                        isUpperLoaded: true,
+                    })
+                });
+        }
+        if (!this.state.isLowwerLoaded) {
+            for (let i = 1; i < 5; i++) {
+                let { apiPath, request } = lowwerModelPreview(i);
+                fetchApi(apiPath, request)
+                    .then(res => res.json())
+                    .then(data => {
+
+
+
+                    })
+            };
+        }
+    }
+
+
+    render() {
+        return (
+            <div>
+                <BreadcrumbCustom first="模块管理" second="模块" />
+                <Row gutter={16}>
+                    <Col className="gutter-row" md={24}>
+                        <div className="gutter-box">
+                            <Collapse bordered={false}>
+                                <Panel header="效果预览" key="model-preview">
+                                    {this.state.readyUpperModel && this.state.isUpperLoaded ?
+                                        <div>
+                                            <Col span={9}>
+                                                <Preview model="A" data={this.state.modelA} />
+                                            </Col>
+                                            <Col span={15}>
+                                                <Preview model="B" data={this.state.modelB} />
+                                            </Col>
+                                            <Col span={9}>
+                                                <Preview model="C" data={this.state.modelC} />
+                                            </Col>
+                                            <Col span={15}>
+                                                <Preview model="D" data={this.state.modelD} />
+                                            </Col>
+                                        </div>
+                                        : <Result title="有必要的设置未完成,请检查" extra="完成后此信息自动消失" />}
+                                </Panel>
+                            </Collapse>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Card className="banner-edit-card" title="管理模块A" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(0)}><Icon type="info-circle" />帮助</Button>}>
+                                        <ModelManager modelType="A" bindInfo={this.state.modelA} isReady={this.state.isUpperLoaded} />
+                                    </Card>
+                                </Col>
+                                <Col span={12}>
+                                    <Card className="banner-edit-card" title="管理模块B" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(1)}><Icon type="info-circle" />帮助</Button>}>
+                                        <ModelManager modelType="B" bindInfo={this.state.modelB} isReady={this.state.isUpperLoaded} />
+                                    </Card>
+                                </Col>
+                                <Col span={12}>
+                                    <Card className="banner-edit-card" title="管理模块C" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(2)}><Icon type="info-circle" />帮助</Button>}>
+                                        <ModelManager modelType="C" bindInfo={this.state.modelC} isReady={this.state.isUpperLoaded} />
+                                    </Card>
+                                </Col>
+                                <Col span={12}>
+                                    <Card className="banner-edit-card" title="管理模块D" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(3)}><Icon type="info-circle" />帮助</Button>}>
+                                        <ModelManager modelType="D" bindInfo={this.state.modelD} isReady={this.state.isUpperLoaded} />
+                                    </Card>
+                                </Col>
+                            </Row>
+                            <Card className="banner-edit-card" title="管理模块E" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(4)}><Icon type="info-circle" />帮助</Button>}>
+                                <ModelManager modelType="E" bindInfo={this.state.modelE} />
+                            </Card>
+                            <Card className="banner-edit-card" title="管理模块F" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(5)}><Icon type="info-circle" />帮助</Button>}>
+                                <ModelManager modelType="F" bindInfo={this.state.modelF} />
+                            </Card>
+                            <Card className="banner-edit-card" title="管理模块G" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(6)}><Icon type="info-circle" />帮助</Button>}>
+                                <ModelManager modelType="G" bindInfo={this.state.modelG} />
+                            </Card>
+                            <Card className="banner-edit-card" title="管理模块H" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(7)}><Icon type="info-circle" />帮助</Button>}>
+                                <ModelManager modelType="H" bindInfo={this.state.modelH} />
+                            </Card>
+                        </div>
+                    </Col>
+                </Row>
+                <BackTop />
+            </div>
         )
     }
 }
 
 const BasicForm = Form.create()(BasicForms);
-
 export default BasicForm;

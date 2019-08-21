@@ -1,0 +1,44 @@
+.model-box {
+    margin-bottom: 1rem;
+}
+
+.model-title {
+    font-size: 24px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 1);
+}
+
+.m-1 {
+    z-index: 9;
+    position: absolute;
+    left: 5%;
+    top: 3%;
+}
+
+.m-2 {
+    z-index: 9;
+    position: absolute;
+    left: 41%;
+    top: 10%;
+}
+
+.m-3 {
+    z-index: 9;
+    position: absolute;
+
+}
+
+.m-4 {
+    z-index: 9;
+    position: absolute;
+}
+
+.ant-card-bordered {
+    border: 0 !important;
+}
+
+.grey-bg {
+    background-color: rgba(247, 247, 248, 1);
+    border-radius: 4px;
+}
