@@ -7,6 +7,8 @@ import {
     Button,
     Card,
     Upload,
+    Modal,
+    Col,
     message,
 } from 'antd';
 import LocalizedModal from '../../ui/Modals'
@@ -18,7 +20,7 @@ import { fetchApi } from '../../../callApi';
 import { getNaviInfo } from '../../../constants/api/navi';
 import { showMessageList } from '../../../constants/api/banner';
 import { notification } from 'antd';
-
+import FileUpLoader, { FilePath } from '../../uploader/UpLoader';
 const { Option, OptGroup } = Select;
 const { Panel } = Collapse;
 const noNaviNotification = () => {
@@ -30,41 +32,30 @@ const noNaviNotification = () => {
     };
     notification.open(args);
 };
+
 const formItemLayoutWithOutLabel = {
     wrapperCol: {
         xs: { span: 24, offset: 0 },
         sm: { span: 20, offset: 4 },
     },
 };
-function beforeUpload(file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-}
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
-
 class BannerForm extends Component {
     constructor(props) {
         super(props);
+        this.fileInput = React.createRef();
         this.state = {
             isNaviLoaded: false,
+            //加载栏目名称
             isSaved: false,
-            isEdit: true,
+            //表单是否提交
             navData: null,
+            //栏目名称
             isNavChanged: true,
+            //选择栏目
             titleList: null,
+            //栏目下的文章列表
             isTitleListLoaded: false,
-            loading: false,
+            //栏目下的文章列表加载状态
         }
     }
 
@@ -100,6 +91,17 @@ class BannerForm extends Component {
         }
     }
 
+    imgList = () => {
+        let list = [];
+        if (this.props.isLoaded) {
+            for (let i = 0; i < this.props.data.length; i++) {
+                list.push({
+                    "url": "https://xuegong.twtstudio.com/" + this.props.data[i].picture,
+                });
+            }
+        }
+        return list;
+    }
 
     listColumn(data) {
         let columns = [];
@@ -125,22 +127,6 @@ class BannerForm extends Component {
     listTitleList(nav_id) {
 
     }
-
-    handleChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    imageUrl,
-                    loading: false,
-                }),
-            );
-        }
-    };
 
     handleSubmit = e => {
         e.preventDefault();
@@ -191,8 +177,9 @@ class BannerForm extends Component {
                 titleList: value,
             })
         }
-        console.log(value)
+        console.log(value);
     }
+
     getBanner = (data, maxlen, index) => {
         // console.log(this.getTitle(index, 1));
         const formItemLayout = {
@@ -205,31 +192,8 @@ class BannerForm extends Component {
                 sm: { span: 20 },
             },
         };
-        const uploadButton = (
-            <div>
-                <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">上传</div>
-            </div>
-        );
-        const props = {
-            name: 'file',
-            action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-            headers: {
-                authorization: 'authorization-text',
-            },
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
-                }
-            },
-        };
+        const { imageUrl } = this.state;
         const { getFieldDecorator } = this.props.form;
-
         return (
             <div>
                 <Card className="banner-card">
@@ -260,9 +224,7 @@ class BannerForm extends Component {
                                 ],
                                 initialValue: this.getTitle(index, 1),
                             })(
-                                <Select id={index + '-1'} key={index + '-1'} required="true" style={{ width: '20%' }} placeholder="请选择一个栏目"
-                                    onChange={console.log(this.value)}
-                                >
+                                <Select id={index + '-1'} key={index + '-1'} required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
                                     {/* <Option value="-1">请选择</Option> */}
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                 </Select>
@@ -283,24 +245,14 @@ class BannerForm extends Component {
                             }
                         </Form.Item>
                         {/* 图片上传 */}
-                        <Form.Item {...formItemLayout} label="标题图" >
-                            {getFieldDecorator(`titlePic${index}`, {
-                                rules: [{
-                                    required: true,
-                                }]
-                            })(<Upload
-                                name="avatar"
-                                listType="picture-card"
-                                className="avatar-uploader"
-                                showUploadList={false}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                beforeUpload={beforeUpload}
-                                onChange={this.handleChange}
-                            >
-                                {this.imageUrl ? <img src={this.imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                            </Upload>)
-                            }
-                        </Form.Item>
+                        {/* -------------------------------------------------------------------------------- */}
+                        <FileUpLoader type="image" bindTo={"Banner" + index} />
+                        {/* -------------------------------------------------------------------------------- */}
+                        {/* 图片上传 */}
+                        <Col span={24} style={{ textAlign: 'right' }}>
+                            <Button type="default" loading={this.state.isSaved}><Icon type="save" />保存修改</Button>
+                        </Col>
+
                     </Form>
                 </Card>
             </div>
@@ -308,8 +260,6 @@ class BannerForm extends Component {
     }
 
     render() {
-        const { imageUrl } = this.state;
-        console.log(this.state.titleList);
         // const { getFieldDecorator } = this.props.form;
         let data = this.props.data;
         // console.log(data);

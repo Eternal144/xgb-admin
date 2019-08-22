@@ -49,8 +49,15 @@ class BasicForms extends Component {
             modelB: null,
             modelC: null,
             modelD: null,
+            modelE: null,
+            modelF: null,
+            modelG: null,
+            modelH: null,
+            isModelEReady: false,
+            isModelFReady: false,
+            isModelGReady: false,
+            isModelHReady: false,
             readyUpperModel: false,
-            readyLowwerModel: false,
             isUpperLoaded: false,
             isLowwerLoaded: false,
             bindInfo: null,
@@ -83,14 +90,33 @@ class BasicForms extends Component {
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-
-
-
+                        if (data.error_code === 0 && data.data.length >0) {
+                            if (i === 1) {
+                                this.setState({
+                                    modelE: data.data,
+                                    isModelEReady:true,
+                                })
+                            } else if (i === 2) {
+                                this.setState({
+                                    modelF: data.data,
+                                    isModelFReady:true,
+                                })
+                            } else if (i === 3) {
+                                this.setState({
+                                    modelG: data.data,
+                                    isModelGReady:true,
+                                })
+                            } else if (i === 4) {
+                                this.setState({
+                                    modelH: data.data,
+                                    isModelHReady:true,
+                                })
+                            }
+                        }
                     })
             };
         }
     }
-
 
     render() {
         return (
@@ -142,16 +168,16 @@ class BasicForms extends Component {
                                 </Col>
                             </Row>
                             <Card className="banner-edit-card" title="管理模块E" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(4)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModelManager modelType="E" bindInfo={this.state.modelE} />
+                                <ModelManager modelType="E" bindInfo={this.state.modelE} isReady={this.state.isModelEReady} />
                             </Card>
                             <Card className="banner-edit-card" title="管理模块F" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(5)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModelManager modelType="F" bindInfo={this.state.modelF} />
+                                <ModelManager modelType="F" bindInfo={this.state.modelF} isReady={this.state.isModelFReady}/>
                             </Card>
                             <Card className="banner-edit-card" title="管理模块G" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(6)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModelManager modelType="G" bindInfo={this.state.modelG} />
+                                <ModelManager modelType="G" bindInfo={this.state.modelG} isReady={this.state.isModelGReady}/>
                             </Card>
                             <Card className="banner-edit-card" title="管理模块H" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(7)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModelManager modelType="H" bindInfo={this.state.modelH} />
+                                <ModelManager modelType="H" bindInfo={this.state.modelH} isReady={this.state.isModelHReady}/>
                             </Card>
                         </div>
                     </Col>

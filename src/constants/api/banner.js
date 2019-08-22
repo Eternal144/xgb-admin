@@ -1,7 +1,7 @@
 
 export const getBannerInfo = () => {
     return {
-        apiPath: `banner`,
+        apiPath: `admin/banner`,
         request: {
             method: "GET",
             mode: 'no-cors',
@@ -11,7 +11,7 @@ export const getBannerInfo = () => {
 
 export const addBanner = () => {
     return {
-        apiPath: `banner`,
+        apiPath: `admin/banner`,
         request: {
             method: "POST",
             mode: 'no-cors',
@@ -21,7 +21,7 @@ export const addBanner = () => {
 
 export const editBanner = () => {
     return {
-        apiPath: `banner`,
+        apiPath: `admin/banner`,
         request: {
             method: "PUT",
             mode: 'no-cors',
@@ -32,7 +32,7 @@ export const editBanner = () => {
 
 export const delBanner = () => {
     return {
-        apiPath: `banner`,
+        apiPath: `admin/banner`,
         request: {
             method: "DELETE",
             mode: 'no-cors',
@@ -43,7 +43,7 @@ export const delBanner = () => {
 
 export const showMessageList = (id) => {
     return {
-        apiPath: `BMessage/${id}`,
+        apiPath: `admin/BMessage/${id}`,
         request: {
             method: "GET",
             mode: 'no-cors',

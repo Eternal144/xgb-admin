@@ -1,7 +1,7 @@
 
 export const getNaviInfo = ()=> {
     return{
-        apiPath:`nav`,
+        apiPath:`admin/nav`,
         request:{
             method:"GET",
             mode:'no-cors',
@@ -11,7 +11,7 @@ export const getNaviInfo = ()=> {
 
 export const addNav = (body)=>{
     return{
-        apiPath:'addnav',
+        apiPath:'admin/addnav',
         request:{
             body:body,
             method:"POST",
