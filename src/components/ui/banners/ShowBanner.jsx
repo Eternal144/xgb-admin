@@ -53,20 +53,21 @@ class BannerForm extends Component {
             isNavChanged: true,
             //选择栏目
             titleList: null,
-            //栏目下的文章列表
+            //栏目下的文章列表id
             isTitleListLoaded: false,
             //栏目下的文章列表加载状态
         }
     }
 
     componentDidMount = () => {
-        const { apiPath, request } = getNaviInfo();
+        
         // console.log(fetchApi(apiPath, request))
         if (!this.state.isNaviLoaded) {
+            const { apiPath, request } = getNaviInfo();
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.setState({
                         navData: data.data,
                         isNaviLoaded: true,
@@ -137,8 +138,9 @@ class BannerForm extends Component {
         });
     };
 
+    //用nav_id匹配对应的栏目名称或
     getTitle = (index, opt) => {
-        let nav = this.props.data[index].nav_id;
+        let nav = this.props.data[index].nav_id;//nav_id
         let pas = this.props.data[index].mes_id;
         if (opt === 1) {
             for (let i = 0; i < this.state.navData.length; i++) {
@@ -214,6 +216,10 @@ class BannerForm extends Component {
                             })(<Input placeholder="20字以内" hideRequiredMark="false" allowClear={`true`} style={{ width: '60%' }} />)
                             }
                         </Form.Item>
+
+
+
+
                         <Form.Item label="跳转文章选择">
                             {getFieldDecorator(`title${index}`, {
                                 rules: [
@@ -224,11 +230,15 @@ class BannerForm extends Component {
                                 ],
                                 initialValue: this.getTitle(index, 1),
                             })(
-                                <Select id={index + '-1'} key={index + '-1'} required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
+                                <Select id={index + '-1'} onChange={this.handleSelect} key={index + '-1'} required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
                                     {/* <Option value="-1">请选择</Option> */}
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                 </Select>
                             )}
+
+
+
+
                             {getFieldDecorator(`passage${index}`, {
                                 rules: [
                                     {
@@ -244,6 +254,12 @@ class BannerForm extends Component {
                                 </Select>)
                             }
                         </Form.Item>
+
+
+
+
+
+
                         {/* 图片上传 */}
                         {/* -------------------------------------------------------------------------------- */}
                         <FileUpLoader type="image" bindTo={"Banner" + index} />
@@ -262,7 +278,7 @@ class BannerForm extends Component {
     render() {
         // const { getFieldDecorator } = this.props.form;
         let data = this.props.data;
-        // console.log(data);
+        console.log(data);
         return (
             <div>
                 {this.props.isLoaded && this.state.isNaviLoaded ? this.formIt(data, data.length) : <Skeleton active />}

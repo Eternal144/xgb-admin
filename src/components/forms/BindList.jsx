@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Select, message, Button, Icon, Col, Popconfirm, Input ,Skeleton} from 'antd';
+import { Form, Select, message, Button, Icon, Col, Popconfirm, Input, Skeleton } from 'antd';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
 import { modelPreview } from '../../constants/api/model';
@@ -28,6 +28,7 @@ class BindMan extends Component {
             navData: null,
         }
     }
+
     componentDidMount = () => {
         // console.log(fetchApi(apiPath, request))
         if (!this.state.isNaviLoaded) {
@@ -78,13 +79,13 @@ class BindMan extends Component {
     // }
 
     modelTitle = () => {
-        if(this.props.isReady===true){
+        if (this.props.isReady === true) {
             if (queue.indexOf(this.props.fromModel) > -1) {
                 return this.props.bindInfo.title;
             } else {
                 return this.props.bindInfo[0].nav_name;
             }
-        }else{
+        } else {
             return null;
         }
     }
@@ -96,37 +97,40 @@ class BindMan extends Component {
             <div>
                 {this.state.isNaviLoaded ?
                     <Form {...formItemLayout} >
-                        <Form.Item label="栏目选择">
-                            {getFieldDecorator(`bindIt${this.props.fromModel}`, {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请选择一个栏目',
-                                    },
-                                ],
-                                initialValue: this.modelTitle(),
-                            })(
-                                <Select required="true" style={{ width: '30%' }} placeholder="请选择一个栏目">
-                                    {/* <Option value="-1">请选择</Option> */}
-                                    {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
-                                </Select>
-                            )}
-                        </Form.Item>
-                        {
-                            queue.indexOf(this.props.fromModel) > -1 ? <Form.Item label="置顶文章" extra="如未选择，则默认为最新文章">
-                                {getFieldDecorator(`Top${this.props.fromModel}`, {
+                        {this.props.fromModel !== "ModelF" ?
+                            <Form.Item label="栏目选择">
+                                {getFieldDecorator(`bindIt${this.props.fromModel}`, {
                                     rules: [
                                         {
-                                            required: false,
-                                            message: '请选择一篇文章',
+                                            required: true,
+                                            message: '请选择一个栏目',
                                         },
                                     ],
+                                    initialValue: this.modelTitle(),
                                 })(
-                                    <Select style={{ width: '60%' }} placeholder="请选择一篇文章">
+                                    <Select required="true" style={{ width: '30%' }} placeholder="请选择一个栏目">
                                         {/* <Option value="-1">请选择</Option> */}
+                                        {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                     </Select>
                                 )}
                             </Form.Item> : null
+                        }
+                        {
+                            queue.indexOf(this.props.fromModel) > -1 ?
+                                <Form.Item label="置顶文章" extra="如未选择，则默认为最新文章">
+                                    {getFieldDecorator(`Top${this.props.fromModel}`, {
+                                        rules: [
+                                            {
+                                                required: false,
+                                                message: '请选择一篇文章',
+                                            },
+                                        ],
+                                    })(
+                                        <Select style={{ width: '60%' }} placeholder="请选择一篇文章">
+                                            {/* <Option value="-1">请选择</Option> */}
+                                        </Select>
+                                    )}
+                                </Form.Item> : null
                         }
                         {
                             this.props.fromModel === "ModelE" ? <Form.Item label="栏目描述">
@@ -144,8 +148,8 @@ class BindMan extends Component {
                                 )
                                 }
                             </Form.Item>
-                            
-                            : null
+
+                                : null
                         }
                         <Form.Item>
                             {/* <Button onClick={this.handleSubmit}>保存修改</Button> */}
@@ -158,7 +162,7 @@ class BindMan extends Component {
                                 </Popconfirm>
                             </Col>
                         </Form.Item>
-                    </Form > : <Skeleton active/>
+                    </Form > : <Skeleton active />
                 }
             </div>
         )

@@ -2,7 +2,7 @@ export default {
     menus: [ // 菜单相关路由
         { key: '/app/dashboard/index', title: '账户管理', icon: 'mobile', component: 'Dashboard' },
         {
-            key: '/app/ui', title: '资源管理', icon: 'scan',
+            key: '/app/ui', title: '资源管理', icon: 'scan',component:'',
             subs: [
                 { key: '/app/ui/buttons', title: '按钮', component: 'Buttons'},
                 { key: '/app/ui/icons', title: '图标', component: 'Icons'},

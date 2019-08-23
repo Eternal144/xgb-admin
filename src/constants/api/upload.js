@@ -1,20 +1,20 @@
 //上传图片
-export const uploadPic = (body) => {
+export const uploadPic = (file) => {
     return {
         apiPath: 'uploadPic',
         request: {
-            body: body,
+            file: file,
             method: "POST",
         }
     }
 }
 
 //上传附件
-export const uploadApp = (body) => {
+export const uploadApp = (file) => {
     return {
         apiPath: 'uploadApp',
         request: {
-            body: body,
+            file: file,
             method: "POST",
         }
     }
