@@ -1,6 +1,6 @@
 export const upperModelPreview = (body) => {
     return {
-        apiPath: 'upper',
+        apiPath: 'admin/upper',
         request: {
             body: body,
             method: "GET",
@@ -10,7 +10,7 @@ export const upperModelPreview = (body) => {
 
 export const lowwerModelPreview = (name) => {
     return {
-        apiPath: 'lowwer/' + name,
+        apiPath: 'admin/lowwer/' + name,
         request: {
             method: "GET",
         }
