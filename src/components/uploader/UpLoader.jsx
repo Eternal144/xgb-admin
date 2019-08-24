@@ -1,3 +1,10 @@
+// 封装了一个上传组件，具有附件和图片上传两个功能
+// 内含三个参数
+// 'type'[string](必要)，type="image"对应图片上传，type="file"对应附件上传
+// 'bindTo'[string](必要)，与当前所使用的父表单相挂钩，当一个页面具有多个<Uploader>组件shi，该值应保证互不相等
+// 'necessary'[boolean](可选，默认为false)，是否为表单必填项
+// 2019.8.24 CALLMELARE
+
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
 import ContentLoader from 'react-content-loader';
@@ -7,7 +14,7 @@ const switchModel = (type, file) => {
     if (type === "image") {
         return ({
             "url": "https://xuegong.twtstudio.com/api/uploadPic",
-            "text": "上传图片(x1)",
+            "text": "上传图片",
         });
     } else if (type === "file") {
         return ({
@@ -113,7 +120,7 @@ class UpLoaderModel extends Component {
                         {getFieldDecorator(`image${this.props.bindTo}`, {
                             rules: [
                                 {
-                                    required: true,
+                                    required: this.props.necessary,
                                     message: '请选择一个图片',
                                 },
                             ],
@@ -135,7 +142,7 @@ class UpLoaderModel extends Component {
                         {getFieldDecorator(`file${this.props.bindTo}`, {
                             rules: [
                                 {
-                                    required: true,
+                                    required: this.props.necessary,
                                     message: '请选择一个文件',
                                 },
                             ],
