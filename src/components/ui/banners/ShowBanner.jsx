@@ -60,7 +60,7 @@ class BannerForm extends Component {
     }
 
     componentDidMount = () => {
-        
+
         // console.log(fetchApi(apiPath, request))
         if (!this.state.isNaviLoaded) {
             const { apiPath, request } = getNaviInfo();
@@ -255,14 +255,9 @@ class BannerForm extends Component {
                             }
                         </Form.Item>
 
-
-
-
-
-
                         {/* 图片上传 */}
                         {/* -------------------------------------------------------------------------------- */}
-                        <FileUpLoader type="image" bindTo={"Banner" + index} />
+                        <FileUpLoader type="image" bindTo={"Banner" + index} necessary={true} />
                         {/* -------------------------------------------------------------------------------- */}
                         {/* 图片上传 */}
                         <Col span={24} style={{ textAlign: 'right' }}>
