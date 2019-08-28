@@ -7,7 +7,7 @@ const { Option, OptGroup } = Select;
 const confirmClearText = '清除此模块相关设置?';
 const confirmSaveText = '是否保存设置?';
 const queue = ["ModelA", "ModelB", "ModelC", "ModelD"];
-
+let id = 0;
 
 const formItemLayout = {
     labelCol: {
@@ -19,7 +19,15 @@ const formItemLayout = {
         sm: { span: 20 },
     },
 };
+const formItemLayoutWithOutLabel = {
+    wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 20, offset: 4 },
+    },
+};
 
+
+// 主要
 class BindMan extends Component {
     constructor(props) {
         super(props);
@@ -91,7 +99,35 @@ class BindMan extends Component {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        getFieldDecorator('keys', { initialValue: [] });
+        const keys = getFieldValue('keys');
+        const formItems = keys.map((k, index) => (
+            <Form.Item
+                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                label={index === 0 ? 'Passengers' : ''}
+                required={false}
+                key={k}
+            >
+                {getFieldDecorator(`names[${k}]`, {
+                    validateTrigger: ['onChange', 'onBlur'],
+                    rules: [
+                        {
+                            required: true,
+                            whitespace: true,
+                            message: "Please input passenger's name or delete this field.",
+                        },
+                    ],
+                })(<Input placeholder="passenger name" style={{ width: '60%', marginRight: 8 }} />)}
+                {keys.length > 1 ? (
+                    <Icon
+                        className="dynamic-delete-button"
+                        type="minus-circle-o"
+                        onClick={() => this.remove(k)}
+                    />
+                ) : null}
+            </Form.Item>
+        ));
         // console.log(this.props.isReady);
         return (
             <div>
@@ -133,22 +169,32 @@ class BindMan extends Component {
                                 </Form.Item> : null
                         }
                         {
-                            this.props.fromModel === "ModelE" ? <Form.Item label="栏目描述">
-                                {getFieldDecorator(`Description${this.props.fromModel}`, {
-                                    rules: [
-                                        {
-                                            max: 35,
-                                            message: '描述过长,请酌定删减',
-                                        },
-                                    ],
-                                    initialValue: this.props.bindInfo[0].description,
-                                })(
-                                    <Input style={{ width: '60%' }} placeholder="35字以内(选填)">
-                                    </Input>
-                                )
-                                }
-                            </Form.Item>
+                            this.props.fromModel === "ModelE" ?
+                                <div>
+                                    <Form.Item label="栏目描述">
+                                        {getFieldDecorator(`Description${this.props.fromModel}`, {
+                                            rules: [
+                                                {
+                                                    max: 35,
+                                                    message: '描述过长,请酌定删减',
+                                                },
+                                            ],
+                                            initialValue: this.props.bindInfo[0].description,
+                                        })(
+                                            <Input style={{ width: '60%' }} placeholder="35字以内(选填)">
+                                            </Input>
+                                        )
+                                        }
+                                    </Form.Item>
+                                    {/* {formItems}
+                                    <Form.Item {...formItemLayoutWithOutLabel}>
+                                        <Button type="dashed" onClick={this.add} style={{ width: '60%' }}><Icon type="plus" /> Add field</Button>
+                                    </Form.Item>
+                                    <Form.Item {...formItemLayoutWithOutLabel}>
+                                        <Button type="primary" htmlType="submit">Submit</Button>
+                                    </Form.Item> */}
 
+                                </div>
                                 : null
                         }
                         <Form.Item>

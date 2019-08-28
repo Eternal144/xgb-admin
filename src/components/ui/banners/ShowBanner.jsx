@@ -20,7 +20,7 @@ import { fetchApi } from '../../../callApi';
 import { getNaviInfo } from '../../../constants/api/navi';
 import { showMessageList } from '../../../constants/api/banner';
 import { notification } from 'antd';
-import FileUpLoader, { FilePath } from '../../uploader/UpLoader';
+import FileUpLoader from '../../uploader/UpLoader';
 const { Option, OptGroup } = Select;
 const { Panel } = Collapse;
 const noNaviNotification = () => {
@@ -50,9 +50,9 @@ class BannerForm extends Component {
             //表单是否提交
             navData: null,
             //栏目名称
-            isNavChanged: true,
+            isNavChanged: false,
             //选择栏目
-            titleList: null,
+            titleList: 0,
             //栏目下的文章列表id
             isTitleListLoaded: false,
             //栏目下的文章列表加载状态
@@ -60,7 +60,6 @@ class BannerForm extends Component {
     }
 
     componentDidMount = () => {
-
         // console.log(fetchApi(apiPath, request))
         if (!this.state.isNaviLoaded) {
             const { apiPath, request } = getNaviInfo();
@@ -77,7 +76,7 @@ class BannerForm extends Component {
         if (this.state.isNaviLoaded) {
             this.id = this.props.data.length;
         }
-        if (this.state.isNavChanged) {
+        if (this.state.isNavChanged && this.state.isNavChanged) {
             const { apiPath, request } = showMessageList(this.state.titleList);
             fetchApi(apiPath, request)
                 .then(res => res.json())
@@ -125,6 +124,8 @@ class BannerForm extends Component {
         return columns;
     }
 
+
+    //获取栏目对应的文章列表并展示
     listTitleList(nav_id) {
 
     }
@@ -155,34 +156,21 @@ class BannerForm extends Component {
         }
     }
 
-    getOptions = (length) => {
-        let OptionArr = [];
-        for (let i = 0; i < length; i++) {
-            OptionArr.push(<Option value={i + 1}>{i + 1}</Option>)
-        }
-        return OptionArr;
-    }
-
     formIt = (data, len) => {
         const { getFieldValue } = this.props.form;
         const keys = getFieldValue('keys');
         return data.map((m, i) => {
-            return this.getBanner(data, len, i);
+            return this.getBanner(m, data, len, i);
         })
         // forms.push(this.getBanner(data, len, i));
     }
 
+    //选择的栏目变更
     handleSelect(value) {
-        if (!this.state.isNavChanged) {
-            this.setState({
-                isNavChanged: true,
-                titleList: value,
-            })
-        }
         console.log(value);
     }
 
-    getBanner = (data, maxlen, index) => {
+    getBanner = (m, data, maxlen, index) => {
         // console.log(this.getTitle(index, 1));
         const formItemLayout = {
             labelCol: {
@@ -239,6 +227,7 @@ class BannerForm extends Component {
 
 
 
+
                             {getFieldDecorator(`passage${index}`, {
                                 rules: [
                                     {
@@ -248,12 +237,15 @@ class BannerForm extends Component {
                                 ],
                                 initialValue: this.getTitle(index, 2),
                             })(
-                                <Select id={index + '-2'} key={index + '-2'} required="true" style={{ width: '40%' }} placeholder="请选择一篇文章">
+                                <Select id={index + '-2'} key={index + '-2'} style={{ width: '40%' }} onChange={this.handleChange} placeholder="请选择一篇文章">
                                     {/* <Option value="-1">请选择</Option> */}
                                     {this.state.isTitleListLoaded ? this.listTitleList(this.state.titleList) : null}
-                                </Select>)
+                                </Select>
+                            )
                             }
                         </Form.Item>
+
+
 
                         {/* 图片上传 */}
                         {/* -------------------------------------------------------------------------------- */}
@@ -273,7 +265,7 @@ class BannerForm extends Component {
     render() {
         // const { getFieldDecorator } = this.props.form;
         let data = this.props.data;
-        console.log(data);
+        // console.log(data);
         return (
             <div>
                 {this.props.isLoaded && this.state.isNaviLoaded ? this.formIt(data, data.length) : <Skeleton active />}
