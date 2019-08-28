@@ -28,7 +28,7 @@ class Banners extends React.Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.setState({
                         data: data.data,
                         isLoaded: true,

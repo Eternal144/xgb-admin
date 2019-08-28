@@ -21,7 +21,6 @@ class NaviManage extends React.Component {
         let { data } = this.state;
         let lastData = data[data.length - 1];
         const body = {
-
         }
         data.push({
             "id": lastData.id + 1,
