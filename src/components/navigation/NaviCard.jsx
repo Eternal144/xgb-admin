@@ -149,7 +149,7 @@ class RegistrationForm extends React.Component {
         }
     );
     return (
-        <div style={{ padding:'30px' }}>
+        <div style={{paddingTop:"20px"}}>
             <Card >
                 <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                     {this.getSuperior(data,length)}

@@ -51,26 +51,28 @@ class NaviManage extends React.Component {
       const formItemLayoutWithOutLabel = {
         wrapperCol: {
           xs: { span: 24, offset: 0 },
-          sm: { span: 20, offset: 4 },
+          sm: { span: 24, offset:0},
         },
       };
     return (
         //根据接口获取以后的
-        <div>
+        <div style={{padding:"30px"}}>
             <BreadcrumbCustom first="导航栏管理" />
                 {data && data.length > 0 ? data.map((x,i)=>{
                   return <NaviCardForm data={x} length={data.length} key={i} />
                 }) : <Spin size="large" />}
-            <Card>
-                {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}
-                <Form onSubmit={this.handleSubmit}>
-                    <Form.Item {...formItemLayoutWithOutLabel}>
-                    <Button type="dashed" onClick={this.handleAddItem} style={{ width: '60%' }}>
-                        <Icon type="plus" /> 添加导航
-                    </Button>
-                    </Form.Item>
-                </Form>
-            </Card>
+            <div style={{paddingTop:"20px"}}>
+                {/* <Card > */}
+                    {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}
+                    <Form onSubmit={this.handleSubmit}>
+                        <Form.Item {...formItemLayoutWithOutLabel}>
+                        <Button type="dashed" onClick={this.handleAddItem} style={{width:"100%",height:"50px"}}>
+                            <Icon type="plus" /> 添加导航
+                        </Button>
+                        </Form.Item>
+                    </Form>
+                {/* </Card> */}
+            </div>
        </div>
     );
   }
