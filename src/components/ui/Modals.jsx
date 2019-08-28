@@ -28,16 +28,16 @@ class LocalizedModal extends React.Component {
     return (
       <div>
         <Button type="primary" onClick={this.showModal}>
-          确认修改
+          {this.props.data.content}
         </Button>
-        <Modal
+        <Modal style={{marginTop:"150px"}}
           visible={this.state.visible}
           onOk={this.handleOK}
           onCancel={this.handleCancel}
           okText="确认"
           cancelText="取消"
         >
-          {this.props.content}
+          {this.props.data.details}
         </Modal>
       </div>
     );

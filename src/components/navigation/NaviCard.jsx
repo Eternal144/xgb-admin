@@ -10,37 +10,58 @@ import {
     Row
   } from 'antd';
   import LocalizedModal from '../ui/Modals'
-  import {CONFIRM_MODIFY} from '../../constants/common'
-  import {fetchApi} from '../../callApi'
-  import {addNav} from '../../constants/api/navi'
+  import {CONFIRM_MODIFY, CONFIRM_ADD} from '../../constants/common'
+
  
   
 const { Option } = Select;
+const newChild =(idd,parents_idd,rankk)=> {
+    return{
+        title: null,
+        id: ++idd,
+        parents_id: parents_idd,
+        rank: ++rankk,
+        listType: "1",
+        contentType: "1",
+        grade: "2",
+    }
+    
+}
 class RegistrationForm extends React.Component {
+    constructor(props){
+        super(props);
+        this.state={
+            data: this.props.data
+        }
+    }
     componentDidMount = ()=>{
         this.id = this.props.data.children.length;
     }
-    add = ()=>{
-        const { form } = this.props;
-        const keys = form.getFieldValue('keys');
-        const nextKeys = keys.concat(++this.id);
-        form.setFieldsValue({
-        keys: nextKeys,
-        });
+    add = ()=>{ //新增一个儿子。
+        const { data } = this.state;
+        const lastChild = data.children[data.children.length-1];
+        let child;
+        if(data.children.length === 0){
+            child = newChild(data.id,data.id,0);
+        }else{
+            child = newChild(lastChild.id,lastChild.parents_id,lastChild.rank);
+        }
+        
+        data.children.push(child);
+        this.setState({
+            data:data
+        })
+
     };
       
-    handleSubmit = e => {
-        e.preventDefault();
+    handleSubmit = () => {
+        // e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
             console.log('Received values of form: ', values);
         }
         });
     };
-
-    handleConfirm = ()=>{
-        
-    }
 
     getOptions = (length)=>{
         let OptionArr = [];
@@ -49,12 +70,23 @@ class RegistrationForm extends React.Component {
         }
         return OptionArr;
     }
-      
+    //label:标签
+    //data:初始化数据
+    //length:可选option的长度。
+    //key:{
+    //     title:  二级标题名称
+    //     rank: 排序。
+    // }
     getNavigation = (label,data,length,key)=>{
         const { getFieldDecorator } = this.props.form;
-        console.log(label.charAt(0));
-        let ch = label.charAt(0);
-        const Superior =  //不带阴影。
+        const { children } = this.state.data;
+         //当为一级标题，且二级标题数量不为0时。为fasle.
+        let flag = true;
+        if(label[0] === '一' && children.length > 0){
+            flag = false;
+        }
+
+        return(
             <div>
                 <Form.Item label={label} >
                 {getFieldDecorator(`${key.title}`, {
@@ -70,7 +102,7 @@ class RegistrationForm extends React.Component {
                     ],
                     initialValue:data.title,
                 })(<Input placeholder="10字以内" style={{ width: '40%' }}/>)}
-                <Icon type="close-circle" className="iconHover" style={{marginLeft:"20px"}} />
+                {flag ? <Icon type="close-circle" className="iconHover" style={{marginLeft:"20px"}} /> : null}
             </Form.Item>
             <Form.Item label="展示位置">
                 {getFieldDecorator(`${key.rank}`, {
@@ -86,30 +118,57 @@ class RegistrationForm extends React.Component {
             </Select>)}
             </Form.Item>
             </div>
-        const Subordinate = 
-        <Col  className={"shadow"} >
-            {Superior}
-        </Col>
-        return (
-        <div >
-            {ch === "一"  ?  Superior : Subordinate}
-        </div>
-            )
+        )
       }
-      //子导航们
+    //把所有的二级标题渲染出来即可。
     getSubordinates = (data)=>{
-        const { getFieldValue } = this.props.form;
-        const keys = getFieldValue('keys');
-        const len = keys.length > 0 ? keys[keys.length-1] : 0;
+        const { getFieldDecorator} = this.props.form;
         const { children } = data;
-        let length = Math.max(len,children.length);
         return children.map((x,i)=>{
             let label = `二级导航栏${data.rank}-${i+1}`;
             let key={
                 title:`${i+1}title`,
                 rank:`${i+1}rank`
             };
-            return this.getNavigation(label,x,length,key);
+            const Com1 = this.getNavigation(label,x,children.length,key);
+            const TypeChoose = <div>
+                                <Form.Item label='类型分类'>
+                                    {getFieldDecorator(`contentType-${i+1}`, {
+                                        rules: [
+                                        {
+                                            required: true,
+                                            message: '选择导航类型',
+                                        },
+                                        ],
+                                        initialValue:data.contentType,
+                                    })(<Select style={{ width: '120px' }}>
+                                        <Option value="1">活动预告类</Option>
+                                        <Option value="2">新闻公告类</Option>
+                                    </Select>)}
+                                </Form.Item>
+                                <Form.Item label='排版分类'>
+                                    {getFieldDecorator(`listType-${i+1}`, {
+                                        rules: [
+                                        {
+                                            required: true,
+                                            message: '选择导航类型',
+                                        },
+                                        ],
+                                        initialValue:data.listType,
+                                    })(<Select style={{ width: '120px' }}>
+                                        <Option value="1">文字类</Option>
+                                        <Option value="2">图文类</Option>
+                                    </Select>)} 
+                                </Form.Item>
+                            </div>
+            return (
+                <div>
+                    <Col  className={"shadow"} >
+                    {Com1}
+                    {TypeChoose}
+                    </Col>
+                </div>
+            )
         })
     }
     getSuperior = (data,length)=>{
@@ -120,9 +179,34 @@ class RegistrationForm extends React.Component {
         let label = `一级导航栏${data.rank}`
         return this.getNavigation(label,data,length,key);
     }
-    
+    confirmCont = (notify)=>{
+        return <LocalizedModal onConfirm={this.handleSubmit} data={notify} />
+    }
+    //添加新的导航栏。
+    modelManage = (title)=>{
+        if(title === null){
+            return (<div style={{marginTop:"20px"}}>
+                <Col span={8} offset={16} style={{textAlign:'right'}}>
+                {this.confirmCont(CONFIRM_ADD)}
+                </Col>
+            
+        </div>)
+        }else{
+            return (<div style={{marginTop:"20px"}}>
+            <Col span={8} offset={8} >
+                <Button type="dashed" onClick={this.add} style={{ width: '100%' }}>
+                    <Icon type="plus" /> Add model
+                </Button>
+            </Col>
+            <Col span={8} style={{textAlign:'right'}}>
+                {this.confirmCont(CONFIRM_MODIFY)}
+                </Col>
+        </div>)
+        }
+    }
+
     render() {
-      const { getFieldDecorator,getFieldValue } = this.props.form;
+    //   const { getFieldDecorator,getFieldValue } = this.props.form;
       const data = this.props.data;
       const length = this.props.length;
       const formItemLayout = {
@@ -135,77 +219,14 @@ class RegistrationForm extends React.Component {
           sm: { span: 16},
         },
       };
-      const formItemLayoutWithOutLabel = {
-        wrapperCol: {
-          xs: { span: 24, offset: 0 },
-          sm: { span: 18},
-        },
-      };
-
-    getFieldDecorator('keys', { initialValue: [] });
-        const keys = getFieldValue('keys');
-        let childData={
-            rank:null,
-            title:null
-        };
-        let len = keys[keys.length-1];
-        const formItems = keys.map((k, index) => {
-             let label = `二级导航栏${data.rank}-${k}`;
-             let key={
-                 title:`${k}title`,
-                 rank:`${k}rank`
-             }
-            return this.getNavigation(label,childData,len,key)
-        }
-    );
     return (
         <div style={{paddingTop:"20px"}}>
             <Card style={{padding:"0 20%"}}>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                    {this.getSuperior(data,length)}
-                    <Form.Item label='类型分类'>
-                    {getFieldDecorator('contentType', {
-                        rules: [
-                        {
-                            required: true,
-                            message: '选择导航类型',
-                        },
-                        ],
-                        initialValue:data.contentType,
-                    })(<Select style={{ width: '120px' }}>
-                        <Option value="1">活动预告类</Option>
-                        <Option value="2">新闻公告类</Option>
-                    </Select>)}
-                    </Form.Item>
-
-                    <Form.Item label='排版分类'>
-                    {getFieldDecorator('listType', {
-                        rules: [
-                        {
-                            required: true,
-                            message: '选择导航类型',
-                        },
-                        ],
-                        initialValue:data.listType,
-                    })(<Select style={{ width: '120px' }}>
-                        <Option value="1">文字类</Option>
-                        <Option value="2">图文类</Option>
-                    </Select>)} 
-                    
-                    </Form.Item>
-
+                    {this.getSuperior(data,length)} 
+                    {/* 渲染所有的二级标题 */}
                     {data.children.length > 0 ? this.getSubordinates(data):null}
-                    {formItems}
-                    <div style={{marginTop:"20px"}}>
-                        <Col span={8} offset={8} >
-                            <Button type="dashed" onClick={this.add} style={{ width: '100%' }}>
-                                <Icon type="plus" /> Add model
-                            </Button>
-                        </Col>
-                        <Col span={8} style={{textAlign:'right'}}>
-                        <LocalizedModal onConfirm={this.handleConfirm} content={CONFIRM_MODIFY} />
-                        </Col>
-                    </div>
+                    {this.modelManage(data.title)}
             </Form>
         </Card>
     </div>
