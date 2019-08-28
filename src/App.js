@@ -16,7 +16,7 @@ class App extends Component {
     };
     componentWillMount() {
         const { setAlitaState } = this.props;
-        const user = JSON.parse(localStorage.getItem('user'));
+        const user = localStorage.getItem('user');
         // user && receiveData(user, 'auth');
         user && setAlitaState({ stateName: 'auth', data: user });
         // receiveData({a: 213}, 'auth');
