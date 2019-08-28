@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Form, Select, message, Button, Icon, Col, Popconfirm } from 'antd';
+import { Form, Select, message, Button, Icon, Col, Popconfirm, Input, Skeleton } from 'antd';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
 import { modelPreview } from '../../constants/api/model';
 const { Option, OptGroup } = Select;
 const confirmClearText = '清除此模块相关设置?';
 const confirmSaveText = '是否保存设置?';
+const queue = ["ModelA", "ModelB", "ModelC", "ModelD"];
+let id = 0;
 
 const formItemLayout = {
     labelCol: {
@@ -17,7 +19,15 @@ const formItemLayout = {
         sm: { span: 20 },
     },
 };
+const formItemLayoutWithOutLabel = {
+    wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 20, offset: 4 },
+    },
+};
 
+
+// 主要
 class BindMan extends Component {
     constructor(props) {
         super(props);
@@ -26,6 +36,7 @@ class BindMan extends Component {
             navData: null,
         }
     }
+
     componentDidMount = () => {
         // console.log(fetchApi(apiPath, request))
         if (!this.state.isNaviLoaded) {
@@ -75,45 +86,116 @@ class BindMan extends Component {
     //     })
     // }
 
+    modelTitle = () => {
+        if (this.props.isReady === true) {
+            if (queue.indexOf(this.props.fromModel) > -1) {
+                return this.props.bindInfo.title;
+            } else {
+                return this.props.bindInfo[0].nav_name;
+            }
+        } else {
+            return null;
+        }
+    }
+
     render() {
-        const queue = ["ModelA", "ModelB", "ModelC", "ModelD"];
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        getFieldDecorator('keys', { initialValue: [] });
+        const keys = getFieldValue('keys');
+        const formItems = keys.map((k, index) => (
+            <Form.Item
+                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                label={index === 0 ? 'Passengers' : ''}
+                required={false}
+                key={k}
+            >
+                {getFieldDecorator(`names[${k}]`, {
+                    validateTrigger: ['onChange', 'onBlur'],
+                    rules: [
+                        {
+                            required: true,
+                            whitespace: true,
+                            message: "Please input passenger's name or delete this field.",
+                        },
+                    ],
+                })(<Input placeholder="passenger name" style={{ width: '60%', marginRight: 8 }} />)}
+                {keys.length > 1 ? (
+                    <Icon
+                        className="dynamic-delete-button"
+                        type="minus-circle-o"
+                        onClick={() => this.remove(k)}
+                    />
+                ) : null}
+            </Form.Item>
+        ));
         // console.log(this.props.isReady);
         return (
             <div>
-                {this.state.isNaviLoaded && this.props.isReady ?
+                {this.state.isNaviLoaded ?
                     <Form {...formItemLayout} >
-                        <Form.Item label="绑定列表">
-                            {getFieldDecorator(`bindIt${this.props.fromModel}`, {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请选择一个栏目',
-                                    },
-                                ],
-                                initialValue: this.props.bindInfo.title,
-                            })(
-                                <Select required="true" style={{ width: '30%' }} placeholder="请选择一个栏目">
-                                    {/* <Option value="-1">请选择</Option> */}
-                                    {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
-                                </Select>
-                            )}
-                        </Form.Item>
-                        {
-                            queue.indexOf(this.props.fromModel) > -1 ? <Form.Item label="置顶文章" extra="如未选择，则默认为最新文章">
-                                {getFieldDecorator(`Top${this.props.fromModel}`, {
+                        {this.props.fromModel !== "ModelF" ?
+                            <Form.Item label="栏目选择">
+                                {getFieldDecorator(`bindIt${this.props.fromModel}`, {
                                     rules: [
                                         {
-                                            required: false,
-                                            message: '请选择一篇文章',
+                                            required: true,
+                                            message: '请选择一个栏目',
                                         },
                                     ],
+                                    initialValue: this.modelTitle(),
                                 })(
-                                    <Select required="true" style={{ width: '60%' }} placeholder="请选择一篇文章">
+                                    <Select required="true" style={{ width: '30%' }} placeholder="请选择一个栏目">
                                         {/* <Option value="-1">请选择</Option> */}
+                                        {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                     </Select>
                                 )}
                             </Form.Item> : null
+                        }
+                        {
+                            queue.indexOf(this.props.fromModel) > -1 ?
+                                <Form.Item label="置顶文章" extra="如未选择，则默认为最新文章">
+                                    {getFieldDecorator(`Top${this.props.fromModel}`, {
+                                        rules: [
+                                            {
+                                                required: false,
+                                                message: '请选择一篇文章',
+                                            },
+                                        ],
+                                    })(
+                                        <Select style={{ width: '60%' }} placeholder="请选择一篇文章">
+                                            {/* <Option value="-1">请选择</Option> */}
+                                        </Select>
+                                    )}
+                                </Form.Item> : null
+                        }
+                        {
+                            this.props.fromModel === "ModelE" ?
+                                <div>
+                                    <Form.Item label="栏目描述">
+                                        {getFieldDecorator(`Description${this.props.fromModel}`, {
+                                            rules: [
+                                                {
+                                                    max: 35,
+                                                    message: '描述过长,请酌定删减',
+                                                },
+                                            ],
+                                            initialValue: this.props.bindInfo[0].description,
+                                        })(
+                                            <Input style={{ width: '60%' }} placeholder="35字以内(选填)">
+                                            </Input>
+                                        )
+                                        }
+                                    </Form.Item>
+                                    {/* {formItems}
+                                    <Form.Item {...formItemLayoutWithOutLabel}>
+                                        <Button type="dashed" onClick={this.add} style={{ width: '60%' }}><Icon type="plus" /> Add field</Button>
+                                    </Form.Item>
+                                    <Form.Item {...formItemLayoutWithOutLabel}>
+                                        <Button type="primary" htmlType="submit">Submit</Button>
+                                    </Form.Item> */}
+
+                                </div>
+                                : null
                         }
                         <Form.Item>
                             {/* <Button onClick={this.handleSubmit}>保存修改</Button> */}
@@ -122,11 +204,11 @@ class BindMan extends Component {
                         <Button type="danger"><Icon type="undo" />清除</Button>
                     </Popconfirm> */}
                                 <Popconfirm placement="top" title={confirmSaveText} onConfirm={this.confirmSave()} okText="确定" cancelText="取消">
-                                    <Button ><Icon type="save" />保存</Button>
+                                    <Button ><Icon type="save" />保存修改</Button>
                                 </Popconfirm>
                             </Col>
                         </Form.Item>
-                    </Form > : null
+                    </Form > : <Skeleton active />
                 }
             </div>
         )

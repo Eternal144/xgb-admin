@@ -1,93 +1,88 @@
 import React from 'react';
-import { Form, Input, Icon, Button,Card,Spin} from 'antd';
+import { Form, Input, Icon, Button, Card, Spin } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // import NaviAdd from './NaviAdd';
 import NaviCardForm from './NaviCard';
-import {fetchApi} from '../../callApi'
- import {getNaviInfo} from '../../constants/api/navi'
+import { fetchApi } from '../../callApi'
+import { getNaviInfo } from '../../constants/api/navi'
 
 //当个容器吧
 
 // let data = NaviData.data;
 //在这里渲染已有数据，并且可以添加和修改
 class NaviManage extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            data:null,
+        this.state = {
+            data: null,
         }
     }
-    handleAddItem = ()=>{
+    handleAddItem = () => {
         let { data } = this.state;
-        let lastData = data[data.length-1];
+        let lastData = data[data.length - 1];
         const body = {
-            
-        } 
+        }
         data.push({
-            "id":lastData.id+1,
-            "title":null,
-            "rank":parseInt(lastData.rank)+1,
-            "grade":1,
-            "parents_id":0,
-            "module":1,
-            "contentType":null,
-            "listType":null,
-            "children":[
+            "id": lastData.id + 1,
+            "title": null,
+            "rank": parseInt(lastData.rank) + 1,
+            "grade": 1,
+            "parents_id": 0,
+            "module": 1,
+            "contentType": null,
+            "listType": null,
+            "children": [
             ],
-            "confirm":false
+            "confirm": false
         })
         //const {apiPath,request} = addNav();
         // fetchApi(apiPath,request)
         // .then(res => res.json())
         // .then(data => {
-            
+
         // })
         this.setState({
-            data:data,
+            data: data,
         })
     }
-  render() {
-      let data = this.state.data
-      const formItemLayoutWithOutLabel = {
-        wrapperCol: {
-          xs: { span: 24, offset: 0 },
-          sm: { span: 24, offset:0},
-        },
-      };
-    return (
-        //根据接口获取以后的
-        <div style={{padding:"30px"}}>
-            <BreadcrumbCustom first="导航栏管理" />
-                {data && data.length > 0 ? data.map((x,i)=>{
-                  return <NaviCardForm data={x} length={data.length} key={i} />
+    render() {
+        let data = this.state.data
+        const formItemLayoutWithOutLabel = {
+            wrapperCol: {
+                xs: { span: 24, offset: 0 },
+                sm: { span: 20, offset: 4 },
+            },
+        };
+        return (
+            //根据接口获取以后的
+            <div>
+                <BreadcrumbCustom first="导航栏管理" />
+                {data && data.length > 0 ? data.map((x, i) => {
+                    return <NaviCardForm data={x} length={data.length} key={i} />
                 }) : <Spin size="large" />}
-            <div style={{paddingTop:"20px"}}>
-                {/* <Card > */}
+                <Card>
                     {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayoutWithOutLabel}>
-                        <Button type="dashed" onClick={this.handleAddItem} style={{width:"100%",height:"50px"}}>
-                            <Icon type="plus" /> 添加导航
-                        </Button>
+                            <Button type="dashed" onClick={this.handleAddItem} style={{ width: '60%' }}><Icon type="plus" />添加导航</Button>
                         </Form.Item>
                     </Form>
-                {/* </Card> */}
+                </Card>
             </div>
-       </div>
-    );
-  }
-  componentDidMount(){
-      const {apiPath,request} = getNaviInfo();
-      fetchApi(apiPath,request)
-      .then(res=>res.json())
-      .then(data=>{
-        this.setState({
-            data:data.data,
-        })
-      });
-      
+        );
+    }
+    componentDidMount() {
+        const { apiPath, request } = getNaviInfo();
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    data: data.data,
+                })
+            });
 
-  }
+
+    }
 }
 
 export default NaviManage;

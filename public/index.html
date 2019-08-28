@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 <head>
 	<meta charset="utf-8">
@@ -7,18 +7,19 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="theme-color" content="#000000">
 	<link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-	<title>React Admin</title>
+	<title>学工部管理后台</title>
 </head>
 
 <body>
 	<link rel="stylesheet/less" type="text/css" href="./theme.less" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script> -->
+	<script src="https://cdn.bootcss.com/less.js/2.7.2/less.min.js"></script>
 	<script>
 		const primaryColor = localStorage.getItem('@primary-color');
 		primaryColor && window.less.modifyVars({
 			'@primary-color': primaryColor,
 		})
-    </script>
+	</script>
 	<div id="root"></div>
 </body>
 
