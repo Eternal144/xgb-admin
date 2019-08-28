@@ -51,7 +51,7 @@ export default class CRouter extends Component {
                                             // 重新包装组件
                                             const wrappedComponent = (
                                                 <DocumentTitle title={r.title}>
-                                                    <Component {...merge} />
+                                                    <Component {...merge} user={this.props.auth} />
                                                 </DocumentTitle>
                                             )
                                             return r.login

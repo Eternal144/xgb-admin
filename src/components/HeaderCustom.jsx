@@ -98,9 +98,9 @@ class HeaderCustom extends Component {
                             <img src={avater} alt="头像" /><i className="on bottom b-white" />
                         </span>
                     }>
-                        <MenuItemGroup title="用户中心">
-                            <Menu.Item key="setting:1">欢迎-{this.props.user.userName}</Menu.Item>
-                            <Menu.Item key="setting:2">个人信息</Menu.Item>
+                        <MenuItemGroup title={"已登录-" + sessionStorage.getItem("username")}>
+                            {/* <Menu.Item key="setting:1">欢迎-{this.props.user.userName}</Menu.Item> */}
+                            {/* <Menu.Item key="setting:2">个人信息</Menu.Item> */}
                             <Menu.Item key="logout"><span onClick={this.logout}>退出登录</span></Menu.Item>
                         </MenuItemGroup>
                         {/* <MenuItemGroup title="设置中心">
