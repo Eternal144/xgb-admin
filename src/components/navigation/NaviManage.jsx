@@ -20,8 +20,6 @@ class NaviManage extends React.Component {
     handleAddItem = () => {
         let { data } = this.state;
         let lastData = data[data.length - 1];
-        const body = {
-        }
         data.push({
             "id": lastData.id + 1,
             "title": null,
@@ -35,12 +33,6 @@ class NaviManage extends React.Component {
             ],
             "confirm": false
         })
-        //const {apiPath,request} = addNav();
-        // fetchApi(apiPath,request)
-        // .then(res => res.json())
-        // .then(data => {
-
-        // })
         this.setState({
             data: data,
         })
@@ -49,8 +41,8 @@ class NaviManage extends React.Component {
         let data = this.state.data
         const formItemLayoutWithOutLabel = {
             wrapperCol: {
-                xs: { span: 24, offset: 0 },
-                sm: { span: 20, offset: 4 },
+                xs: { span: 12, offset: 6 },
+                sm: { span: 12, offset: 6 },
             },
         };
         return (
@@ -60,11 +52,13 @@ class NaviManage extends React.Component {
                 {data && data.length > 0 ? data.map((x, i) => {
                     return <NaviCardForm data={x} length={data.length} key={i} />
                 }) : <Spin size="large" />}
-                <Card>
+                <Card style={{marginTop:"50px"}}>
                     {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayoutWithOutLabel}>
-                            <Button type="dashed" onClick={this.handleAddItem} style={{ width: '60%' }}><Icon type="plus" />添加导航</Button>
+                            <Button type="dashed" onClick={this.handleAddItem} 
+                            style={{width:"100%"}}
+                             ><Icon type="plus" />添加导航</Button>
                         </Form.Item>
                     </Form>
                 </Card>
@@ -80,8 +74,6 @@ class NaviManage extends React.Component {
                     data: data.data,
                 })
             });
-
-
     }
 }
 
