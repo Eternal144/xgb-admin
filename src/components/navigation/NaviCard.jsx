@@ -6,6 +6,8 @@ import {
     Select,
     Button,
     Card,
+    Col,
+    Row
   } from 'antd';
   import LocalizedModal from '../ui/Modals'
   import {CONFIRM_MODIFY} from '../../constants/common'
@@ -39,6 +41,7 @@ class RegistrationForm extends React.Component {
     handleConfirm = ()=>{
         
     }
+
     getOptions = (length)=>{
         let OptionArr = [];
         for(let i = 0; i < length; i++){
@@ -49,9 +52,11 @@ class RegistrationForm extends React.Component {
       
     getNavigation = (label,data,length,key)=>{
         const { getFieldDecorator } = this.props.form;
-        return (
-        <div>
-            <Form.Item label={label}>
+        console.log(label.charAt(0));
+        let ch = label.charAt(0);
+        const Superior =  //不带阴影。
+            <div>
+                <Form.Item label={label} >
                 {getFieldDecorator(`${key.title}`, {
                     rules: [
                         {
@@ -64,10 +69,9 @@ class RegistrationForm extends React.Component {
                         },
                     ],
                     initialValue:data.title,
-                })(<Input placeholder="10字以内" style={{ width: '60%' }}/>)}
+                })(<Input placeholder="10字以内" style={{ width: '40%' }}/>)}
                 <Icon type="close-circle" className="iconHover" style={{marginLeft:"20px"}} />
             </Form.Item>
-  
             <Form.Item label="展示位置">
                 {getFieldDecorator(`${key.rank}`, {
                     rules: [
@@ -81,6 +85,14 @@ class RegistrationForm extends React.Component {
                 {this.getOptions(length)}
             </Select>)}
             </Form.Item>
+            </div>
+        const Subordinate = 
+        <Col  className={"shadow"} >
+            {Superior}
+        </Col>
+        return (
+        <div >
+            {ch === "一"  ?  Superior : Subordinate}
         </div>
             )
       }
@@ -108,7 +120,7 @@ class RegistrationForm extends React.Component {
         let label = `一级导航栏${data.rank}`
         return this.getNavigation(label,data,length,key);
     }
-    //在这里用redux改变状态。调用确认框。显示她检测到点击后这个返回这个点击值给这个页面并且submit。
+    
     render() {
       const { getFieldDecorator,getFieldValue } = this.props.form;
       const data = this.props.data;
@@ -116,17 +128,17 @@ class RegistrationForm extends React.Component {
       const formItemLayout = {
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 4 },
+          sm: { span: 8},
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 20 },
+          sm: { span: 16},
         },
       };
       const formItemLayoutWithOutLabel = {
         wrapperCol: {
           xs: { span: 24, offset: 0 },
-          sm: { span: 20, offset: 4 },
+          sm: { span: 18},
         },
       };
 
@@ -137,8 +149,6 @@ class RegistrationForm extends React.Component {
             title:null
         };
         let len = keys[keys.length-1];
-        //居然累加了？？？
-        // console.log(keys);
         const formItems = keys.map((k, index) => {
              let label = `二级导航栏${data.rank}-${k}`;
              let key={
@@ -150,7 +160,7 @@ class RegistrationForm extends React.Component {
     );
     return (
         <div style={{paddingTop:"20px"}}>
-            <Card >
+            <Card style={{padding:"0 20%"}}>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                     {this.getSuperior(data,length)}
                     <Form.Item label='类型分类'>
@@ -183,21 +193,19 @@ class RegistrationForm extends React.Component {
                     </Select>)} 
                     
                     </Form.Item>
+
                     {data.children.length > 0 ? this.getSubordinates(data):null}
-                    <div>
-                        {formItems}
-                        <Form.Item {...formItemLayoutWithOutLabel}>
-                        <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-                            <Icon type="plus" /> Add model
-                        </Button>
-                        </Form.Item>
-                    </div>
-                    <Form.Item style={{textAlign:'right'}}>
-                        {/* <Button type="primary" htmlType="submit">
-                        确定
-                        </Button> */}
+                    {formItems}
+                    <div style={{marginTop:"20px"}}>
+                        <Col span={8} offset={8} >
+                            <Button type="dashed" onClick={this.add} style={{ width: '100%' }}>
+                                <Icon type="plus" /> Add model
+                            </Button>
+                        </Col>
+                        <Col span={8} style={{textAlign:'right'}}>
                         <LocalizedModal onConfirm={this.handleConfirm} content={CONFIRM_MODIFY} />
-                    </Form.Item>
+                        </Col>
+                    </div>
             </Form>
         </Card>
     </div>
