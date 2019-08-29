@@ -7,14 +7,22 @@ import {
     Button,
     Card,
     Col,
-    Row
+    message
   } from 'antd';
   import LocalizedModal from '../ui/Modals'
   import {CONFIRM_MODIFY, CONFIRM_ADD} from '../../constants/common'
+  import { fetchApi } from '../../callApi'
+  import { addSuperior, addNav, deleteNavi } from '../../constants/api/navi'
 
  
   
 const { Option } = Select;
+const success = (content) => {
+    message.success(content);
+};
+const error = (content)=>{
+    message.error(content);
+}
 const newChild =(idd,parents_idd,rankk)=> {
     return{
         title: null,
@@ -53,16 +61,45 @@ class RegistrationForm extends React.Component {
         })
 
     };
-      
+    //在这里提交添加或者修改。
     handleSubmit = () => {
-        // e.preventDefault();
+        const { data } = this.props;
         this.props.form.validateFieldsAndScroll((err, values) => {
+            let formData = new FormData();
+            formData.append('title',values.title);
+            formData.append('rank',values.rank);
+            formData.append('parents_id',0);
+            formData.append('grade',1);
         if (!err) {
-            console.log('Received values of form: ', values);
+            //提交
+            if(data.confirm === false){
+                const { apiPath, request } = addNav(formData);
+                fetchApi(apiPath,request)
+                .then(res=>res.json())
+                .then(data=>{
+                    if(data.error_code === 0){
+                        success("添加成功")
+                    }else{
+                        error("添加失败")
+                    }
+                })
+            }else{ //调用修改覆盖的接口。
+
+            }
+
         }
         });
     };
-
+    //可能是一级可能是二级。随便删吧，我已经限制了id
+    handleDelete = ()=>{
+        const { data } = this.state;
+        const { apiPath, request } = deleteNavi(data.id);
+        fetchApi( apiPath, request)
+        .then(data=>data.json())
+        .then(data=>{
+            console.log(data);
+        })
+    }
     getOptions = (length)=>{
         let OptionArr = [];
         for(let i = 0; i < length; i++){
@@ -102,7 +139,7 @@ class RegistrationForm extends React.Component {
                     ],
                     initialValue:data.title,
                 })(<Input placeholder="10字以内" style={{ width: '40%' }}/>)}
-                {flag ? <Icon type="close-circle" className="iconHover" style={{marginLeft:"20px"}} /> : null}
+                {flag ? <Icon type="close-circle" onClick={this.handleDelete} className="iconHover" style={{marginLeft:"20px"}} /> : null}
             </Form.Item>
             <Form.Item label="展示位置">
                 {getFieldDecorator(`${key.rank}`, {

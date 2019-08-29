@@ -3,7 +3,7 @@ export const getNaviInfo = ()=> {
     return{
         apiPath:`admin/nav`,
         request:{
-            method:"GET",
+            method:'GET',
             mode:'no-cors',
         }
     }
@@ -14,7 +14,22 @@ export const addNav = (body)=>{
         apiPath:'admin/addnav',
         request:{
             body:body,
-            method:"POST",
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+            },
+            mode:'no-cors',
         }
     }
 }
+
+export const deleteNavi = (id)=>{
+    return{
+        apiPath:`admin/delnav/${id}`,
+        request:{
+            method:'PUT',
+            mode:'no-cors',
+        }
+    }
+}
+

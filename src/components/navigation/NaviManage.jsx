@@ -21,17 +21,14 @@ class NaviManage extends React.Component {
         let { data } = this.state;
         let lastData = data[data.length - 1];
         data.push({
-            "id": lastData.id + 1,
-            "title": null,
-            "rank": parseInt(lastData.rank) + 1,
-            "grade": 1,
-            "parents_id": 0,
-            "module": 1,
-            "contentType": null,
-            "listType": null,
-            "children": [
+            id: lastData.id + 1,
+            title: null,
+            rank: parseInt(lastData.rank) + 1,
+            grade: 1,
+            parents_id: 0,
+            children: [
             ],
-            "confirm": false
+            "confirm": false //自己写的数据有一个confirm
         })
         this.setState({
             data: data,
@@ -39,6 +36,7 @@ class NaviManage extends React.Component {
     }
     render() {
         let data = this.state.data
+        console.log(data);
         const formItemLayoutWithOutLabel = {
             wrapperCol: {
                 xs: { span: 12, offset: 6 },
