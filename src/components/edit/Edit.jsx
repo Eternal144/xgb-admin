@@ -1,57 +1,29 @@
 import React from 'react'
 // 引入编辑器组件
 import BraftEditor from 'braft-editor'
-import { Card, Input, Button, Form, Select, DatePicker, TimePicker, Upload, Icon, message } from 'antd'
+import { Card, Input, Button, Form, Select, DatePicker, TimePicker, Upload, Icon, message, Row, Col } from 'antd'
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // 引入编辑器样式
 import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
+import 'braft-editor/dist/index.css';
+import 'braft-extensions/dist/table.css';
+import Table from 'braft-extensions/dist/table';
 
 const { Option, OptGroup } = Select;
 const { MonthPicker } = DatePicker;
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
-function beforeUpload(file) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-        message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJpgOrPng && isLt2M;
-}
+
 class EditorDemo extends React.Component {
 
     state = {
         // 创建一个空的editorState作为初始值
-        editorState: BraftEditor.createEditorState(null),
+        editorState: BraftEditor.createEditorState("<p>在这里输入文章正文</p>"),
         loading: false,
         isNaviLoaded: false,
         navData: null,
-
     }
-    handleChange = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl =>
-                this.setState({
-                    imageUrl,
-                    loading: false,
-                }),
-            );
-        }
-    };
 
     componentWillMount() {
         if (!this.state.isNaviLoaded) {
@@ -108,11 +80,74 @@ class EditorDemo extends React.Component {
         }
         return columns;
     }
+    buildPreviewHtml() {
+        return `
+          <!Doctype html>
+          <html>
+            <head>
+              <title>文章预览</title>
+              <style>
+                html,body{
+                  height: 100%;
+                  margin: 0;
+                  padding: 0;
+                  overflow: auto;
+                  background-color: #f1f2f3;
+                }
+                .container{
+                  box-sizing: border-box;
+                  width: 1000px;
+                  max-width: 100%;
+                  min-height: 100%;
+                  margin: 0 auto;
+                  padding: 30px 20px;
+                  overflow: hidden;
+                  background-color: #fff;
+                  border-right: solid 1px #eee;
+                  border-left: solid 1px #eee;
+                }
+                .container img,
+                .container audio,
+                .container video{
+                  max-width: 100%;
+                  height: auto;
+                }
+                .container p{
+                  white-space: pre-wrap;
+                  min-height: 1em;
+                }
+                .container pre{
+                  padding: 15px;
+                  background-color: #f1f1f1;
+                  border-radius: 5px;
+                }
+                .container blockquote{
+                  margin: 0;
+                  padding: 15px;
+                  background-color: #f1f1f1;
+                  border-left: 3px solid #d1d1d1;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="container">${this.state.editorState.toHTML()}</div>
+            </body>
+          </html>
+        `
+    }
+    preview = () => {
+        if (window.previewWindow) {
+            window.previewWindow.close()
+        }
+        window.previewWindow = window.open()
+        window.previewWindow.document.write(this.buildPreviewHtml())
+        window.previewWindow.document.close()
+    }
 
     render() {
-        const { editorState } = this.state
-        const { getFieldDecorator, getFieldValue } = this.props.form
-        const PlaceDefault = "50字以内（若缺省则取正文前50字）"
+        const { editorState } = this.state;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        const PlaceDefault = "50字以内（若缺省则取正文前50字）";
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -122,32 +157,35 @@ class EditorDemo extends React.Component {
                 xs: { span: 24 },
                 sm: { span: 16 }
             }
-        }
-        // 启用<FileUpLoader>，这里的配置没什么用了
-        // const props = {
-        //     name: 'file',
-        //     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-        //     headers: {
-        //         authorization: 'authorization-text',
-        //     },
-        //     onChange(info) {
-        //         if (info.file.status !== 'uploading') {
-        //             console.log(info.file, info.fileList);
-        //         }
-        //         if (info.file.status === 'done') {
-        //             message.success(`${info.file.name} file uploaded successfully`);
-        //         } else if (info.file.status === 'error') {
-        //             message.error(`${info.file.name} file upload failed.`);
-        //         }
-        //     },
-        // };
-        // const uploadButton = (
-        //     <div>
-        //         <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        //         <div className="ant-upload-text">Upload</div>
-        //     </div>
-        // );
+        };
         const { imageUrl } = this.state;
+        // 定义富文本编辑器功能
+        const editorControls = ['undo', 'redo', 'separator',
+            'font-size', 'line-height', 'letter-spacing', 'separator',
+            'text-color', 'bold', 'italic', 'underline', 'strike-through', 'separator',
+            'superscript', 'subscript', 'remove-styles', 'separator', 'text-indent', 'text-align', 'separator',
+            'headings', 'list-ul', 'list-ol', 'separator', 'separator', 'hr', 'separator', 'media', 'separator', 'clear', 'fullscreen'];
+        const tableOption = {
+            defaultColumns: 3, // 默认列数
+            defaultRows: 3, // 默认行数
+            withDropdown: false, // 插入表格前是否弹出下拉菜单
+            exportAttrString: 'table', // 指定输出HTML时附加到table标签上的属性字符串
+        };
+        BraftEditor.use(Table(tableOption));
+        const extendControls = [
+            {
+                key: 'add-table',
+                type: 'button',
+                text: '表格',
+            },
+            {
+                key: 'custom-button',
+                type: 'button',
+                text: '预览',
+                onClick: this.preview,
+            }
+        ]
+
         return (
             <div className="my-component">
                 <BreadcrumbCustom first="发帖编辑" />
@@ -160,13 +198,7 @@ class EditorDemo extends React.Component {
                                     message: "请选择栏目"
                                 }],
                             })(
-                                // 从服务器获取栏目列表
-                                // <Select style={{ width: "20%" }} >
-                                //     <Option value="1">啊啊啊</Option>
-                                //     <Option value="2">哦哦哦</Option>
-                                // </Select>
                                 <Select required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
-                                    {/* <Option value="-1">请选择</Option> */}
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                 </Select>
                             )}
@@ -233,55 +265,36 @@ class EditorDemo extends React.Component {
                                 }]
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
-                        {/* 启用UpLoader,弃用下方代码 */}
-                        {/* <Form.Item  {...formItemLayout} label="附件">
-                            {getFieldDecorator('attachment', {
-                                rules: [{
-                                    required: false,
-                                }]
-                            })(
-                                // <Upload {...props}>
-                                //     <Button type="upload" > Upload</Button>（支持格式为word，excel，pdf，压缩包）
-                                // </Upload>
-                            )}
-                        </Form.Item> */}
-                        {/* 启用UpLoader,弃用上方代码 */}
+                        {/* 附件上传 */}
                         <FileUpLoader type="file" bindTo={"MessageEdit"} />
-
-
-                        {/* 启用UpLoader,弃用下方代码 */}
-                        {/* <Form.Item {...formItemLayout} label="标题图" >
-                            {getFieldDecorator('titlePic', {
-                                rules: [{
-                                    required: false,
-                                }]
-                            })(<Upload
-                                name="avatar"
-                                listType="picture-card"
-                                className="avatar-uploader"
-                                showUploadList={false}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                beforeUpload={beforeUpload}
-                                onChange={this.handleChange}
-                            >
-                                {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-                            </Upload>)
-                            }
-                        </Form.Item> */}
-                        {/* 启用UpLoader,弃用上方代码 */}
-
-
+                        {/* 图片上传 */}
                         <FileUpLoader type="image" bindTo={"MessageCover"} necessary={true} />
-                        {/* <Form.Item {...formItemLayout} label="正文">
-                        {getFieldDecorator('article',{
-                            rules:[{
-                                required: true,
-                            }]
-                        })()
-
-                        }
-                    </Form.Item>  */}
+                        <Row>
+                            <Col span={16} offset={4}>
+                                <Form.Item>
+                                    {getFieldDecorator('content', {
+                                        validateTrigger: 'onBlur',
+                                        rules: [{
+                                            required: true,
+                                            validator: (_, value, callback) => {
+                                                if (value.isEmpty()) {
+                                                    callback('请输入一个正文');
+                                                } else {
+                                                    callback();
+                                                }
+                                            }
+                                        }],
+                                    })(
+                                        <BraftEditor className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} placeholder="请输入正文内容" />
+                                    )}
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Form.Item>
+                            <Button size="default" type="default" htmlType="submit" >保存</Button>
+                        </Form.Item>
                     </Form>
+
                 </Card>
             </div>
         )

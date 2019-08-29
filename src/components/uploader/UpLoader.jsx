@@ -58,7 +58,7 @@ class UpLoaderModel extends Component {
     }
 
     render() {
-        console.log(this.state.path);
+        // console.log(this.state.path);
         const imageReqSettings = {
             name: 'file',
             action: switchModel(this.props.type).url,
@@ -66,7 +66,7 @@ class UpLoaderModel extends Component {
             listType: 'picture',
             onChange(info) {
                 if (info.file.status !== 'uploading') {
-                    // console.log(info.file, info.fileList);
+                    //文件上传中
                 }
                 if (info.file.status === 'done') {
                     message.success(`图片上传成功：${info.file.name}`);
@@ -130,8 +130,9 @@ class UpLoaderModel extends Component {
                             <Row>
                                 <Col span={8}>
                                     <Upload {...fileReqSettings}>
-                                        <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传附件</Button>
-                                    </Upload>
+                                        <Tooltip placement="top" title="小于8MB的文件 格式不限">
+                                            <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传附件</Button>
+                                        </Tooltip>                                    </Upload>
                                 </Col>
                             </Row>
                         )}
