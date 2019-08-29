@@ -35,7 +35,7 @@ class Buttons extends React.Component {
         );
         return (
             <div className="gutter-example button-demo">
-                <BreadcrumbCustom first="UI" second="按钮" />
+                <BreadcrumbCustom first="资源管理" />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={12}>
                         <div className="gutter-box">

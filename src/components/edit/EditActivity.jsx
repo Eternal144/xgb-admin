@@ -8,6 +8,7 @@ import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
+import { postMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
@@ -16,22 +17,27 @@ const { Option, OptGroup } = Select;
 const { MonthPicker } = DatePicker;
 
 class EditorDemo extends React.Component {
-
-    state = {
-        // 创建一个空的editorState作为初始值
-        editorState: BraftEditor.createEditorState("<p>在这里输入文章正文</p>"),
-        loading: false,
-        isNaviLoaded: false,
-        navData: null,
+    constructor(props) {
+        super(props);
+        this.state = {
+            editorState: BraftEditor.createEditorState("<p>在这里输入文章正文</p>"),
+            loading: false,
+            isNaviLoaded: false,
+            navData: null,
+        }
     }
 
-    componentWillMount() {
+    noNaviNotification() {
+        message.error("栏目列表获取失败");
+    }
+
+    componentDidMount() {
         if (!this.state.isNaviLoaded) {
             const { apiPath, request } = getNaviInfo();
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    // console.log(data.data)
+                    console.log(data.data)
                     this.setState({
                         navData: data.data,
                         isNaviLoaded: true,
@@ -40,14 +46,14 @@ class EditorDemo extends React.Component {
         }
     }
 
-    async componentDidMount() {
-        // 假设此处从服务端获取html格式的编辑器内容
-        // const htmlContent = await fetchEditorContent()
-        // // 使用BraftEditor.createEditorState将html字符串转换为编辑器需要的editorStat
-        // this.setState({
-        //     editorState: BraftEditor.createEditorState(htmlContent)
-        // })
-    }
+    // async componentDidMount() {
+    //     假设此处从服务端获取html格式的编辑器内容
+    //     const htmlContent = await fetchEditorContent()
+    //     使用BraftEditor.createEditorState将html字符串转换为编辑器需要的editorStat
+    //     this.setState({
+    //         editorState: BraftEditor.createEditorState(htmlContent)
+    //     })
+    // }
 
     submitContent = async () => {
         // 在编辑器获得焦点时按下ctrl+s会执行此方法
@@ -62,8 +68,8 @@ class EditorDemo extends React.Component {
 
     listColumn(data) {
         let columns = [];
-        // console.log(data[0].children[0].title);
-        if (data[0].children.length > 0) {
+        // console.log(data);
+        if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
                 let opts = [];
                 for (let j = 0; j < data[i].children.length; j++) {
@@ -135,6 +141,7 @@ class EditorDemo extends React.Component {
           </html>
         `
     }
+
     preview = () => {
         if (window.previewWindow) {
             window.previewWindow.close()
@@ -142,6 +149,28 @@ class EditorDemo extends React.Component {
         window.previewWindow = window.open()
         window.previewWindow.document.write(this.buildPreviewHtml())
         window.previewWindow.document.close()
+    }
+
+    handleSubmit = e => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let pic=null;
+                let icon=null;
+                let appendix=null;
+                const { apiPath, request } = postMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
+                fetchApi(apiPath, request)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data.data)
+                        this.setState({
+                            navData: data.data,
+                            isNaviLoaded: true,
+                        })
+                    });
+                console.log('Received values of form: ', values);
+            }
+        });
     }
 
     render() {
@@ -173,11 +202,11 @@ class EditorDemo extends React.Component {
         };
         BraftEditor.use(Table(tableOption));
         const extendControls = [
-            {
-                key: 'add-table',
-                type: 'button',
-                text: '表格',
-            },
+            // {
+            //     key: 'add-table',
+            //     type: 'button',
+            //     text: '表格',
+            // },
             {
                 key: 'custom-button',
                 type: 'button',
@@ -191,6 +220,11 @@ class EditorDemo extends React.Component {
                 <BreadcrumbCustom first="发帖编辑" />
                 <Card>
                     <Form onSubmit={this.handleSubmit} {...formItemLayout}  >
+                        <Form.Item>
+                            <Col span={20} style={{ textAlign: 'right' }}>
+                                <Button size="default" type="default" htmlType="submit" >保存</Button>
+                            </Col>
+                        </Form.Item>
                         <Form.Item label="所属栏目" >
                             {getFieldDecorator('section', {
                                 rules: [{
@@ -290,9 +324,10 @@ class EditorDemo extends React.Component {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Form.Item>
+                        <Col span={20} style={{ textAlign: 'right' }}>
                             <Button size="default" type="default" htmlType="submit" >保存</Button>
-                        </Form.Item>
+                        </Col>
+
                     </Form>
 
                 </Card>

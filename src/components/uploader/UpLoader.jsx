@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
-import ContentLoader from 'react-content-loader';
+// import ContentLoader from 'react-content-loader';
 
 const switchModel = (type, file) => {
     if (type === "image") {
@@ -22,11 +22,11 @@ const switchModel = (type, file) => {
     }
 }
 
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
+// function getBase64(img, callback) {
+//     const reader = new FileReader();
+//     reader.addEventListener('load', () => callback(reader.result));
+//     reader.readAsDataURL(img);
+// }
 
 class UpLoaderModel extends Component {
     constructor(props) {
@@ -73,7 +73,7 @@ class UpLoaderModel extends Component {
                 } else if (info.file.status === 'error') {
                     message.error(`图片上传失败：${info.file.name}`);
                 }
-                let fileList = [...info.fileList];
+                // let fileList = [...info.fileList];
             },
         }
         const fileReqSettings = {

@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/14.
  */
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { fetchApi } from '../../callApi';
 import { getModify } from '../../constants/api/login';
 const FormItem = Form.Item;

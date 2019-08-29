@@ -23,15 +23,6 @@ import { notification } from 'antd';
 import FileUpLoader from '../../uploader/UpLoader';
 const { Option, OptGroup } = Select;
 const { Panel } = Collapse;
-const noNaviNotification = () => {
-    const args = {
-        message: '提示',
-        description:
-            '当前二级栏目数为0，请先前往"导航栏管理"设置栏目',
-        duration: 0,
-    };
-    notification.open(args);
-};
 
 const formItemLayoutWithOutLabel = {
     wrapperCol: {
@@ -91,6 +82,10 @@ class BannerForm extends Component {
         }
     }
 
+    noNaviNotification() {
+        message.error("栏目列表获取失败");
+    }
+
     imgList = () => {
         let list = [];
         if (this.props.isLoaded) {
@@ -106,7 +101,7 @@ class BannerForm extends Component {
     listColumn(data) {
         let columns = [];
         // console.log(data[0].children[0].title);
-        if (data[0].children.length > 0) {
+        if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
                 let opts = [];
                 for (let j = 0; j < data[i].children.length; j++) {

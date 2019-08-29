@@ -19,7 +19,8 @@ import Tabs from './ui/Tabs';
 import NaviManage from './navigation/NaviManage';
 import Banners from './ui/banners';
 import Drags from './ui/Draggable';
-import Edit from './edit/Edit';
+import EditActivity from './edit/EditActivity';
+import EditNews from './edit/EditNews';
 import Dashboard from './dashboard/Dashboard';
 import Gallery from './ui/Gallery';
 import AuthBasic from './auth/Basic';
@@ -37,6 +38,6 @@ export default {
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Buttons, Spins, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery,
-     AuthBasic, RouterEnter, WysiwygBundle,
-    Cssmodule, QueryParams,Edit,NaviManage
+    AuthBasic, RouterEnter, WysiwygBundle,
+    Cssmodule, QueryParams, EditActivity, NaviManage, EditNews
 }
