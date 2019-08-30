@@ -3,28 +3,33 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-const renderMenuItem = item => ( // item.route 菜单单独跳转的路由
+//没有下级了，最终的。
+const renderMenuItem = (item,s) => ( // item.route 菜单单独跳转的路由
     <Menu.Item
         key={item.key}
     >
         <Link to={(item.route || item.key) + (item.query || '')}>
             {item.icon && <Icon type={item.icon} />}
-            <span className="nav-text">{item.title}</span>
+            {s === 1 ? <span className="nav-text sub-item">{item.title}</span> : <span className="nav-text">{item.title}</span>}
         </Link>
     </Menu.Item>
 );
 
-const renderSubMenu = item => (
+// const [dragItems, setDragItems] = useState(menus);
+
+//如果还有下级
+const renderSubMenu = (item,s) => (
     <Menu.SubMenu
         key={item.key}
         title={
             <span>
                 {item.icon && <Icon type={item.icon} />}
-                <span className="nav-text">{item.title}</span>
+                {s === 1 ? <span className="sub-item">{item.title}</span> :  <span className="nav-text">{item.title}</span>}
             </span>
         }
     >
-        {item.subs.map(item => renderMenuItem(item))}
+    {item.subs.map(item =>item.subs ? renderSubMenu(item,1) : renderMenuItem(item,1))}
+        
     </Menu.SubMenu>
 );
 
@@ -67,6 +72,7 @@ export default ({ menus, ...props }) => {
                                 index={index}
                             >
                                 {(provided, snapshot) => (
+                                    
                                     <div>
                                         <div
                                             ref={provided.innerRef}
@@ -74,7 +80,8 @@ export default ({ menus, ...props }) => {
                                             {...provided.draggableProps}
                                         >
                                             <Menu {...props}>
-                                                {item.subs ? renderSubMenu(item) : renderMenuItem(item)}
+                                                {/* {console.log(provided)} */}
+                                                {item.subs ? renderSubMenu(item,0) : renderMenuItem(item,0)}
                                             </Menu>
                                         </div>
                                         {provided.placeholder}

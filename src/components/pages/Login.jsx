@@ -27,7 +27,7 @@ class Login extends React.Component {
         // const { history } = this.props;
         if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
             localStorage.setItem('user', JSON.stringify(nextAuth.data));
-            // console.log("aaa");
+            console.log("aaa");
             history.push('/app/dashboard/index');
         }
     }
