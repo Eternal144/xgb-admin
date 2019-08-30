@@ -33,8 +33,11 @@ class UpLoaderModel extends Component {
         super(props);
         this.state = {
             loading: false,
-            path: null,
+            imgPath: null,
+            filePath: null,
+            iconPath: null,
         }
+        Object.assign(this.state, this.props);
     }
 
     beforeImageUpload(file) {
@@ -87,6 +90,7 @@ class UpLoaderModel extends Component {
                 }
                 if (info.file.status === 'done') {
                     message.success(`文件上传成功：${info.file.name}`);
+                    this.props.GetPath();
                 } else if (info.file.status === 'error') {
                     message.error(`文件上传失败：${info.file.name}`);
                 }
@@ -132,7 +136,8 @@ class UpLoaderModel extends Component {
                                     <Upload {...fileReqSettings}>
                                         <Tooltip placement="top" title="小于8MB的文件 格式不限">
                                             <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传附件</Button>
-                                        </Tooltip>                                    </Upload>
+                                        </Tooltip>
+                                    </Upload>
                                 </Col>
                             </Row>
                         )}

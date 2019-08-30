@@ -8,7 +8,7 @@ import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
-import { postMessage } from '../../constants/api/edit';
+import { postActivityMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
@@ -24,6 +24,9 @@ class EditorDemo extends React.Component {
             loading: false,
             isNaviLoaded: false,
             navData: null,
+            imgpath: null,
+            filepath: null,
+            icon: null,
         }
     }
 
@@ -37,7 +40,7 @@ class EditorDemo extends React.Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.setState({
                         navData: data.data,
                         isNaviLoaded: true,
@@ -155,23 +158,37 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let pic=null;
-                let icon=null;
-                let appendix=null;
-                const { apiPath, request } = postMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
+                let pic = null;
+                let icon = null;
+                let appendix = null;
+                const { apiPath, request } = postActivityMessage(values.section, values.title, this.state.imgpath, this.state.icon, this.state.editorState.toHTML(), this.state.filepath);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data.data)
+                        // console.log(data.data)
                         this.setState({
                             navData: data.data,
                             isNaviLoaded: true,
                         })
                     });
                 console.log('Received values of form: ', values);
+                console.log(this.state.editorState)
             }
         });
     }
+
+    // formFilePath = (paths) => {
+    //     this.setState({
+    //         filepath: paths,
+    //     })
+    // }
+
+    // formImgPath = (imgPath, iconPath) => {
+    //     this.setState({
+    //         imgpath: imgPath,
+    //         icon: iconPath,
+    //     })
+    // }
 
     render() {
         const { editorState } = this.state;

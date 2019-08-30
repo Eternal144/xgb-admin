@@ -8,7 +8,7 @@ import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
-import { postMessage } from '../../constants/api/edit';
+import { postNewsMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
@@ -24,6 +24,9 @@ class EditorDemo extends React.Component {
             loading: false,
             isNaviLoaded: false,
             navData: null,
+            imgpath: null,
+            filepath: null,
+            icon: null,
         }
     }
 
@@ -37,7 +40,7 @@ class EditorDemo extends React.Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.setState({
                         navData: data.data,
                         isNaviLoaded: true,
@@ -155,10 +158,10 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let pic=null;
-                let icon=null;
-                let appendix=null;
-                const { apiPath, request } = postMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
+                let pic = null;
+                let icon = null;
+                let appendix = null;
+                const { apiPath, request } = postNewsMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
@@ -214,7 +217,7 @@ class EditorDemo extends React.Component {
                 onClick: this.preview,
             }
         ]
-
+        console.log(this.state.imgpath);
         return (
             <div className="my-component">
                 <BreadcrumbCustom first="发帖编辑" />
@@ -251,51 +254,14 @@ class EditorDemo extends React.Component {
                             })(<Input placeholder="35字以内" style={{ width: "40%" }} />)
                             }
                         </Form.Item>
-                        <Form.Item label="活动日期">
-                            {getFieldDecorator('date', {
+
+                        <Form.Item label="记者" >
+                            {getFieldDecorator('journalist', {
                                 rules: [{
                                     required: true,
-                                },
-                                ],
-                            })(<DatePicker style={{ width: "40%" }} />)}
-                        </Form.Item>
-
-                        <Form.Item label="活动时间">
-                            {getFieldDecorator('time', {
-                                rules: [{
-                                    required: true,
-                                }]
-                            })(<TimePicker style={{ width: "40%" }} />)}
-                        </Form.Item>
-
-                        <Form.Item {...formItemLayout} label="活动地点" >
-                            {getFieldDecorator('place', {
-                                rules: [{
-                                    required: false,
-                                    max: 50
-                                }]
-                            })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
-                        </Form.Item>
-
-                        <Form.Item label="人物介绍">
-                            {getFieldDecorator('people', {
-                                rules: [{
-                                    required: false,
-                                },
-                                {
-                                    max: 50,
-                                    message: "人物介绍过长,请酌情删减",
-                                }]
-                            })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
-                        </Form.Item>
-
-                        <Form.Item label="补充说明">
-                            {getFieldDecorator('tips', {
-                                rules: [{
-                                    required: false,
                                 }, {
-                                    max: 50,
-                                    message: "人物介绍过长,请酌情删减",
+                                    max: 20,
+                                    message: "文本过长,请酌情删减",
                                 }]
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
