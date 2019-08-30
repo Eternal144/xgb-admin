@@ -11,7 +11,7 @@ export const getNaviInfo = ()=> {
     }
 }
 
-export cognst addNav = (body)=>{
+export const addNav = (body)=>{
     return{
         apiPath:'admin/addnav',
         request:{

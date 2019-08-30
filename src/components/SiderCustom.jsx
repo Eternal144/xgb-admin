@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
-import routes from '../routes/config';
+import routes from '../routes/config'; //在这里也要处理那个嘛。。。怕是哦
 import SiderMenu from './SiderMenu';
 // import logoImg from '../style/imgs/logo.png';
 
