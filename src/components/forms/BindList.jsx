@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Select, message, Button, Icon, Col, Popconfirm, Input, Skeleton } from 'antd';
+import { Form, Select, Button, Icon, Col, Popconfirm, Input, Skeleton, message } from 'antd';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
-import { modelPreview } from '../../constants/api/model';
 const { Option, OptGroup } = Select;
-const confirmClearText = '清除此模块相关设置?';
 const confirmSaveText = '是否保存设置?';
 const queue = ["ModelA", "ModelB", "ModelC", "ModelD"];
 let id = 0;
@@ -53,10 +51,14 @@ class BindMan extends Component {
         }
     }
 
+    noNaviNotification() {
+        message.error("栏目列表获取失败");
+    }
+
     listColumn(data) {
         let columns = [];
         // console.log(data[0].children[0].title);
-        if (data[0].children.length > 0) {
+        if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
                 let opts = [];
                 for (let j = 0; j < data[i].children.length; j++) {

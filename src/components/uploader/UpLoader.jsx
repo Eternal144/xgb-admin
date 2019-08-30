@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
-import ContentLoader from 'react-content-loader';
+// import ContentLoader from 'react-content-loader';
 
 const switchModel = (type, file) => {
     if (type === "image") {
@@ -22,19 +22,22 @@ const switchModel = (type, file) => {
     }
 }
 
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
+// function getBase64(img, callback) {
+//     const reader = new FileReader();
+//     reader.addEventListener('load', () => callback(reader.result));
+//     reader.readAsDataURL(img);
+// }
 
 class UpLoaderModel extends Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
-            path: null,
+            imgPath: null,
+            filePath: null,
+            iconPath: null,
         }
+        Object.assign(this.state, this.props);
     }
 
     beforeImageUpload(file) {
@@ -58,7 +61,7 @@ class UpLoaderModel extends Component {
     }
 
     render() {
-        console.log(this.state.path);
+        // console.log(this.state.path);
         const imageReqSettings = {
             name: 'file',
             action: switchModel(this.props.type).url,
@@ -66,14 +69,14 @@ class UpLoaderModel extends Component {
             listType: 'picture',
             onChange(info) {
                 if (info.file.status !== 'uploading') {
-                    // console.log(info.file, info.fileList);
+                    //文件上传中
                 }
                 if (info.file.status === 'done') {
                     message.success(`图片上传成功：${info.file.name}`);
                 } else if (info.file.status === 'error') {
                     message.error(`图片上传失败：${info.file.name}`);
                 }
-                let fileList = [...info.fileList];
+                // let fileList = [...info.fileList];
             },
         }
         const fileReqSettings = {
@@ -87,6 +90,7 @@ class UpLoaderModel extends Component {
                 }
                 if (info.file.status === 'done') {
                     message.success(`文件上传成功：${info.file.name}`);
+                    this.props.GetPath();
                 } else if (info.file.status === 'error') {
                     message.error(`文件上传失败：${info.file.name}`);
                 }
@@ -130,7 +134,9 @@ class UpLoaderModel extends Component {
                             <Row>
                                 <Col span={8}>
                                     <Upload {...fileReqSettings}>
-                                        <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传附件</Button>
+                                        <Tooltip placement="top" title="小于8MB的文件 格式不限">
+                                            <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传附件</Button>
+                                        </Tooltip>
                                     </Upload>
                                 </Col>
                             </Row>

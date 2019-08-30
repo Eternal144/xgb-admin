@@ -14,8 +14,7 @@ class Preview extends Component {
             return (
                 <div>
                     <p className="model-title m-1">{this.props.data.title}</p>
-                    <ContentLoader ariaLabel="模块A" height={305} width={370} speed={0}
-                        primaryColor="#f3f3f3">
+                    <ContentLoader ariaLabel="模块A" height={305} width={370} speed={0} primaryColor="#f3f3f3">
                         <rect x="6" y="49" rx="0" ry="0" width="325" height="47" />
                         <rect x="6" y="102" rx="0" ry="0" width="58" height="17" />
                         <rect x="6" y="124" rx="0" ry="0" width="328" height="18" />
@@ -33,8 +32,7 @@ class Preview extends Component {
             return (
                 <div className="grey-bg">
                     <p className="model-title m-2">{this.props.data.title}</p>
-                    <ContentLoader ariaLabel="模块B" height={305} width={578} speed={0}
-                        primaryColor="#ffffff">
+                    <ContentLoader ariaLabel="模块B" height={305} width={578} speed={0} primaryColor="#ffffff">
                         <rect x="24" y="26" rx="0" ry="0" width="185" height="252" />
                         <rect x="237" y="67" rx="0" ry="0" width="70" height="19" />
                         <rect x="237" y="100" rx="0" ry="0" width="318" height="51" />
@@ -47,8 +45,7 @@ class Preview extends Component {
             return (
                 <div>
                     <p className="model-title m-3">{this.props.data.title}</p>
-                    <ContentLoader ariaLabel="模块C" height={489} width={362} speed={0}
-                        primaryColor="#f3f3f3">
+                    <ContentLoader ariaLabel="模块C" height={489} width={362} speed={0} primaryColor="#f3f3f3">
                         <rect x="0" y="41" rx="0" ry="0" width="75" height="60" />
                         <rect x="0" y="110" rx="0" ry="0" width="75" height="60" />
                         <rect x="0" y="180" rx="0" ry="0" width="75" height="60" />
@@ -72,8 +69,7 @@ class Preview extends Component {
             return (
                 <div>
                     <p className="model-title m-4">{this.props.data.title}</p>
-                    <ContentLoader ariaLabel="模块D" height={489} width={587} speed={0}
-                        primaryColor="#f3f3f3">
+                    <ContentLoader ariaLabel="模块D" height={489} width={587} speed={0} primaryColor="#f3f3f3">
                         <rect x="0" y="43" rx="0" ry="0" width="175" height="138" />
                         <rect x="203" y="43" rx="0" ry="0" width="175" height="138" />
                         <rect x="406" y="43" rx="0" ry="0" width="175" height="138" />

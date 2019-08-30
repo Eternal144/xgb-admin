@@ -18,10 +18,10 @@ export const getLogin = (user, psw) => {
 export const getModify = (user, old_psw, new_psw) => {
     let formdata = new FormData();
     formdata.append("username", user);
-    formdata.append("old_psw", old_psw);
-    formdata.append("new_psw",new_psw);
+    formdata.append("old_pwd", old_psw);
+    formdata.append("new_pwd", new_psw);
     return {
-        apiPath: `admin/login`,
+        apiPath: `admin/modify`,
         request: {
             method: "POST",
             mode: 'no-cors',

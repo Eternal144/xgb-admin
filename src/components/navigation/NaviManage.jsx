@@ -50,13 +50,13 @@ class NaviManage extends React.Component {
                 {data && data.length > 0 ? data.map((x, i) => {
                     return <NaviCardForm data={x} length={data.length} key={i} />
                 }) : <Spin size="large" />}
-                <Card style={{marginTop:"50px"}}>
+                <Card style={{ marginTop: "50px" }}>
                     {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayoutWithOutLabel}>
-                            <Button type="dashed" onClick={this.handleAddItem} 
-                            style={{width:"100%"}}
-                             ><Icon type="plus" />添加导航</Button>
+                            <Button type="dashed" onClick={this.handleAddItem}
+                                style={{ width: "100%" }}
+                            ><Icon type="plus" />添加导航</Button>
                         </Form.Item>
                     </Form>
                 </Card>

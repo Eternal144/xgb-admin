@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import { PwaInstaller } from '../widget';
 import { connectAlita } from 'redux-alita';
 import { fetchApi } from '../../callApi';
@@ -45,6 +45,8 @@ class Login extends React.Component {
                         if (data.error_code === 0) {
                             sessionStorage.setItem('username', values.userName);
                             setAlitaState({ funcName: 'admin', stateName: 'auth' });
+                        } else {
+                            message.error("用户名或密码错误，请检查")
                         }
                     })
             }
@@ -65,7 +67,7 @@ class Login extends React.Component {
                             {getFieldDecorator('userName', {
                                 rules: [{ required: true, message: '请输入用户名!' }],
                             })(
-                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="账户名" />
+                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
                             )}
                         </FormItem>
                         <FormItem>
