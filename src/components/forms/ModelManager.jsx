@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import { Form, Select } from 'antd';
+import { Form } from 'antd';
 import BindList from './BindList';
 
 
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 20 },
-    },
-};
+// const formItemLayout = {
+//     labelCol: {
+//         xs: { span: 24 },
+//         sm: { span: 4 },
+//     },
+//     wrapperCol: {
+//         xs: { span: 24 },
+//         sm: { span: 20 },
+//     },
+// };
 
 class ModelMan extends Component {
     constructor(props) {

@@ -61,7 +61,7 @@ class Banners extends React.Component {
         };
         return (
             <div className="gutter-example button-demo">
-                <BreadcrumbCustom first="轮播图管理" second="轮播图" />
+                <BreadcrumbCustom first="轮播图管理" />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">

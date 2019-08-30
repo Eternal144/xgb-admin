@@ -1,10 +1,12 @@
 
+
 export const getNaviInfo = ()=> {
     return{
         apiPath:`admin/nav`,
         request:{
             method:'GET',
             mode:'no-cors',
+
         }
     }
 }
@@ -19,6 +21,7 @@ export const addNav = (body)=>{
                 'Content-Type':'application/json',
             },
             mode:'no-cors',
+
         }
     }
 }
