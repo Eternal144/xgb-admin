@@ -42,3 +42,9 @@
     background-color: rgba(247, 247, 248, 1);
     border-radius: 4px;
 }
+
+.dynamic-box{
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 60%;
+    margin-top:10px;
+}

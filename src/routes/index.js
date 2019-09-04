@@ -7,7 +7,7 @@ import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';
 import routesConfig from './config'; //在这里进行更改。
 import queryString from 'query-string';
-import {fetchApi} from '../callApi'
+import { fetchApi } from '../callApi'
 import { getNaviInfo } from '../constants/api/navi'
 
 export default class CRouter extends Component {
@@ -32,32 +32,32 @@ export default class CRouter extends Component {
         }
         return permission ? this.requireAuth(permission, component) : component;
     };
-    getObject = ()=>{
+    getObject = () => {
 
     }
-    componentDidMount = ()=>{
+    componentDidMount = () => {
         // console.log(Object.keys(routesConfig));
         // const { apiPath, request } = getNaviInfo();
-        // fetchApi(apiPath,request)
-        // .then(res=>res.json())
-        // .then(data=>{
-        //     // const data = data.data;
-        //     // data.map((key,i)=>{
+        // fetchApi(apiPath, request)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         const data = data.data;
+        //         data.map((key, i) => {
 
-        //     // })
-        //     // let { routesConfig } = this.state;
-        //     // routesConfig.menus[1].subs[1] = 
-        //     // { 
-        //     //     key: '/app/resource', title: '按钮', component: 'Buttons',
-        //     //     subs:'/app/resource1',title:'按钮2',compoennt: 'Icons'
-        //     // };
-           
-        //     this.setState({
-        //         routesConfig : routesConfig
+        //         })
+        //         let { routesConfig } = this.state;
+        //         routesConfig.menus[1].subs[1] =
+        //             {
+        //                 key: '/app/resource', title: '按钮', component: 'Buttons',
+        //                 subs: '/app/resource1', title: '按钮2', compoennt: 'Icons'
+        //             };
+
+        //         this.setState({
+        //             routesConfig: routesConfig
+        //         })
+        //         //把一级标题和二级标题插进去。
+        //         // console.log(this.state.routesConfig)
         //     })
-        //     //把一级标题和二级标题插进去。
-        //     // console.log(this.state.routesConfig)
-        // })
     }
     render() {
         // const {routesConfig} = this.state;
@@ -97,12 +97,12 @@ export default class CRouter extends Component {
             <Switch>
                 {
                     Object.keys(routesConfig).map(key => //第一个key为menu
-                        routesConfig[key].map(rr => { 
-                            return rr.component ? route(rr) : 
-                            rr.subs.map(a=>{
-                                return a.component ? route(a) : a.subs.map(b => {route(b);});
-                            })
-                            
+                        routesConfig[key].map(rr => {
+                            return rr.component ? route(rr) :
+                                rr.subs.map(a => {
+                                    return a.component ? route(a) : a.subs.map(b => { route(b); });
+                                })
+
                         })
                     )
                 }

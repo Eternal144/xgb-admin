@@ -98,7 +98,7 @@ class UpLoaderModel extends Component {
         }
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form.Item label={switchModel(this.props.type).text}>
+            <Form.Item label={this.props.disLabel ? switchModel(this.props.type).text : null} >
                 {this.props.type === "image" ?
                     <div>
                         {getFieldDecorator(`image${this.props.bindTo}`, {
@@ -147,7 +147,6 @@ class UpLoaderModel extends Component {
         )
     }
 }
-
 
 const UpLoader = Form.create({ name: "uploadModel" })(UpLoaderModel);
 export default UpLoader;
