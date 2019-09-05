@@ -27,7 +27,6 @@ class Login extends React.Component {
         // const { history } = this.props;
         if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
             localStorage.setItem('user', JSON.stringify(nextAuth.data));
-            console.log("aaa");
             history.push('/app/dashboard/index');
         }
     }
@@ -66,6 +65,7 @@ class Login extends React.Component {
                         <FormItem>
                             {getFieldDecorator('userName', {
                                 rules: [{ required: true, message: '请输入用户名!' }],
+                                initialValue: 'test'
                             })(
                                 <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
                             )}
@@ -73,6 +73,7 @@ class Login extends React.Component {
                         <FormItem>
                             {getFieldDecorator('password', {
                                 rules: [{ required: true, message: '请输入密码!' }],
+                                initialValue: 123456
                             })(
                                 <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
                             )}

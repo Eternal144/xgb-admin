@@ -11,12 +11,12 @@ import { fetchApi } from '../callApi'
 import { getNaviInfo } from '../constants/api/navi'
 
 export default class CRouter extends Component {
-    // constructor(props){
-    //     super(props)
-    //     this.state={
-    //         routesConfig:routesConfig
-    //     }
-    // }
+    constructor(props){
+        super(props)
+        this.state={
+            routesConfig:routesConfig
+        }
+    }
     requireAuth = (permission, component) => {
         const { auth } = this.props;
         const { permissions } = auth.data;
@@ -36,77 +36,83 @@ export default class CRouter extends Component {
 
     }
     componentDidMount = () => {
-        // console.log(Object.keys(routesConfig));
-        // const { apiPath, request } = getNaviInfo();
-        // fetchApi(apiPath, request)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         const data = data.data;
-        //         data.map((key, i) => {
-
-        //         })
-        //         let { routesConfig } = this.state;
-        //         routesConfig.menus[1].subs[1] =
-        //             {
-        //                 key: '/app/resource', title: '按钮', component: 'Buttons',
-        //                 subs: '/app/resource1', title: '按钮2', compoennt: 'Icons'
-        //             };
-
-        //         this.setState({
-        //             routesConfig: routesConfig
-        //         })
-        //         //把一级标题和二级标题插进去。
-        //         // console.log(this.state.routesConfig)
-        //     })
+        const { apiPath, request } = getNaviInfo();
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                const aaa = data.data;
+                //在这里要获取一级所有的一级。
+                let arr = aaa.map((key, i) => { //
+                    //应该是返回一个对象。key component?
+                    let obj = {
+                        id: key.id,
+                        title: key.title,
+                        icon: 'database',
+                        component: 'SrcMan',
+                        key:`/app/resource/${key.id}`
+                    };
+                    return obj;
+                })
+                let { routesConfig } = this.state;
+                routesConfig.menus[1].subs = arr;
+                this.setState({
+                    routesConfig: routesConfig
+                })
+            })
     }
     render() {
-        // const {routesConfig} = this.state;
-        const route = r => {
-            // console.log(r);
-            const Component = AllComponents[r.component];
-            return (
-                <Route
-                    key={r.route || r.key}
-                    exact
-                    path={r.route || r.key}
-                    render={props => {
-                        const reg = /\?\S*/g;
-                        // 匹配?及其以后字符串
-                        const queryParams = window.location.hash.match(reg);
-                        // 去除?的参数
-                        const { params } = props.match;
-                        Object.keys(params).forEach(key => {
-                            params[key] = params[key] && params[key].replace(reg, '');
-                        });
-                        props.match.params = { ...params };
-                        const merge = { ...props, query: queryParams ? queryString.parse(queryParams[0]) : {} };
-                        // 重新包装组件
-                        const wrappedComponent = (
-                            <DocumentTitle title={r.title}>
-                                <Component {...merge} user={this.props.auth} />
-                            </DocumentTitle>
-                        )
-                        return r.login
-                            ? wrappedComponent
-                            : this.requireLogin(wrappedComponent, r.auth)
-                    }}
-                />
-            )
-        }
+        const {routesConfig} = this.state;
         return (
-            <Switch>
-                {
-                    Object.keys(routesConfig).map(key => //第一个key为menu
-                        routesConfig[key].map(rr => {
-                            return rr.component ? route(rr) :
-                                rr.subs.map(a => {
-                                    return a.component ? route(a) : a.subs.map(b => { route(b); });
-                                })
-
-                        })
-                    )
-                }
-
+                <Switch>
+                {Object.keys(routesConfig).map(key =>
+                    routesConfig[key].map(r => {
+                        const route = r => {
+                            const Component = AllComponents[r.component];
+                            return (
+                                <Route
+                                    key={r.route || r.key}
+                                    exact
+                                    path={r.route || r.key}
+                                    render={props => {
+                                        const reg = /\?\S*/g;
+                                        // 匹配?及其以后字符串
+                                        const queryParams = window.location.hash.match(reg);
+                                        // 去除?的参数
+                                        const { params } = props.match;
+                                        Object.keys(params).forEach(key => {
+                                            params[key] =
+                                                params[key] && params[key].replace(reg, '');
+                                        });
+                                        props.match.params = { ...params };
+                                        const merge = {
+                                            ...props,
+                                            query: queryParams
+                                                ? queryString.parse(queryParams[0])
+                                                : {},
+                                        };
+                                        // 重新包装组件
+                                        const wrappedComponent = (
+                                            <DocumentTitle title={r.title}>
+                                                <Component {...merge} />
+                                            </DocumentTitle>
+                                        );
+                                        return r.login
+                                            ? wrappedComponent
+                                            : this.requireLogin(wrappedComponent, r.auth);
+                                    }}
+                                />
+                            );
+                        };
+                        if(r.component){
+                            return route(r);
+                        }else{
+                            if(r.subs){
+                                return r.subs.map(r => route(r));
+                            }
+                            return null
+                        }
+                    })
+                )}
                 <Route render={() => <Redirect to="/404" />} />
             </Switch>
         )
