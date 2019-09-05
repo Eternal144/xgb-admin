@@ -91,14 +91,30 @@ class RegistrationForm extends React.Component {
                 })
             }else{ //调用修改覆盖的接口。
                 const { data } = this.state;
-                // console.log(data);
-                // for (var i in values){
-                //     console.log(values[i]);
-                //     console.log(i);
-                // }
-                // data.rank = values.rank;
-                // data.title = values.title;
-                // console.log(values);
+                data.rank = values.rank;
+                data.title = values.title;
+                delete values.rank;
+                delete values.title;
+                for (var i in values){ //i为key，values[i] 为value。感觉怪怪的，我怎么把数据给他？先整理出来吧。
+                    let arr = i.split('-');
+                    let s = arr[0];
+                    let index = parseInt(arr[1])-1;
+                    switch(s){
+                        case "title":
+                            data.children[index].title = values[i];
+                            break;
+                        case "rank":
+                            data.children[index].rank = values[i];
+                            break;
+                        case "contentType":
+                            data.children[index].contentType = values[i];
+                            break;
+                        case "listType":
+                            data.children[index].listType = values[i];
+                            break;
+                    }
+                }
+                
             }
         }
         });
@@ -137,10 +153,7 @@ class RegistrationForm extends React.Component {
                 }
             })
         }
-        
-        
     }
-
     cancel = ()=>{
         error('Click on No');
     }
@@ -219,8 +232,8 @@ class RegistrationForm extends React.Component {
         return children.map((x, i) => {
             let label = `二级导航栏${data.rank}-${i + 1}`;
             let key = {
-                title: `${i + 1}title`,
-                rank: `${i + 1}rank`
+                title: `title-${i + 1}`,
+                rank: `rank-${i + 1}`
             };
             const Com1 = this.getNavigation(label, x, children.length, key,i);
             const TypeChoose = <div>
