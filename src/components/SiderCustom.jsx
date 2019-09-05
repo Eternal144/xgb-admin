@@ -6,11 +6,13 @@ import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
 import routes from '../routes/config'; //在这里也要处理那个嘛。。。怕是哦
 import SiderMenu from './SiderMenu';
-// import logoImg from '../style/imgs/logo.png';
+import { fetchApi } from '../callApi'
+import { getNaviInfo } from '../constants/api/navi'
 
 const { Sider } = Layout;
 
 class SiderCustom extends Component {
+    
     static getDerivedStateFromProps(props, state) {
         if (props.collapsed !== state.collapsed) {
             const state1 = SiderCustom.setMenuOpen(props);
@@ -43,12 +45,37 @@ class SiderCustom extends Component {
         openKey: '',
         selectedKey: '',
         firstHide: true, // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
+        routesConfig:routes
     };
-    componentDidMount() {
-        // this.setMenuOpen(this.props);
-        const state = SiderCustom.setMenuOpen(this.props);
-        this.setState(state);
+    componentDidMount = () => {
+        const { apiPath, request } = getNaviInfo();
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                const aaa = data.data;
+                //在这里要获取一级所有的一级。
+                let arr = aaa.map((key, i) => { //
+                    //应该是返回一个对象。key component?
+                    let obj = {
+                        id: key.id,
+                        title: key.title,
+                        icon: 'database',
+                        component: 'SrcMan',
+                        key:`/app/resource/${key.id}`
+                    };
+                    return obj;
+                })
+                let { routesConfig } = this.state;
+                // console.log(arr);
+                routesConfig.menus[1].subs = arr;
+                this.setState({
+                    routesConfig: routesConfig
+                });
+                const state = SiderCustom.setMenuOpen(this.props);
+                this.setState(state);
+            })
     }
+
     menuClick = e => {
         this.setState({
             selectedKey: e.key
@@ -56,14 +83,17 @@ class SiderCustom extends Component {
         const { popoverHide } = this.props; // 响应式布局控制小屏幕点击菜单时隐藏菜单操作
         popoverHide && popoverHide();
     };
+
     openMenu = v => {
         this.setState({
             openKey: v[v.length - 1],
             firstHide: false,
         })
     };
+    
     render() {
-        const { selectedKey, openKey, firstHide, collapsed } = this.state;
+        const { selectedKey, openKey, firstHide, collapsed,routesConfig } = this.state;
+        console.log(routesConfig);
         return (
             <Sider
                 trigger={null}
@@ -75,7 +105,7 @@ class SiderCustom extends Component {
                     {/* <img src={logoImg} /> */}
                 </div>
                 <SiderMenu
-                    menus={routes.menus}
+                    menus={routesConfig.menus}
                     onClick={this.menuClick}
                     mode="inline"
                     selectedKeys={[selectedKey]}
