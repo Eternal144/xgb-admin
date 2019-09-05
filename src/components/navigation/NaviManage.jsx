@@ -19,23 +19,33 @@ class NaviManage extends React.Component {
     }
     handleAddItem = () => {
         let { data } = this.state;
+        //存在一点问题。
         let lastData = data[data.length - 1];
         data.push({
-            id: lastData.id + 1,
+            id:-1,
             title: null,
             rank: parseInt(lastData.rank) + 1,
             grade: 1,
             parents_id: 0,
             children: [
             ],
-            "confirm": false //自己写的数据有一个confirm
+            confirm: false //自己写的数据有一个confirm
         })
         this.setState({
             data: data,
         })
     }
+    handleUpdateID = (id,index)=>{
+        const { data } = this.state;
+        data[index].id = id;
+        console.log(data);
+        this.setState({
+            data: data
+        })
+    }
+
     render() {
-        let data = this.state.data
+        let data = this.state.data;
         console.log(data);
         const formItemLayoutWithOutLabel = {
             wrapperCol: {
@@ -47,8 +57,11 @@ class NaviManage extends React.Component {
             //根据接口获取以后的
             <div>
                 <BreadcrumbCustom first="导航栏管理" />
+                {/* {console.log(data)}  */}
                 {data && data.length > 0 ? data.map((x, i) => {
-                    return <NaviCardForm data={x} length={data.length} key={i} />
+                    return <NaviCardForm data={x} length={data.length} 
+                    update={this.handleUpdateID}
+                    delete={this.handleDeleteItem} key={i} index={i} />
                 }) : <Spin size="large" />}
                 <Card style={{ marginTop: "50px" }}>
                     {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}
@@ -71,6 +84,7 @@ class NaviManage extends React.Component {
                 this.setState({
                     data: data.data,
                 })
+                console.log("应该更新数据了")
             });
     }
 }

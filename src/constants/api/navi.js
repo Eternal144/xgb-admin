@@ -30,8 +30,8 @@ export const deleteNavi = (id)=>{
     return{
         apiPath:`admin/delnav/${id}`,
         request:{
-            method:'PUT',
-            mode:'no-cors',
+            method:'GET',
+            mode:'cors',
         }
     }
 }

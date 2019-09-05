@@ -43,7 +43,6 @@ export default class CRouter extends Component {
                 const aaa = data.data;
                 //在这里要获取一级所有的一级。
                 let arr = aaa.map((key, i) => { //
-                    //应该是返回一个对象。key component?
                     let obj = {
                         id: key.id,
                         title: key.title,
