@@ -16,3 +16,27 @@ export const lowwerModelPreview = (name) => {
         }
     }
 };
+
+export const updateLowwer = (body, model, id) => {
+    return {
+        apiPath: 'admin/updateLowwer/' + model + '/' + id,
+        request: {
+            method: "POST",
+            body: body,
+        }
+    }
+}
+
+export const addlowwer = (body) => {
+    return {
+        apiPath: 'admin/addlowwer',
+        request: {
+            method: "POST",
+            body: body,
+        }
+    }
+}
+
+export default () => {
+    return;
+}

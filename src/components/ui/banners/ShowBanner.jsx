@@ -258,7 +258,8 @@ class BannerForm extends Component {
     }
 
     render() {
-        // const { getFieldDecorator } = this.props.form;
+        // console.log("filepath:" + filePath);
+        // console.log("iconpath:" + iconPath);
         let data = this.props.data;
         // console.log(data);
         return (
