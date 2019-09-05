@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Row, Col, Card } from 'antd';
 import BreadcrumbCustom from '@/components/BreadcrumbCustom';
 import AuthWidget from '@/components/widget/AuthWidget';
-import beauty from '@/style/imgs/beauty.jpg';
+// import beauty from '@/style/imgs/beauty.jpg';
 
 class Basic extends Component {
     render() {
@@ -21,7 +21,7 @@ class Basic extends Component {
                                     {
                                         auth.permissions && auth.permissions.includes('auth/authPage/visit') &&
                                         <div style={{textAlign: 'center'}}>
-                                            <img src={beauty} alt="" style={{height: 400}} />
+                                            {/* <img src={beauty} alt="" style={{height: 400}} /> */}
                                             {(auth.permissions.includes('auth/authPage/edit') &&
                                             <div>
                                                 <p>看啥子美女，看点美景就行啦~<span role="img" aria-label="" aria-labelledby="">😄😄</span></p>
