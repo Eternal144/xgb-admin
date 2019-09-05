@@ -4,6 +4,7 @@ import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
 import './customize.css';
 import Uploader from '../uploader/UpLoader';
+import updateLowwer from '../../constants/api/model';
 const { Option, OptGroup } = Select;
 const confirmSaveText = '是否保存设置?';
 const queue = ["ModelA", "ModelB", "ModelC", "ModelD"];
@@ -142,7 +143,36 @@ class BindMan extends Component {
     }
 
     confirmSave = () => {
+        const type = this.props.fromModel;
+        if (type === "ModelA") {
 
+        } else if (type === "ModelB") {
+
+        } else if (type === "ModelC") {
+
+        } else if (type === "ModelD") {
+
+        } else if (type === "ModelE") {
+
+        } else if (type === "ModelF") {
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    let reqinfo = new FormData();
+                    reqinfo.append('content1', values.modelF[1]);
+                    reqinfo.append('description', values.modelF[2]);
+                    let { apiPath, request } = updateLowwer(reqinfo, 2, this.props.bindInfo.id);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            
+                        });
+                }
+            });
+        } else if (type === "ModelG") {
+
+        } else if (type === "ModelH") {
+
+        }
     }
     // handleSubmit = () => {
     //     let bindInfo = this.props.form.getFieldsValue();
@@ -179,7 +209,7 @@ class BindMan extends Component {
                 <div className="dynamic-box">
                     <Row>
                         <div>PART {index + 1}:</div>
-                        <Uploader labelReq={false} type="image" bindTo={`E` + index} />
+                        <Uploader labelReq={false} type="image" bindTo={`E` + index} disLabel={true} />
                     </Row>
                     {getFieldDecorator(`modelE1[${k}]`, {
                         validateTrigger: ['onChange', 'onBlur'],
@@ -230,6 +260,7 @@ class BindMan extends Component {
 
             </Form.Item>
         ));
+
         const formGItems = keys.map((k, index) => (
             <Form.Item
                 {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
@@ -240,7 +271,7 @@ class BindMan extends Component {
                 <div className="dynamic-box">
                     <Row>
                         <div>PART {index + 1}:</div>
-                        <Uploader labelReq={false} type="image" bindTo={`E` + index} />
+                        <Uploader labelReq={false} type="image" bindTo={`E` + index} disLabel={true} />
                     </Row>
                     {getFieldDecorator(`modelG1[${k}]`, {
                         validateTrigger: ['onChange', 'onBlur'],
@@ -287,7 +318,7 @@ class BindMan extends Component {
                 <div className="dynamic-box">
                     <Row>
                         <div>PART {index + 1}:</div>
-                        <Uploader labelReq={false} type="image" bindTo={`E` + index} />
+                        <Uploader labelReq={false} type="image" bindTo={`E` + index} disLabel={true} />
                     </Row>
                     {getFieldDecorator(`modelH1[${k}]`, {
                         validateTrigger: ['onChange', 'onBlur'],
@@ -408,6 +439,7 @@ class BindMan extends Component {
                                                 message: '字数超过上限，请酌情删减'
                                             },
                                         ],
+                                        initialValue:this.props.bindInfo[0].content1,
                                     })(<Input placeholder="请填写文字标题,35字以内" style={{ width: '60%', marginRight: 8 }} />)}
 
                                 </Form.Item>
@@ -421,10 +453,10 @@ class BindMan extends Component {
                                                 message: "请填写跳转链接",
                                             },
                                         ],
+                                        initialValue:this.props.bindInfo[0].description,
                                     })(<Input placeholder="请填写跳转链接" style={{ width: '60%', marginRight: 8 }} />)}
                                 </Form.Item>
                             </div> : null
-
                         }
                         {/* 模块G表单 */}
                         {
@@ -451,8 +483,8 @@ class BindMan extends Component {
                                 {/* <Popconfirm placement="top" title={confirmClearText} onConfirm={this.confirmClear()} okText="确定" cancelText="取消">
                         <Button type="danger"><Icon type="undo" />清除</Button>
                     </Popconfirm> */}
-                                <Popconfirm placement="top" title={confirmSaveText} onConfirm={this.confirmSave()} okText="确定" cancelText="取消">
-                                    <Button ><Icon type="save" />保存修改</Button>
+                                <Popconfirm placement="top" title={confirmSaveText} onConfirm={this.confirmSave} okText="确定" cancelText="取消">
+                                    <Button><Icon type="save" />保存修改</Button>
                                 </Popconfirm>
                             </Col>
                         </Form.Item>
