@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Select, Button, Icon, Col, Popconfirm, Input, Skeleton, message } from 'antd';
+import { Form, Select, Button, Icon, Col, Popconfirm, Input, Skeleton, message, Row } from 'antd';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
+import './customize.css';
+import Uploader from '../uploader/UpLoader';
 const { Option, OptGroup } = Select;
 const confirmSaveText = '是否保存设置?';
 const queue = ["ModelA", "ModelB", "ModelC", "ModelD"];
@@ -55,6 +57,69 @@ class BindMan extends Component {
         message.error("栏目列表获取失败");
     }
 
+    removeE = (k) => {
+        const { form } = this.props;
+        const keys = form.getFieldValue('keys');
+        if (keys.length === 1) {
+            return;
+        }
+
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        });
+    };
+
+    addE = () => {
+        const { form } = this.props;
+        const keys = form.getFieldValue('keys');
+        const nextKeys = keys.concat(id++);
+        form.setFieldsValue({
+            keys: nextKeys,
+        });
+    };
+
+    removeG = (k) => {
+        const { form } = this.props;
+        const keys = form.getFieldValue('keys');
+        if (keys.length === 1) {
+            return;
+        }
+
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        });
+    };
+
+    addG = () => {
+        const { form } = this.props;
+        const keys = form.getFieldValue('keys');
+        const nextKeys = keys.concat(id++);
+        form.setFieldsValue({
+            keys: nextKeys,
+        });
+    };
+
+    removeH = (k) => {
+        const { form } = this.props;
+        const keys = form.getFieldValue('keys');
+        if (keys.length === 1) {
+            return;
+        }
+
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        });
+    };
+
+    addH = () => {
+        const { form } = this.props;
+        const keys = form.getFieldValue('keys');
+        const nextKeys = keys.concat(id++);
+        form.setFieldsValue({
+            keys: nextKeys,
+        });
+    };
+
     listColumn(data) {
         let columns = [];
         // console.log(data[0].children[0].title);
@@ -104,32 +169,161 @@ class BindMan extends Component {
         const { getFieldDecorator, getFieldValue } = this.props.form;
         getFieldDecorator('keys', { initialValue: [] });
         const keys = getFieldValue('keys');
-        const formItems = keys.map((k, index) => (
+        const formEItems = keys.map((k, index) => (
             <Form.Item
                 {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                label={index === 0 ? 'Passengers' : ''}
+                label={index === 0 ? '内容控制' : ''}
                 required={false}
                 key={k}
             >
-                {getFieldDecorator(`names[${k}]`, {
-                    validateTrigger: ['onChange', 'onBlur'],
-                    rules: [
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Please input passenger's name or delete this field.",
-                        },
-                    ],
-                })(<Input placeholder="passenger name" style={{ width: '60%', marginRight: 8 }} />)}
-                {keys.length > 1 ? (
-                    <Icon
-                        className="dynamic-delete-button"
-                        type="minus-circle-o"
-                        onClick={() => this.remove(k)}
-                    />
-                ) : null}
+                <div className="dynamic-box">
+                    <Row>
+                        <div>PART {index + 1}:</div>
+                        <Uploader labelReq={false} type="image" bindTo={`E` + index} />
+                    </Row>
+                    {getFieldDecorator(`modelE1[${k}]`, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                            {
+                                required: true,
+                                whitespace: true,
+                                message: "请填写第一段描述性文字",
+                            },
+                            {
+                                max: 35,
+                                message: '字数超过上限，请酌情删减'
+                            },
+                        ],
+                    })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
+                    {getFieldDecorator(`modelE2[${k}]`, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                            {
+                                required: true,
+                                whitespace: true,
+                                message: "请填写第二段描述性文字",
+                            },
+                            {
+                                max: 35,
+                                message: '字数超过上限，请酌情删减'
+                            },
+                        ],
+                    })(<Input placeholder="请填写第二段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
+                    {getFieldDecorator(`Top${this.props.fromModel}`, {
+                        rules: [
+                            {
+                                required: true,
+                                message: '请选择一篇文章',
+                            },
+                        ],
+                    })(
+                        <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
+                            {/* <Option value="-1">请选择</Option> */}
+                        </Select>
+                    )}
+                    {keys.length > 1 ? (
+                        <Button style={{ width: '10%' }} onClick={() => this.removeE(k)}>
+                            <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                        </Button>
+                    ) : null}
+                </div>
+
             </Form.Item>
         ));
+        const formGItems = keys.map((k, index) => (
+            <Form.Item
+                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                label={index === 0 ? '内容控制' : ''}
+                required={false}
+                key={k}
+            >
+                <div className="dynamic-box">
+                    <Row>
+                        <div>PART {index + 1}:</div>
+                        <Uploader labelReq={false} type="image" bindTo={`E` + index} />
+                    </Row>
+                    {getFieldDecorator(`modelG1[${k}]`, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                            {
+                                required: true,
+                                whitespace: true,
+                                message: "请填写描述性文字",
+                            },
+                            {
+                                max: 35,
+                                message: '字数超过上限，请酌情删减'
+                            },
+                        ],
+                    })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
+                    {getFieldDecorator(`Top${this.props.fromModel}`, {
+                        rules: [
+                            {
+                                required: true,
+                                message: '请选择一篇文章',
+                            },
+                        ],
+                    })(
+                        <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
+                            {/* <Option value="-1">请选择</Option> */}
+                        </Select>
+                    )}
+                    {keys.length > 1 ? (
+                        <Button style={{ width: '10%' }} onClick={() => this.removeG(k)}>
+                            <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                        </Button>
+                    ) : null}
+                </div>
+            </Form.Item>
+        ));
+
+        const formHItems = keys.map((k, index) => (
+            <Form.Item
+                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                label={index === 0 ? '内容控制' : ''}
+                required={false}
+                key={k}
+            >
+                <div className="dynamic-box">
+                    <Row>
+                        <div>PART {index + 1}:</div>
+                        <Uploader labelReq={false} type="image" bindTo={`E` + index} />
+                    </Row>
+                    {getFieldDecorator(`modelH1[${k}]`, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [
+                            {
+                                required: true,
+                                whitespace: true,
+                                message: "请填写描述性文字",
+                            },
+                            {
+                                max: 35,
+                                message: '字数超过上限，请酌情删减'
+                            },
+                        ],
+                    })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
+                    {getFieldDecorator(`Model${this.props.fromModel}[index]`, {
+                        rules: [
+                            {
+                                required: true,
+                                message: '请选择一篇文章',
+                            },
+                        ],
+                    })(
+                        <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
+                            {/* <Option value="-1">请选择</Option> */}
+                        </Select>
+                    )}
+                    {keys.length > 1 ? (
+                        <Button style={{ width: '10%' }} onClick={() => this.removeG(k)}>
+                            <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                        </Button>
+                    ) : null}
+                </div>
+            </Form.Item>
+        ));
+
         // console.log(this.props.isReady);
         return (
             <div>
@@ -153,6 +347,7 @@ class BindMan extends Component {
                                 )}
                             </Form.Item> : null
                         }
+                        {/* 通用模块 */}
                         {
                             queue.indexOf(this.props.fromModel) > -1 ?
                                 <Form.Item label="置顶文章" extra="如未选择，则默认为最新文章">
@@ -170,6 +365,7 @@ class BindMan extends Component {
                                     )}
                                 </Form.Item> : null
                         }
+                        {/* 模块E表单 */}
                         {
                             this.props.fromModel === "ModelE" ?
                                 <div>
@@ -188,17 +384,67 @@ class BindMan extends Component {
                                         )
                                         }
                                     </Form.Item>
-                                    {/* {formItems}
+                                    {formEItems}
                                     <Form.Item {...formItemLayoutWithOutLabel}>
-                                        <Button type="dashed" onClick={this.add} style={{ width: '60%' }}><Icon type="plus" /> Add field</Button>
+                                        <Button type="dashed" onClick={this.addE} style={{ width: '60%' }}><Icon type="plus" /></Button>
                                     </Form.Item>
-                                    <Form.Item {...formItemLayoutWithOutLabel}>
-                                        <Button type="primary" htmlType="submit">Submit</Button>
-                                    </Form.Item> */}
-
                                 </div>
                                 : null
                         }
+                        {/* 模块F表单 */}
+                        {
+                            this.props.fromModel === "ModelF" ? <div>
+                                <Form.Item label="文字标题">
+                                    {getFieldDecorator(`modelF[1]`, {
+                                        validateTrigger: ['onChange', 'onBlur'],
+                                        rules: [
+                                            {
+                                                required: true,
+                                                whitespace: true,
+                                                message: "请填写文字标题",
+                                            },
+                                            {
+                                                max: 35,
+                                                message: '字数超过上限，请酌情删减'
+                                            },
+                                        ],
+                                    })(<Input placeholder="请填写文字标题,35字以内" style={{ width: '60%', marginRight: 8 }} />)}
+
+                                </Form.Item>
+                                <Form.Item label="跳转链接">
+                                    {getFieldDecorator(`modelF[2]`, {
+                                        validateTrigger: ['onChange', 'onBlur'],
+                                        rules: [
+                                            {
+                                                required: true,
+                                                whitespace: true,
+                                                message: "请填写跳转链接",
+                                            },
+                                        ],
+                                    })(<Input placeholder="请填写跳转链接" style={{ width: '60%', marginRight: 8 }} />)}
+                                </Form.Item>
+                            </div> : null
+
+                        }
+                        {/* 模块G表单 */}
+                        {
+                            this.props.fromModel === "ModelG" ? <div>
+                                {formGItems}
+                                <Form.Item {...formItemLayoutWithOutLabel}>
+                                    <Button type="dashed" onClick={this.addG} style={{ width: '60%' }}><Icon type="plus" /></Button>
+                                </Form.Item>
+                            </div> : null
+                        }
+                        {/* 模块H表单 */}
+                        {
+                            this.props.fromModel === "ModelH" ? <div>
+                                {formHItems}
+                                <Form.Item {...formItemLayoutWithOutLabel}>
+                                    <Button type="dashed" onClick={this.addH} style={{ width: '60%' }}><Icon type="plus" /></Button>
+                                </Form.Item>
+                            </div> : null
+                        }
+
                         <Form.Item>
                             {/* <Button onClick={this.handleSubmit}>保存修改</Button> */}
                             <Col span={24} style={{ textAlign: 'right' }}>

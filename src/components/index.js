@@ -12,7 +12,7 @@ import Echarts from './charts/Echarts';
 // import Recharts from './charts/Recharts';
 // import Icons from './ui/Icons';
 import Buttons from './ui/Buttons';
-import Spins from './ui/Spins';
+import SrcMan from './ui/SrcMan';
 // import Modals from './ui/Modals';
 import Notifications from './ui/Notifications';
 import Tabs from './ui/Tabs';
@@ -36,8 +36,8 @@ const WysiwygBundle = Loadable({ // 按需加载富文本配置
 
 export default {
     BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
-    Echarts, Buttons, Spins, Notifications,
+    Echarts, Buttons, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery,
-    AuthBasic, RouterEnter, WysiwygBundle,
+    AuthBasic, RouterEnter, WysiwygBundle, SrcMan,
     Cssmodule, QueryParams, EditActivity, NaviManage, EditNews
 }
