@@ -271,7 +271,7 @@ class EditorDemo extends React.Component {
                         <Form.Item label="活动日期">
                             {getFieldDecorator('date', {
                                 rules: [{
-                                    required: true,
+                                    required: false,
                                 },
                                 ],
                             })(<DatePicker style={{ width: "40%" }} />)}
@@ -280,7 +280,7 @@ class EditorDemo extends React.Component {
                         <Form.Item label="活动时间">
                             {getFieldDecorator('time', {
                                 rules: [{
-                                    required: true,
+                                    required: false,
                                 }]
                             })(<TimePicker style={{ width: "40%" }} />)}
                         </Form.Item>
@@ -332,7 +332,7 @@ class EditorDemo extends React.Component {
                                             required: true,
                                             validator: (_, value, callback) => {
                                                 if (value.isEmpty()) {
-                                                    callback('请输入一个正文');
+                                                    callback('正文不能为空！');
                                                 } else {
                                                     callback();
                                                 }

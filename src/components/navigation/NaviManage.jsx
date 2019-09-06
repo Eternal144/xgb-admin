@@ -22,7 +22,7 @@ class NaviManage extends React.Component {
         //存在一点问题。
         let lastData = data[data.length - 1];
         data.push({
-            id:-1,
+            id: -1,
             title: null,
             rank: parseInt(lastData.rank) + 1,
             grade: 1,
@@ -35,7 +35,7 @@ class NaviManage extends React.Component {
             data: data,
         })
     }
-    handleUpdateID = (id,index)=>{
+    handleUpdateID = (id, index) => {
         const { data } = this.state;
         data[index].id = id;
         this.setState({
@@ -58,9 +58,9 @@ class NaviManage extends React.Component {
                 <BreadcrumbCustom first="导航栏管理" />
                 {/* {console.log(data)}  */}
                 {data && data.length > 0 ? data.map((x, i) => {
-                    return <NaviCardForm data={x} length={data.length} 
-                    update={this.handleUpdateID}
-                    delete={this.handleDeleteItem} key={i} index={i} />
+                    return <NaviCardForm data={x} length={data.length}
+                        update={this.handleUpdateID}
+                        delete={this.handleDeleteItem} key={i} index={i} />
                 }) : <Spin size="large" />}
                 <Card style={{ marginTop: "50px" }}>
                     {/* 在添加的时候直接修改state，增加一个状态。那个数据直接从fetch中拿取。 */}

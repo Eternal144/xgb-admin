@@ -19,6 +19,7 @@ import { Skeleton } from 'antd';
 import { fetchApi } from '../../../callApi';
 import { getNaviInfo } from '../../../constants/api/navi';
 import { showMessageList } from '../../../constants/api/banner';
+import { messageList } from '../../../constants/api/model';
 import { notification } from 'antd';
 import FileUpLoader from '../../uploader/UpLoader';
 const { Option, OptGroup } = Select;
@@ -122,8 +123,23 @@ class BannerForm extends Component {
 
 
     //获取栏目对应的文章列表并展示
-    listTitleList(nav_id) {
-
+    handleColumnSelectChange = (columnValue) => {
+        this.setState({ isListLoaded: false })
+        let { apiPath, request } = messageList(columnValue);
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                let temp = [];
+                for (let i = 0; i < data.data.length; i++) {
+                    temp.push(
+                        <Option key={columnValue + "--" + data.data[i].id} value={data.data[i].id}>{data.data[i].title}</Option>
+                    )
+                }
+                this.setState({
+                    isListLoaded: true,
+                    mesList: temp,
+                })
+            });
     }
 
     handleSubmit = e => {
@@ -159,11 +175,6 @@ class BannerForm extends Component {
             return this.getBanner(m, data, len, i);
         })
         // forms.push(this.getBanner(data, len, i));
-    }
-
-    //选择的栏目变更
-    handleSelect(value) {
-        console.log(value);
     }
 
     getBanner = (m, data, maxlen, index) => {
@@ -214,7 +225,7 @@ class BannerForm extends Component {
                                 ],
                                 initialValue: this.getTitle(index, 1),
                             })(
-                                <Select id={index + '-1'} onChange={this.handleSelect} key={index + '-1'} required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
+                                <Select id={index + '-1'} onChange={this.handleColumnSelectChange} key={index + '-1'} required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
                                     {/* <Option value="-1">请选择</Option> */}
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                 </Select>
@@ -233,9 +244,9 @@ class BannerForm extends Component {
                                 ],
                                 initialValue: this.getTitle(index, 2),
                             })(
-                                <Select id={index + '-2'} key={index + '-2'} style={{ width: '40%' }} onChange={this.handleChange} placeholder="请选择一篇文章">
+                                <Select id={index + '-2'} key={index + '-2'} style={{ width: '40%' }} placeholder="请选择一篇文章">
                                     {/* <Option value="-1">请选择</Option> */}
-                                    {this.state.isTitleListLoaded ? this.listTitleList(this.state.titleList) : null}
+                                    {this.state.isListLoaded ? this.state.mesList : null}
                                 </Select>
                             )
                             }

@@ -16,6 +16,8 @@ import Table from 'braft-extensions/dist/table';
 const { Option, OptGroup } = Select;
 const { MonthPicker } = DatePicker;
 
+let fList = [], pList = [];
+
 class EditorDemo extends React.Component {
     constructor(props) {
         super(props);
@@ -36,6 +38,7 @@ class EditorDemo extends React.Component {
 
     componentDidMount() {
         if (!this.state.isNaviLoaded) {
+            sessionStorage.removeItem('filepath');
             const { apiPath, request } = getNaviInfo();
             fetchApi(apiPath, request)
                 .then(res => res.json())
@@ -158,18 +161,25 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                let appendixList = sessionStorage.getItem('filepath');
+                let appendix = '';
+                if (appendixList) {
+                    //拼接附件路径
+                    appendix = appendixList[0].response.data.path;
+                    if (appendixList.length > 1) {
+                        for (let i = 1; i < appendixList.length; i++) {
+                            appendix += '@';
+                            appendix += appendixList[i].response.data.path;
+                        }
+                    }
+                }
                 let pic = null;
                 let icon = null;
-                let appendix = null;
                 const { apiPath, request } = postNewsMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data.data)
-                        this.setState({
-                            navData: data.data,
-                            isNaviLoaded: true,
-                        })
+
                     });
                 console.log('Received values of form: ', values);
             }
@@ -177,6 +187,8 @@ class EditorDemo extends React.Component {
     }
 
     render() {
+        let appendixList = sessionStorage.getItem('filepath');
+        console.log(appendixList);
         const { editorState } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const PlaceDefault = "50字以内（若缺省则取正文前50字）";
@@ -217,7 +229,6 @@ class EditorDemo extends React.Component {
                 onClick: this.preview,
             }
         ]
-        // console.log(this.state.imgpath);
         return (
             <div className="my-component">
                 <BreadcrumbCustom first="发帖编辑" />

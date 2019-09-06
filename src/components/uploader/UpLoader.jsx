@@ -59,7 +59,6 @@ class UpLoaderModel extends Component {
     }
 
     render() {
-        // console.log(this.state.path);
         const imageReqSettings = {
             name: 'file',
             action: switchModel(this.props.type).url,
@@ -70,13 +69,11 @@ class UpLoaderModel extends Component {
                     //文件上传中
                 }
                 if (info.file.status === 'done') {
-                    // this.props.getfilePath(info.file.response.data.path);
-                    // this.props.geticonPath(info.file.response.data.icon);
+
                     message.success(`图片上传成功：${info.file.name}`);
                 } else if (info.file.status === 'error') {
                     message.error(`图片上传失败：${info.file.name}`);
                 }
-                // let fileList = [...info.fileList];
             },
         }
         const fileReqSettings = {
@@ -90,7 +87,8 @@ class UpLoaderModel extends Component {
                 }
                 if (info.file.status === 'done') {
                     message.success(`文件上传成功：${info.file.name}`);
-                    this.props.GetPath();
+                    // console.log(info.fileList);
+                    sessionStorage.setItem('filepath', info.fileList);
                 } else if (info.file.status === 'error') {
                     message.error(`文件上传失败：${info.file.name}`);
                 }
