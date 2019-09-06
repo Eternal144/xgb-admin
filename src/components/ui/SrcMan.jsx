@@ -2,6 +2,7 @@
  * Created by hao.cheng on 2017/4/23.
  */
 import React from 'react';
+import { Link } from 'react-router-dom'
 import { Col, Spin, Select, Button, Table, Tabs, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import picture from '../../style/imgs/list-preview.jpg';
@@ -92,6 +93,7 @@ class Src extends React.Component {
             sideMenu: null,
             introduct: [], //是一个存储右边数据的数组。如果有就直接拿。没有就请求。
             subordNavID: null, //二级标题ID
+            subordNavIndex: null
         }
     }
     rowSelection = {
@@ -137,7 +139,6 @@ class Src extends React.Component {
                     sideMenu: data.data
                 })
                 const { sideMenu } = this.state; //获取请求第一个二级导航的简介信息。
-                console.log(sideMenu);
                 let firstID = sideMenu[0].id;
                 const { apiPath, request } = getmessageList(firstID, 1);
                 fetchApi(apiPath, request)
@@ -147,7 +148,8 @@ class Src extends React.Component {
                         arr[0] = data.data.message;
                         this.setState({
                             introduct: arr,
-                            subordNavID: sideMenu[0].id
+                            subordNavID: sideMenu[0].id,
+                            subordNavIndex: 0
                         })
                     })
             })
@@ -185,19 +187,28 @@ class Src extends React.Component {
             }
         })
     }
-
     PicData = (introduce) => {
+        const { subordNavID } = this.state
+
         return introduce.map((key, i) => {
             const { id, icon, created_at, title, content } = key;
-            let src = `${root}${icon}`;
+            let str = `${root}${icon}`;
+            let data = {
+                navID: subordNavID,
+                articleID: id
+            }
+            let path = {
+                pathname: key.contentType === 1 ? "/app/edit/activity" : '/app/edit/news',
+                state: data
+            }
             return {
                 key: id,
-                pic: <img alt="缩略图" src={`${root}${icon}`} width="89" height="63" />,
+                pic: <img alt="缩略图" src={str} width="89" height="63" />,
                 activityTime: "活动时间",
                 releaseTime: created_at,
                 title: title,
                 abstract: content,
-                edit: <div><Button type="default">编辑</Button></div>,
+                edit: <Link to={path}><Button type="default">编辑</Button></Link>,
             }
         })
     }
@@ -261,15 +272,16 @@ class Src extends React.Component {
     }
 
     callback = (key) => { //key为下标。二级标题id。
-
-        let { introduct, sideMenu, subordNavID } = this.state;
+        let { introduct, sideMenu } = this.state;
         if (sideMenu[key]) {
             this.setState({
-                subordNavID: sideMenu[key].id
+                subordNavID: sideMenu[key].id,
             })
         }
+        this.setState({
+            subordNavIndex: key
+        })
         if (introduct[key] === undefined) {
-
             const { apiPath, request } = getmessageList(sideMenu[key].id, 1);
             fetchApi(apiPath, request)
                 .then(res => res.json())
@@ -281,51 +293,62 @@ class Src extends React.Component {
                 })
         }
     }
+
     handleSelect = (value) => { //更新要跳转的文章。
-        console.log(value);
-        console.log('跳转了二级导航')
         this.setState({
             chooseNavId: value
         })
     }
 
-    handleJump = () => { //确认跳转。获取选择栏目。this.props.index 
-        const { chooseNavId, chooseArticleId, subordNavID } = this.state
-        console.log(subordNavID)
-        console.log(chooseNavId)
+    handleJump = () => { //确认跳转。获取选择栏目。this.props.index。我得获得一个所处的index
+        const { chooseNavId, chooseArticleId, subordNavID, introduct, subordNavIndex } = this.state
         if (chooseArticleId === null) {
             error("请选择文章")
         } else if (chooseNavId === null) {
             error("请选择跳转栏目");
         } else {
             const { apiPath, request } = removeArticle(subordNavID, chooseNavId, chooseArticleId)
-            console.log(apiPath)
-            console.log(request)
             fetchApi(apiPath, request)
                 .then(res => res.json())
-                .then(data => {
+                .then(data => {  //
                     if (data.error_code === 0) {
-                        success("移动成功")
+                        introduct[subordNavIndex] = introduct[subordNavIndex].filter((obj) => {
+                            for (let i of chooseArticleId) {
+                                if (obj.id === i) {
+                                    return false
+                                }
+                            }
+                            return true
+                        })
+                        this.setState({
+                            introduct: introduct
+                        })
                     }
-                    console.log(data);
                 })
         }
-
-
     }
-    handleDelete = () => { //确认删除
-        const { subordNavID, chooseArticleId } = this.state;
+    handleDelete = () => { //确认删除。
+        const { introduct, subordNavID, chooseArticleId, subordNavIndex } = this.state;
         if (chooseArticleId === null) {
             error("请选择文章")
         } else {
-            const { apiPath, request } = deleteArticle(subordNavID, chooseArticleId)
-            console.log(apiPath);
-            console.log(request);
+            const { apiPath, request } = deleteArticle(subordNavID, chooseArticleId)//选中的文章id。根据id来删除
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
                     if (data.error_code === 0) {
-                        success("移动成功")
+                        introduct[subordNavIndex] = introduct[subordNavIndex].filter((obj) => {
+                            for (let i of chooseArticleId) {
+                                if (obj.id === i) {
+                                    return false
+                                }
+                            }
+                            return true
+                        })
+                        this.setState({
+                            introduct: introduct
+                        })
+                        success("删除成功")
                     }
                 })
         }
