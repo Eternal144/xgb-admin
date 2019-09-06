@@ -11,10 +11,10 @@ import { fetchApi } from '../callApi'
 import { getNaviInfo } from '../constants/api/navi'
 
 export default class CRouter extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
-            routesConfig:routesConfig
+        this.state = {
+            routesConfig: routesConfig
         }
     }
     requireAuth = (permission, component) => {
@@ -48,7 +48,7 @@ export default class CRouter extends Component {
                         title: key.title,
                         icon: 'database',
                         component: 'SrcMan',
-                        key:`/app/resource/${key.id}`
+                        key: `/app/resource/${key.id}`
                     };
                     return obj;
                 })
@@ -60,9 +60,9 @@ export default class CRouter extends Component {
             })
     }
     render() {
-        const {routesConfig} = this.state;
+        const { routesConfig } = this.state;
         return (
-                <Switch>
+            <Switch>
                 {Object.keys(routesConfig).map(key =>
                     routesConfig[key].map(r => {
                         const route = r => {
@@ -103,17 +103,17 @@ export default class CRouter extends Component {
                                 />
                             );
                         };
-                        if(r.component){
+                        if (r.component) {
                             return route(r);
-                        }else{
-                            if(r.subs){ //应该是传id。哭了
+                        } else {
+                            if (r.subs) { //应该是传id。哭了
                                 return r.subs.map((r) => route(r));
                             }
                             return null
                         }
                     })
                 )}
-                <Route render={() => <Redirect to="/404" />} />
+                {/* <Route render={() => <Redirect to="/404" />} /> */}
             </Switch>
         )
     }
