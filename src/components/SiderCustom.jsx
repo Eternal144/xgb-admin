@@ -12,7 +12,7 @@ import { getNaviInfo } from '../constants/api/navi'
 const { Sider } = Layout;
 
 class SiderCustom extends Component {
-    
+
     static getDerivedStateFromProps(props, state) {
         if (props.collapsed !== state.collapsed) {
             const state1 = SiderCustom.setMenuOpen(props);
@@ -45,7 +45,7 @@ class SiderCustom extends Component {
         openKey: '',
         selectedKey: '',
         firstHide: true, // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
-        routesConfig:routes
+        routesConfig: routes
     };
     componentDidMount = () => {
         const { apiPath, request } = getNaviInfo();
@@ -61,7 +61,7 @@ class SiderCustom extends Component {
                         title: key.title,
                         icon: 'database',
                         component: 'SrcMan',
-                        key:`/app/resource/${key.id}`
+                        key: `/app/resource/${key.id}`
                     };
                     return obj;
                 })
@@ -90,10 +90,10 @@ class SiderCustom extends Component {
             firstHide: false,
         })
     };
-    
+
     render() {
-        const { selectedKey, openKey, firstHide, collapsed,routesConfig } = this.state;
-        console.log(routesConfig);
+        const { selectedKey, openKey, firstHide, collapsed, routesConfig } = this.state;
+        // console.log(routesConfig);
         return (
             <Sider
                 trigger={null}

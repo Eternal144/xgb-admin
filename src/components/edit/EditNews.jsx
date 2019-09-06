@@ -217,7 +217,7 @@ class EditorDemo extends React.Component {
                 onClick: this.preview,
             }
         ]
-        console.log(this.state.imgpath);
+        // console.log(this.state.imgpath);
         return (
             <div className="my-component">
                 <BreadcrumbCustom first="发帖编辑" />
@@ -268,7 +268,7 @@ class EditorDemo extends React.Component {
                         {/* 附件上传 */}
                         <FileUpLoader type="file" bindTo={"MessageEdit"} />
                         {/* 图片上传 */}
-                        <FileUpLoader type="image" bindTo={"MessageCover"} necessary={true} />
+                        <FileUpLoader type="image" bindTo={"MessageCover"} />
                         <Row>
                             <Col span={16} offset={4}>
                                 <Form.Item>

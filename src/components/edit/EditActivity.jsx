@@ -289,7 +289,10 @@ class EditorDemo extends React.Component {
                             {getFieldDecorator('place', {
                                 rules: [{
                                     required: false,
-                                    max: 50
+                                },
+                                {
+                                    max: 50,
+                                    message: "活动地点过长，请酌情删减"
                                 }]
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
@@ -319,7 +322,7 @@ class EditorDemo extends React.Component {
                         {/* 附件上传 */}
                         <FileUpLoader type="file" bindTo={"MessageEdit"} />
                         {/* 图片上传 */}
-                        <FileUpLoader type="image" bindTo={"MessageCover"} necessary={true} />
+                        <FileUpLoader type="image" bindTo={"MessageCover"} />
                         <Row>
                             <Col span={16} offset={4}>
                                 <Form.Item>
