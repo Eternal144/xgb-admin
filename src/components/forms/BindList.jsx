@@ -4,7 +4,7 @@ import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
 import './customize.css';
 import Uploader from '../uploader/UpLoader';
-import updateLowwer from '../../constants/api/model';
+import { updateLowwer, addlowwer, lowwerModelPreview, upperModelPreview, messageList, updateUpper } from '../../constants/api/model';
 const { Option, OptGroup } = Select;
 const confirmSaveText = '是否保存设置?';
 const queue = ["ModelA", "ModelB", "ModelC", "ModelD"];
@@ -35,6 +35,8 @@ class BindMan extends Component {
         this.state = {
             isNaviLoaded: false,
             navData: null,
+            isListLoaded: false,
+            mesList: [],
         }
     }
 
@@ -121,6 +123,25 @@ class BindMan extends Component {
         });
     };
 
+    handleColumnSelectChange = (columnValue) => {
+        this.setState({ isListLoaded: false })
+        let { apiPath, request } = messageList(columnValue);
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                let temp = [];
+                for (let i = 0; i < data.data.length; i++) {
+                    temp.push(
+                        <Option key={columnValue + "--" + data.data[i].id} value={data.data[i].id}>{data.data[i].title}</Option>
+                    )
+                }
+                this.setState({
+                    isListLoaded: true,
+                    mesList: temp,
+                })
+            });
+    }
+
     listColumn(data) {
         let columns = [];
         // console.log(data[0].children[0].title);
@@ -145,13 +166,80 @@ class BindMan extends Component {
     confirmSave = () => {
         const type = this.props.fromModel;
         if (type === "ModelA") {
-
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    //此处用fetch提交绑定信息,A-D下同
+                    //values.bindItModelA [int] 模块A绑定栏目nav_id
+                    //values.TopModelA [int] 模块A置顶文章mes_id
+                    let reqinfo = new FormData();
+                    reqinfo.append('nav_id', values.bindItModelA);
+                    reqinfo.append('mes_id', values.TopModelA);
+                    let { apiPath, request } = updateUpper(reqinfo, 1);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("保存成功");
+                            } else {
+                                message.error("保存失败");
+                            }
+                        })
+                }
+            })
         } else if (type === "ModelB") {
-
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    let reqinfo = new FormData();
+                    reqinfo.append('nav_id', values.bindItModelB);
+                    reqinfo.append('mes_id', values.TopModelB);
+                    let { apiPath, request } = updateUpper(reqinfo, 2);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("保存成功");
+                            } else {
+                                message.error("保存失败");
+                            }
+                        })
+                }
+            })
         } else if (type === "ModelC") {
-
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    let reqinfo = new FormData();
+                    reqinfo.append('nav_id', values.bindItModelC);
+                    reqinfo.append('mes_id', values.TopModelC);
+                    let { apiPath, request } = updateUpper(reqinfo, 3);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("保存成功");
+                            } else {
+                                message.error("保存失败");
+                            }
+                        })
+                }
+            })
         } else if (type === "ModelD") {
-
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    let reqinfo = new FormData();
+                    reqinfo.append('nav_id', values.bindItModelD);
+                    reqinfo.append('mes_id', values.TopModelD);
+                    let { apiPath, request } = updateUpper(reqinfo, 4);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("保存成功");
+                            } else {
+                                message.error("保存失败");
+                            }
+                        })
+                }
+            })
         } else if (type === "ModelE") {
 
         } else if (type === "ModelF") {
@@ -164,7 +252,7 @@ class BindMan extends Component {
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
-                            
+
                         });
                 }
             });
@@ -199,6 +287,7 @@ class BindMan extends Component {
         const { getFieldDecorator, getFieldValue } = this.props.form;
         getFieldDecorator('keys', { initialValue: [] });
         const keys = getFieldValue('keys');
+        //模块E动态表单
         const formEItems = keys.map((k, index) => (
             <Form.Item
                 {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
@@ -239,7 +328,7 @@ class BindMan extends Component {
                             },
                         ],
                     })(<Input placeholder="请填写第二段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
-                    {getFieldDecorator(`Top${this.props.fromModel}`, {
+                    {getFieldDecorator(`E${index + 1}`, {
                         rules: [
                             {
                                 required: true,
@@ -249,6 +338,7 @@ class BindMan extends Component {
                     })(
                         <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
                             {/* <Option value="-1">请选择</Option> */}
+                            {this.state.isListLoaded ? this.state.mesList : null}
                         </Select>
                     )}
                     {keys.length > 1 ? (
@@ -261,6 +351,7 @@ class BindMan extends Component {
             </Form.Item>
         ));
 
+        //模块G动态表单
         const formGItems = keys.map((k, index) => (
             <Form.Item
                 {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
@@ -287,7 +378,7 @@ class BindMan extends Component {
                             },
                         ],
                     })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
-                    {getFieldDecorator(`Top${this.props.fromModel}`, {
+                    {getFieldDecorator(`G${index + 1}`, {
                         rules: [
                             {
                                 required: true,
@@ -297,6 +388,7 @@ class BindMan extends Component {
                     })(
                         <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
                             {/* <Option value="-1">请选择</Option> */}
+                            {this.state.isListLoaded ? this.state.mesList : null}
                         </Select>
                     )}
                     {keys.length > 1 ? (
@@ -308,6 +400,7 @@ class BindMan extends Component {
             </Form.Item>
         ));
 
+        //模块H动态表单
         const formHItems = keys.map((k, index) => (
             <Form.Item
                 {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
@@ -334,7 +427,7 @@ class BindMan extends Component {
                             },
                         ],
                     })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
-                    {getFieldDecorator(`Model${this.props.fromModel}[index]`, {
+                    {getFieldDecorator(`H${index + 1}`, {
                         rules: [
                             {
                                 required: true,
@@ -344,6 +437,7 @@ class BindMan extends Component {
                     })(
                         <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
                             {/* <Option value="-1">请选择</Option> */}
+                            {this.state.isListLoaded ? this.state.mesList : null}
                         </Select>
                     )}
                     {keys.length > 1 ? (
@@ -354,6 +448,8 @@ class BindMan extends Component {
                 </div>
             </Form.Item>
         ));
+
+
 
         // console.log(this.props.isReady);
         return (
@@ -371,7 +467,7 @@ class BindMan extends Component {
                                     ],
                                     initialValue: this.modelTitle(),
                                 })(
-                                    <Select required="true" style={{ width: '30%' }} placeholder="请选择一个栏目">
+                                    <Select required="true" style={{ width: '30%' }} placeholder="请选择一个栏目" onChange={this.handleColumnSelectChange}>
                                         {/* <Option value="-1">请选择</Option> */}
                                         {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                     </Select>
@@ -392,6 +488,7 @@ class BindMan extends Component {
                                     })(
                                         <Select style={{ width: '60%' }} placeholder="请选择一篇文章">
                                             {/* <Option value="-1">请选择</Option> */}
+                                            {this.state.isListLoaded ? this.state.mesList : null}
                                         </Select>
                                     )}
                                 </Form.Item> : null
@@ -408,7 +505,7 @@ class BindMan extends Component {
                                                     message: '描述过长,请酌定删减',
                                                 },
                                             ],
-                                            initialValue: this.props.bindInfo[0].description,
+                                            // initialValue: this.props.bindInfo[0].description,
                                         })(
                                             <Input style={{ width: '60%' }} placeholder="35字以内(选填)">
                                             </Input>
@@ -439,7 +536,7 @@ class BindMan extends Component {
                                                 message: '字数超过上限，请酌情删减'
                                             },
                                         ],
-                                        initialValue:this.props.bindInfo[0].content1,
+                                        // initialValue: this.props.bindInfo[0].content1,
                                     })(<Input placeholder="请填写文字标题,35字以内" style={{ width: '60%', marginRight: 8 }} />)}
 
                                 </Form.Item>
@@ -453,7 +550,7 @@ class BindMan extends Component {
                                                 message: "请填写跳转链接",
                                             },
                                         ],
-                                        initialValue:this.props.bindInfo[0].description,
+                                        // initialValue: this.props.bindInfo[0].description,
                                     })(<Input placeholder="请填写跳转链接" style={{ width: '60%', marginRight: 8 }} />)}
                                 </Form.Item>
                             </div> : null

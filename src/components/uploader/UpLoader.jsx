@@ -60,7 +60,6 @@ class UpLoaderModel extends Component {
 
     render() {
         // console.log(this.state.path);
-        let filePath = null, iconPath = null;
         const imageReqSettings = {
             name: 'file',
             action: switchModel(this.props.type).url,
@@ -71,8 +70,8 @@ class UpLoaderModel extends Component {
                     //文件上传中
                 }
                 if (info.file.status === 'done') {
-                    filePath = info.file.response.data.path;
-                    iconPath = info.file.response.data.icon;
+                    this.props.getfilePath(info.file.response.data.path);
+                    this.props.geticonPath(info.file.response.data.icon);
                     message.success(`图片上传成功：${info.file.name}`);
                 } else if (info.file.status === 'error') {
                     message.error(`图片上传失败：${info.file.name}`);
