@@ -47,6 +47,7 @@ class BannerForm extends Component {
             //栏目下的文章列表id
             isTitleListLoaded: false,
             //栏目下的文章列表加载状态
+            filePath: null,
         }
     }
 
@@ -258,7 +259,7 @@ class BannerForm extends Component {
     }
 
     render() {
-        // console.log("filepath:" + filePath);
+        console.log("filepath:" + this.state.filePath);
         // console.log("iconpath:" + iconPath);
         let data = this.props.data;
         // console.log(data);
