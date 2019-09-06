@@ -1,3 +1,22 @@
+export const messageList = (nav_id) => {
+    return {
+        apiPath: 'admin/BMessage/' + nav_id,
+        request: {
+            method: "GET",
+        }
+    }
+}
+
+export const updateUpper = (body, model) => {
+    return {
+        apiPath: 'admin/upper/' + model,
+        request: {
+            body: body,
+            method: "POST",
+        }
+    }
+}
+
 export const upperModelPreview = (body) => {
     return {
         apiPath: 'admin/upper',

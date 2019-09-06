@@ -126,7 +126,7 @@ class BasicForms extends Component {
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
                             <Collapse bordered={false}>
-                                <Panel header="效果预览" key="model-preview">
+                                <Panel header="效果预览" key="model-preview" extra="修改后刷新生效">
                                     {this.state.readyUpperModel && this.state.isUpperLoaded ?
                                         <div>
                                             <Col span={9}>
