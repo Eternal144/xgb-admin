@@ -38,7 +38,6 @@ class NaviManage extends React.Component {
     handleUpdateID = (id,index)=>{
         const { data } = this.state;
         data[index].id = id;
-        console.log(data);
         this.setState({
             data: data
         })
@@ -84,7 +83,6 @@ class NaviManage extends React.Component {
                 this.setState({
                     data: data.data,
                 })
-                console.log("应该更新数据了")
             });
     }
 }

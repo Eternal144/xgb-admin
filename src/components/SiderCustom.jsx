@@ -93,7 +93,6 @@ class SiderCustom extends Component {
     
     render() {
         const { selectedKey, openKey, firstHide, collapsed,routesConfig } = this.state;
-        console.log(routesConfig);
         return (
             <Sider
                 trigger={null}

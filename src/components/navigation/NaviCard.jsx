@@ -15,7 +15,7 @@ import {
   import {CONFIRM_MODIFY, CONFIRM_ADD} from '../../constants/common'
   import { fetchApi } from '../../callApi'
 
-  import { addSuperior, addNav, deleteNavi } from '../../constants/api/navi'
+  import { addSuperior, addNav, deleteNavi,updateNav } from '../../constants/api/navi'
 
 
 const { Option } = Select;
@@ -114,8 +114,13 @@ class RegistrationForm extends React.Component {
                             break;
                     }
                 }
-                
             }
+            const {apiPath, request} = updateNav(data);
+            fetchApi(apiPath, request)
+            .then(res=>res.json())
+            .then(data=>{
+                console.log(data);
+            })
         }
         });
     };
