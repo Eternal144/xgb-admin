@@ -22,14 +22,14 @@ class HeaderCustom extends Component {
     };
     componentDidMount() {
         const QueryString = queryString();
-        const _user = JSON.parse(localStorage.getItem('user')) || '测试';
+        const _user = JSON.parse(sessionStorage.getItem('user')) || '测试';
         if (!_user && QueryString.hasOwnProperty('code')) {
             gitOauthToken(QueryString.code).then(res => {
                 gitOauthInfo(res.access_token).then(info => {
                     this.setState({
                         user: info
                     });
-                    localStorage.setItem('user', JSON.stringify(info));
+                    sessionStorage.setItem('user', JSON.stringify(info));
                 });
             });
         } else {
@@ -49,7 +49,7 @@ class HeaderCustom extends Component {
         e.key === 'logout' && this.logout();
     };
     logout = () => {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         this.props.history.push('/login')
     };
     popoverHide = () => {

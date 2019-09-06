@@ -328,7 +328,7 @@ class BindMan extends Component {
                             },
                         ],
                     })(<Input placeholder="请填写第二段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
-                    {getFieldDecorator(`E${index + 1}`, {
+                    {getFieldDecorator(`E${k}`, {
                         rules: [
                             {
                                 required: true,
@@ -378,7 +378,7 @@ class BindMan extends Component {
                             },
                         ],
                     })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
-                    {getFieldDecorator(`G${index + 1}`, {
+                    {getFieldDecorator(`G${k}`, {
                         rules: [
                             {
                                 required: true,
@@ -427,7 +427,7 @@ class BindMan extends Component {
                             },
                         ],
                     })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
-                    {getFieldDecorator(`H${index + 1}`, {
+                    {getFieldDecorator(`H${k}`, {
                         rules: [
                             {
                                 required: true,
