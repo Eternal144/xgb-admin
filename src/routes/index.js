@@ -43,7 +43,6 @@ export default class CRouter extends Component {
                 const aaa = data.data;
                 //在这里要获取一级所有的一级。
                 let arr = aaa.map((key, i) => { //
-                    //应该是返回一个对象。key component?
                     let obj = {
                         id: key.id,
                         title: key.title,
@@ -67,6 +66,7 @@ export default class CRouter extends Component {
                 {Object.keys(routesConfig).map(key =>
                     routesConfig[key].map(r => {
                         const route = r => {
+                            // console.log(index); //2级才有的
                             const Component = AllComponents[r.component];
                             return (
                                 <Route
@@ -93,7 +93,7 @@ export default class CRouter extends Component {
                                         // 重新包装组件
                                         const wrappedComponent = (
                                             <DocumentTitle title={r.title}>
-                                                <Component {...merge} />
+                                                <Component {...merge} index={r.id} />
                                             </DocumentTitle>
                                         );
                                         return r.login
@@ -106,8 +106,8 @@ export default class CRouter extends Component {
                         if(r.component){
                             return route(r);
                         }else{
-                            if(r.subs){
-                                return r.subs.map(r => route(r));
+                            if(r.subs){ //应该是传id。哭了
+                                return r.subs.map((r) => route(r));
                             }
                             return null
                         }
