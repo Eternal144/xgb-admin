@@ -8,7 +8,7 @@ import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
-import { postNewsMessage } from '../../constants/api/edit';
+import { postNewsMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
@@ -22,13 +22,18 @@ class EditorDemo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState: BraftEditor.createEditorState("<p>在这里输入文章正文</p>"),
+            editorState: null,
             loading: false,
             isNaviLoaded: false,
             navData: null,
             imgpath: null,
             filepath: null,
             icon: null,
+            //初始化文章信息
+            initialColumn: null,
+            initialTitle: null,
+            initialJournalist: null,
+            editorState: BraftEditor.createEditorState(''),
         }
     }
 
@@ -39,6 +44,8 @@ class EditorDemo extends React.Component {
     componentDidMount() {
         if (!this.state.isNaviLoaded) {
             sessionStorage.removeItem('filepath');
+            sessionStorage.removeItem('picpath');
+            sessionStorage.removeItem('iconpath');
             const { apiPath, request } = getNaviInfo();
             fetchApi(apiPath, request)
                 .then(res => res.json())
@@ -49,6 +56,19 @@ class EditorDemo extends React.Component {
                         isNaviLoaded: true,
                     })
                 });
+            if (this.props.location.state) {
+                const { apiPath, request } = editMessage(this.props.location.state.navID, this.props.location.state.articleID);
+                fetchApi(apiPath, request)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.setState({
+                            initialColumn: data.data.message.id,
+                            initialTitle: data.data.message.title,
+                            initialJournalist: data.data.message.remark,
+                            editorState: BraftEditor.createEditorState(data.data.message.content),
+                        })
+                    });
+            }
         }
     }
 
@@ -175,24 +195,41 @@ class EditorDemo extends React.Component {
                 }
                 let pic = sessionStorage.getItem('picpath');
                 let icon = sessionStorage.getItem('iconpath');
-                const { apiPath, request } = postNewsMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
-                fetchApi(apiPath, request)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.error_code === 0) {
-                            message.success("文章发表成功");
-                        } else {
-                            message.error("文章发布失败，请检查网络");
-                        }
-                    });
-                console.log('Received values of form: ', values);
+                if (this.props.location.state) {
+                    //保存编辑文章
+                    const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("文章发表成功");
+                            } else {
+                                message.error("文章发布失败，请检查网络");
+                            }
+                        });
+                    console.log('Received values of form: ', values);
+                } else {
+                    //发布新文章
+                    const { apiPath, request } = postNewsMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("文章发表成功");
+                            } else {
+                                message.error("文章发布失败，请检查网络");
+                            }
+                        });
+                    console.log('Received values of form: ', values);
+                }
             }
         });
     }
 
     render() {
         let appendixList = sessionStorage.getItem('filepath');
-        console.log(appendixList);
+        // console.log(appendixList);
+        console.log(this.props.location.state);
         const { editorState } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const PlaceDefault = "50字以内（若缺省则取正文前50字）";
@@ -232,7 +269,8 @@ class EditorDemo extends React.Component {
                 text: '预览',
                 onClick: this.preview,
             }
-        ]
+        ];
+
         return (
             <div className="my-component">
                 <BreadcrumbCustom first="发帖编辑" />
@@ -249,6 +287,7 @@ class EditorDemo extends React.Component {
                                     required: true,
                                     message: "请选择栏目"
                                 }],
+                                initialValue: this.state.initialColumn,
                             })(
                                 <Select required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
@@ -266,6 +305,7 @@ class EditorDemo extends React.Component {
                                     message: "标题名称过长,请酌情删减",
                                 }
                                 ],
+                                initialValue: this.state.initialTitle,
                             })(<Input placeholder="35字以内" style={{ width: "40%" }} />)
                             }
                         </Form.Item>
@@ -277,7 +317,8 @@ class EditorDemo extends React.Component {
                                 }, {
                                     max: 20,
                                     message: "文本过长,请酌情删减",
-                                }]
+                                }],
+                                initialValue: this.state.initialJournalist,
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
                         {/* 附件上传 */}
@@ -300,7 +341,7 @@ class EditorDemo extends React.Component {
                                             }
                                         }],
                                     })(
-                                        <BraftEditor className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} placeholder="请输入正文内容" />
+                                        <BraftEditor value={editorState} className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} placeholder="请输入正文内容" />
                                     )}
                                 </Form.Item>
                             </Col>

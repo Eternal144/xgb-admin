@@ -36,6 +36,9 @@ class EditorDemo extends React.Component {
 
     componentDidMount() {
         if (!this.state.isNaviLoaded) {
+            sessionStorage.removeItem('filepath');
+            sessionStorage.removeItem('picpath');
+            sessionStorage.removeItem('iconpath');
             const { apiPath, request } = getNaviInfo();
             fetchApi(apiPath, request)
                 .then(res => res.json())
