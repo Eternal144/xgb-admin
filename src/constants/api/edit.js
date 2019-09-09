@@ -59,3 +59,15 @@ export const delMessage = (nav_id, id) => {
         }
     }
 }
+
+export const editMessage = (nav_id, id) => {
+    return {
+        apiPath: `admin/message/${nav_id}/${id}`,
+        request: {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }
+    }
+}
