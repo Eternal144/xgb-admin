@@ -173,8 +173,8 @@ class EditorDemo extends React.Component {
                         }
                     }
                 }
-                let pic = null;
-                let icon = null;
+                let pic = sessionStorage.getItem('picpath');
+                let icon = sessionStorage.getItem('iconpath');
                 const { apiPath, request } = postNewsMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
                 fetchApi(apiPath, request)
                     .then(res => res.json())

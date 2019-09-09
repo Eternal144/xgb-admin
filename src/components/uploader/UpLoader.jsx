@@ -69,8 +69,9 @@ class UpLoaderModel extends Component {
                     //文件上传中
                 }
                 if (info.file.status === 'done') {
-
                     message.success(`图片上传成功：${info.file.name}`);
+                    sessionStorage.setItem('picpath', info.file.response.data.path);
+                    sessionStorage.setItem('iconpath', info.file.response.data.icon);
                 } else if (info.file.status === 'error') {
                     message.error(`图片上传失败：${info.file.name}`);
                 }

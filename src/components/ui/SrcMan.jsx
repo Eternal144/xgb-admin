@@ -327,6 +327,7 @@ class Src extends React.Component {
                 })
         }
     }
+
     handleDelete = () => { //确认删除。
         const { introduct, subordNavID, chooseArticleId, subordNavIndex } = this.state;
         if (chooseArticleId === null) {
