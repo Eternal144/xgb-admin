@@ -369,19 +369,20 @@ class Src extends React.Component {
                         {sideMenu ? this.renderSideMenu() : <Spin tip="Loading..." size="large" />}
                     </Tabs>
                 </div>
-
-                <Col span={4} offset={3}>
-                    <label>跳转到：</label>
-                    <Select id={1} style={{ width: "60%" }} onChange={this.handleSelect} key={1} required="true" placeholder="请选择一个栏目" >
-                        {navData ? this.listColumn(navData) : null}
-                    </Select>
-                </Col>
-                <Col span={2}>
-                    {this.confirmJump(CONFIRM_JUMP)}
-                </Col>
-                <Col span={2}>
-                    {this.confirmDelete(CONFIRM_DELETE)}
-                </Col>
+                <div style={{ margin: "20px 0" }}>
+                    <Col span={4} offset={3}>
+                        <label>移动到：</label>
+                        <Select id={1} style={{ width: "60%" }} onChange={this.handleSelect} key={1} required="true" placeholder="请选择一个栏目" >
+                            {navData ? this.listColumn(navData) : null}
+                        </Select>
+                    </Col>
+                    <Col span={2}>
+                        {this.confirmJump(CONFIRM_JUMP)}
+                    </Col>
+                    <Col span={2}>
+                        {this.confirmDelete(CONFIRM_DELETE)}
+                    </Col>
+                </div>
             </div>
         )
     }

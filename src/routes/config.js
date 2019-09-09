@@ -21,13 +21,6 @@ export default {
         {
             key: '/app/navigation', title: '导航栏管理', icon: 'apartment', component: 'NaviManage',
         },
-        // {
-        //     key: '/subs4', title: '页面', icon: 'switcher',
-        //     subs: [
-        //         { key: '/login', title: '登录' },
-        //         { key: '/404', title: '404' },
-        //     ],
-        // },
     ],
     others: [] // 非菜单相关路由
 }

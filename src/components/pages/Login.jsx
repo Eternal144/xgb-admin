@@ -22,14 +22,6 @@ class Login extends React.Component {
         const { setAlitaState } = this.props;
         setAlitaState({ stateName: 'auth', data: null });
     }
-    componentDidUpdate(prevProps) { // React 16.3+弃用componentWillReceiveProps
-        const { auth: nextAuth = {}, history } = this.props;
-        // const { history } = this.props;
-        if (nextAuth.data && nextAuth.data.uid) { // 判断是否登陆
-            sessionStorage.setItem('user', JSON.stringify(nextAuth.data));
-            history.push('/app/dashboard/index');
-        }
-    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -39,11 +31,14 @@ class Login extends React.Component {
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
+                        console.log(data);
                         // console.log('Received values of form: ', values);
                         const { setAlitaState } = this.props;
                         if (data.error_code === 0) {
                             sessionStorage.setItem('username', values.userName);
                             setAlitaState({ funcName: 'admin', stateName: 'auth' });
+                            const { auth: nextAuth = {}, history } = this.props;
+                            history.push('/app/dashboard/index');
                         } else {
                             message.error("用户名或密码错误，请检查")
                         }
@@ -65,6 +60,7 @@ class Login extends React.Component {
                         <FormItem>
                             {getFieldDecorator('userName', {
                                 rules: [{ required: true, message: '请输入用户名!' }],
+                                initialValue: 'test'
                             })(
                                 <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
                             )}
@@ -72,6 +68,7 @@ class Login extends React.Component {
                         <FormItem>
                             {getFieldDecorator('password', {
                                 rules: [{ required: true, message: '请输入密码!' }],
+                                initialValue: '123456'
                             })(
                                 <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
                             )}
