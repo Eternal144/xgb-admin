@@ -157,18 +157,18 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let pic = null;
-                let icon = null;
+                let pic = sessionStorage.getItem('picpath');
+                let icon = sessionStorage.getItem('iconpath');
                 let appendix = null;
-                const { apiPath, request } = postActivityMessage(values.section, values.title, this.state.imgpath, this.state.icon, this.state.editorState.toHTML(), this.state.filepath);
+                const { apiPath, request } = postActivityMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-                        // console.log(data.data)
-                        this.setState({
-                            navData: data.data,
-                            isNaviLoaded: true,
-                        })
+                        if (data.error_code === 0) {
+                            message.success("文章发表成功");
+                        } else {
+                            message.error("文章发布失败，请检查网络");
+                        }
                     });
                 console.log('Received values of form: ', values);
                 console.log(this.state.editorState)

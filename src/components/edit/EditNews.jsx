@@ -179,7 +179,11 @@ class EditorDemo extends React.Component {
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-
+                        if (data.error_code === 0) {
+                            message.success("文章发表成功");
+                        } else {
+                            message.error("文章发布失败，请检查网络");
+                        }
                     });
                 console.log('Received values of form: ', values);
             }
