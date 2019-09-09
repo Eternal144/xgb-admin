@@ -68,10 +68,9 @@ class EditorDemo extends React.Component {
     handleEditorChange = (editorState) => {
         this.setState({ editorState })
     }
-
+    //为什么会保存的时候获取列表为空？
     listColumn(data) {
         let columns = [];
-        // console.log(data);
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
                 let opts = [];
