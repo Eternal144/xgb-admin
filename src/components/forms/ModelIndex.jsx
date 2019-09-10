@@ -3,9 +3,9 @@
  */
 import React, { Component } from 'react';
 import { Card, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, BackTop, Skeleton, notification } from 'antd';
-import LoginForm from './LoginForm';
-import ModalForm from './ModalForm';
-import HorizontalForm from './HorizontalForm';
+// import LoginForm from './LoginForm';
+// import ModalForm from './ModalForm';
+// import HorizontalForm from './HorizontalForm';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import { Collapse, Result } from 'antd';
 import './customize.css';
@@ -188,5 +188,5 @@ class BasicForms extends Component {
     }
 }
 
-const BasicForm = Form.create()(BasicForms);
-export default BasicForm;
+const ModelIndex = Form.create()(BasicForms);
+export default ModelIndex;
