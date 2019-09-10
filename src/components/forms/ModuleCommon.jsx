@@ -87,10 +87,10 @@ class Module extends Component {
                     })
                     if (id !== navId) { //选择了不同的，刷新表单信息。
                         this.props.form.setFieldsValue({
-                            article_title: data.data[0].title,
+                            article_title: data.data.length > 0 ? data.data[0].title : null,
                         })
                         this.setState({
-                            articleId: data.data[0].id
+                            articleId: data.data.length > 0 ? data.data[0].mes_id : null
                         })
                     }
                 }
