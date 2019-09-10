@@ -4,7 +4,7 @@
  */
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
-import ModelIndex from './forms/ModelIndex';
+import ModelIndex from './forms/ModuleIndex';
 import BasicTable from './tables/BasicTables';
 import AdvancedTable from './tables/AdvancedTables';
 import AsynchronousTable from './tables/AsynchronousTable';

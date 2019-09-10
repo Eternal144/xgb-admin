@@ -7,9 +7,9 @@ export const messageList = (nav_id) => {
     }
 }
 
-export const updateUpper = (body, model) => {
+export const updateUpper = (model, body) => {
     return {
-        apiPath: 'admin/upper/' + model,
+        apiPath: `admin/upper/${model}`,
         request: {
             body: body,
             method: "POST",
@@ -17,16 +17,26 @@ export const updateUpper = (body, model) => {
     }
 }
 
-export const upperModelPreview = (body) => {
+// export const upperModelPreview = (body) => {
+//     return {
+//         apiPath: 'admin/upper',
+//         request: {
+//             body: body,
+//             method: "GET",
+//         }
+//     }
+// }
+export const upperModelPreview = () => {
     return {
         apiPath: 'admin/upper',
         request: {
-            body: body,
+            // body: body,
             method: "GET",
         }
     }
 }
 
+//请求下面四个的数据
 export const lowwerModelPreview = (name) => {
     return {
         apiPath: 'admin/lowwer/' + name,
@@ -56,6 +66,6 @@ export const addlowwer = (body) => {
     }
 }
 
-export default () => {
-    return;
-}
+// export default () => {
+//     return;
+// }
