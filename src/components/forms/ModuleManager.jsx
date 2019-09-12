@@ -25,14 +25,18 @@ class ModelMan extends Component {
     switchModel = (type) => {
         return (
             <div>
-                <BindList fromModel={"Model" + type} bindInfo={this.props.bindInfo} isReady={this.props.isReady} />
+                <BindList type={type} bindInfo={this.props.bindInfo} isReady={this.props.isReady} />
             </div>
         )
     }
 
     render() {
+        // console.log(this.props.bindInfo)
+        const { bindInfo, type } = this.props;
         return (
-            this.switchModel(this.props.modelType)
+            <div>
+                {this.switchModel(type)}
+            </div>
         )
     }
 }

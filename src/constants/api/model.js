@@ -17,15 +17,6 @@ export const updateUpper = (model, body) => {
     }
 }
 
-// export const upperModelPreview = (body) => {
-//     return {
-//         apiPath: 'admin/upper',
-//         request: {
-//             body: body,
-//             method: "GET",
-//         }
-//     }
-// }
 export const upperModelPreview = () => {
     return {
         apiPath: 'admin/upper',

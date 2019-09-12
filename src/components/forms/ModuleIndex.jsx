@@ -10,8 +10,9 @@ import Preview from './PreviewModel';
 import { lowwerModelPreview, upperModelPreview } from '../../constants/api/model';
 import { fetchApi } from '../../callApi';
 import ModuleCommon from "./ModuleCommon";
-import ModuleE from './ModuleE';
 import ModelHelp from './help';
+import ModuleManager from './ModuleManager';
+
 
 const { Panel } = Collapse;
 const FormItem = Form.Item;
@@ -48,10 +49,7 @@ class BasicForms extends Component {
             modelB: null,
             modelC: null,
             modelD: null,
-            modelE: null,
-            // modelF: null,
-            // modelG: null,
-            // modelH: null,
+            lowwerModuleData: [],
             isModelEReady: false,
             isModelFReady: false,
             isModelGReady: false,
@@ -69,7 +67,6 @@ class BasicForms extends Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
                     if (data.error_code === 0) {
                         this.setState({
                             commonModuleData: data.data,
@@ -77,60 +74,33 @@ class BasicForms extends Component {
                             isUpperLoaded: true,
                         })
                     }
-                    if (data.data.length === 4) {
-
-                    }
-                    // this.setState({
-                    //     modelA: data.data[0],
-                    //     modelB: data.data[1],
-                    //     modelC: data.data[2],
-                    //     modelD: data.data[3],
-                    //     isUpperLoaded: true,
-                    // })
                 });
         }
-        // if (!this.state.isLowwerLoaded) {
-        //     for (let i = 1; i < 5; i++) {
-        //         let { apiPath, request } = lowwerModelPreview(i);
-        //         fetchApi(apiPath, request)
-        //             .then(res => res.json())
-        //             .then(data => {
-        //                 if (data.error_code === 0 && data.data.length > 0) {
-        //                     if (i === 1) {
-        //                         this.setState({
-        //                             modelE: data.data,
-        //                             isModelEReady: true,
-        //                         })
-        //                     } else if (i === 2) {
-        //                         this.setState({
-        //                             modelF: data.data,
-        //                             isModelFReady: true,
-        //                         })
-        //                     } else if (i === 3) {
-        //                         this.setState({
-        //                             modelG: data.data,
-        //                             isModelGReady: true,
-        //                         })
-        //                     } else if (i === 4) {
-        //                         this.setState({
-        //                             modelH: data.data,
-        //                             isModelHReady: true,
-        //                         })
-        //                     }
-        //                 }
-        //             })
-        //     };
-        // }
+
+        for (let i = 1; i < 5; i++) {
+            let arr = this.state.lowwerModuleData;
+            let { apiPath, request } = lowwerModelPreview(i);
+            fetchApi(apiPath, request)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error_code === 0 && data.data.length > 0) {
+                        arr[i] = data.data;
+                        this.setState({
+                            lowwerModuleData: arr
+                        })
+                    }
+                })
+        };
     }
     render() {
-        const { commonModuleData } = this.state;
+        const { commonModuleData, lowwerModuleData } = this.state;
         return (
             <div>
                 <BreadcrumbCustom first="模块管理" />
                 <Row gutter={16}>
                     <Col className="gutter-row" md={24}>
                         <div className="gutter-box">
-                            <Collapse bordered={false}>
+                            {/* <Collapse bordered={false}>
                                 <Panel header="效果预览" key="model-preview" extra="修改后刷新生效">
                                     {this.state.readyUpperModel && this.state.isUpperLoaded ?
                                         <div>
@@ -149,7 +119,7 @@ class BasicForms extends Component {
                                         </div>
                                         : <Result title="有必要的设置未完成,请检查" extra="完成后此信息自动消失" />}
                                 </Panel>
-                            </Collapse>
+                            </Collapse> */}
                             <Row gutter={16}>
                                 <Col span={12}>
                                     {commonModuleData ? <Card className="banner-edit-card" title="管理模块A" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(0)}><Icon type="info-circle" />帮助</Button>}>
@@ -176,17 +146,14 @@ class BasicForms extends Component {
                                 </Col>
                             </Row>
                             <Card className="banner-edit-card" title="管理模块E" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(4)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModuleE modelType="E" bindInfo={this.state.modelE} isReady={this.state.isModelEReady} />
-                            </Card>
-                            {/* <Card className="banner-edit-card" title="管理模块F" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(5)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModelManager modelType="F" bindInfo={this.state.modelF} isReady={this.state.isModelFReady} />
+                                <ModuleManager type={1} bindInfo={lowwerModuleData[0]} isReady={this.state.isModelEReady} />
                             </Card>
                             <Card className="banner-edit-card" title="管理模块G" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(6)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModelManager modelType="G" bindInfo={this.state.modelG} isReady={this.state.isModelGReady} />
+                                <ModuleManager type={3} bindInfo={lowwerModuleData[1]} isReady={this.state.isModelGReady} />
                             </Card>
                             <Card className="banner-edit-card" title="管理模块H" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(7)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModelManager modelType="H" bindInfo={this.state.modelH} isReady={this.state.isModelHReady} />
-                            </Card>  */}
+                                <ModuleManager type={4} bindInfo={lowwerModuleData[2]} isReady={this.state.isModelHReady} />
+                            </Card>
                         </div>
                     </Col>
                 </Row>

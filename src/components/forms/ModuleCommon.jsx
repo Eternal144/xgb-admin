@@ -74,7 +74,6 @@ class Module extends Component {
 
     //初始值也应该变。
     handleOnchange = (id) => {
-        console.log("初始调用我一次")
         const { navId } = this.state;
         const { apiPath, request } = getArticleTitle(id);
         fetchApi(apiPath, request)
