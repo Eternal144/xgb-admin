@@ -9,32 +9,52 @@ export const getBannerInfo = () => {
     }
 }
 
-export const addBanner = () => {
+export const addBanner = (pic, title, nav_id, mes_id, rank) => {
+    let formdata = new FormData();
+    formdata.append("picture", pic);
+    formdata.append("title", title);
+    formdata.append("nav_id", nav_id);
+    formdata.append("mes_id", mes_id);
+    formdata.append("rank", rank);
     return {
         apiPath: `admin/banner`,
         request: {
             method: "POST",
             mode: 'no-cors',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: formdata,
         }
     }
 }
 
-export const editBanner = () => {
+export const editBanner = (pic, title, nav_id, mes_id, rank, id) => {
+    let formdata = new FormData();
+    formdata.append("picture", pic);
+    formdata.append("title", title);
+    formdata.append("nav_id", nav_id);
+    formdata.append("mes_id", mes_id);
+    formdata.append("rank", rank);
     return {
-        apiPath: `admin/banner`,
+        apiPath: `admin/banner/` + id,
         request: {
             method: "PUT",
             mode: 'no-cors',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: formdata,
         }
     }
 }
 
 
-export const delBanner = () => {
+export const delBanner = (id) => {
     return {
-        apiPath: `admin/banner`,
+        apiPath: `admin/delbanner/` + id,
         request: {
-            method: "DELETE",
+            method: "GET",
             mode: 'no-cors',
         }
     }
