@@ -179,9 +179,15 @@ class EditorDemo extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
+        console.log(JSON.parse(sessionStorage.getItem('filepath')));
         this.props.form.validateFields((err, values) => {
+            let appendixList = JSON.parse(sessionStorage.getItem('filepath'));
+            // console.log(appendixList);
+            console.log(sessionStorage.getItem('filepath'));
             if (!err) {
-                let appendixList = sessionStorage.getItem('filepath');
+                let appendixList = JSON.parse(sessionStorage.getItem('filepath'));
+                // console.log(appendixList);
+                console.log(sessionStorage.getItem('filepath'));
                 let appendix = '';
                 if (appendixList) {
                     //拼接附件路径
@@ -195,6 +201,7 @@ class EditorDemo extends React.Component {
                 }
                 let pic = sessionStorage.getItem('picpath');
                 let icon = sessionStorage.getItem('iconpath');
+
                 if (this.props.location.state) {
                     //保存编辑文章
                     const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
@@ -229,7 +236,7 @@ class EditorDemo extends React.Component {
     render() {
         let appendixList = sessionStorage.getItem('filepath');
         // console.log(appendixList);
-        console.log(this.props.location.state);
+        // console.log(this.props.location.state);
         const { editorState } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const PlaceDefault = "50字以内（若缺省则取正文前50字）";

@@ -42,9 +42,9 @@ class Banners extends React.Component {
         let newDataId = lastData.id + 1;
         data.push({
             "id": lastData.id + 1,
-            "title": null,
+            "title": undefined,
             "rank": parseInt(lastData.rank) + 1,
-
+            "isnew": true,
         })
         this.setState({
             data: data,
@@ -59,6 +59,7 @@ class Banners extends React.Component {
                 sm: { span: 20, offset: 4 },
             },
         };
+
         return (
             <div className="gutter-example button-demo">
                 <BreadcrumbCustom first="轮播图管理" />

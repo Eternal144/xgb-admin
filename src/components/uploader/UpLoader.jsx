@@ -1,6 +1,6 @@
 // 上传组件，具有附件和图片上传两个功能
 // 'type'[string](必要)，type="image"对应图片上传，type="file"对应附件上传
-// 'bindTo'[string](必要)，与当前所使用的父表单相挂钩，当一个页面具有多个<Uploader>组件shi，该值应保证互不相等
+// 'bindTo'[string](必要)，与当前所使用的父表单相挂钩，当一个页面具有多个<Uploader>组件时，该值应保证互不相等
 // 'necessary'[boolean](可选，默认为false)，是否为表单必填项
 // 'diaLabel'[boolean](可选，默认false)，是否展示表单文本
 
@@ -94,7 +94,8 @@ class UpLoaderModel extends Component {
                 }
                 if (info.file.status === 'done') {
                     message.success(`文件上传成功：${info.file.name}`);
-                    // console.log(info.fileList);
+                    console.log(info.fileList);
+                    // let filelist = JSON.stringify(info.fileList);
                     sessionStorage.setItem('filepath', info.fileList);
                 } else if (info.file.status === 'error') {
                     message.error(`文件上传失败：${info.file.name}`);
