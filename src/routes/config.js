@@ -16,7 +16,7 @@ export default {
             key: '/app/banner', title: '轮播图管理', icon: 'pic-center', component: 'Banners',
         },
         {
-            key: '/app/module', title: '模块管理', icon: 'appstore', component: 'BasicForm',
+            key: '/app/module', title: '模块管理', icon: 'appstore', component: 'ModelIndex',
         },
         {
             key: '/app/navigation', title: '导航栏管理', icon: 'apartment', component: 'NaviManage',

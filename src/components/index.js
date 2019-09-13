@@ -4,16 +4,13 @@
  */
 import Loadable from 'react-loadable';
 import Loading from './widget/Loading';
-import BasicForm from './forms/BasicForm';
+import ModelIndex from './forms/ModuleIndex';
 import BasicTable from './tables/BasicTables';
 import AdvancedTable from './tables/AdvancedTables';
 import AsynchronousTable from './tables/AsynchronousTable';
 import Echarts from './charts/Echarts';
-// import Recharts from './charts/Recharts';
-// import Icons from './ui/Icons';
 import Buttons from './ui/Buttons';
 import SrcMan from './ui/SrcMan';
-// import Modals from './ui/Modals';
 import Notifications from './ui/Notifications';
 import Tabs from './ui/Tabs';
 import NaviManage from './navigation/NaviManage';
@@ -35,7 +32,7 @@ const WysiwygBundle = Loadable({ // 按需加载富文本配置
 });
 
 export default {
-    BasicForm, BasicTable, AdvancedTable, AsynchronousTable,
+    ModelIndex, BasicTable, AdvancedTable, AsynchronousTable,
     Echarts, Buttons, Notifications,
     Tabs, Banners, Drags, Dashboard, Gallery,
     AuthBasic, RouterEnter, WysiwygBundle, SrcMan,
