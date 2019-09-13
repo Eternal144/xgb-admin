@@ -18,10 +18,11 @@ import { Collapse } from 'antd';
 import { Skeleton } from 'antd';
 import { fetchApi } from '../../../callApi';
 import { getNaviInfo } from '../../../constants/api/navi';
-import { showMessageList } from '../../../constants/api/banner';
+import { showMessageList, addBanner, editBanner, delBanner } from '../../../constants/api/banner';
 import { messageList } from '../../../constants/api/model';
 import { notification } from 'antd';
-import FileUpLoader from '../../uploader/UpLoader';
+import UpLoader from '../../uploader/UpLoader';
+const FileUpLoader = UpLoader;
 const { Option, OptGroup } = Select;
 const { Panel } = Collapse;
 
@@ -31,6 +32,7 @@ const formItemLayoutWithOutLabel = {
         sm: { span: 20, offset: 4 },
     },
 };
+
 class BannerForm extends Component {
     constructor(props) {
         super(props);
@@ -48,7 +50,7 @@ class BannerForm extends Component {
             //栏目下的文章列表id
             isTitleListLoaded: false,
             //栏目下的文章列表加载状态
-            filePath: null,
+            submitId: null,
         }
     }
 
@@ -92,9 +94,11 @@ class BannerForm extends Component {
         let list = [];
         if (this.props.isLoaded) {
             for (let i = 0; i < this.props.data.length; i++) {
-                list.push({
-                    "url": "https://xuegong.twtstudio.com/" + this.props.data[i].picture,
-                });
+                if (this.props.data[i].picture > 0) {
+                    list.push({
+                        "url": "https://xuegong.twtstudio.com/" + this.props.data[i].picture,
+                    });
+                }
             }
         }
         return list;
@@ -142,15 +146,6 @@ class BannerForm extends Component {
             });
     }
 
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    };
-
     //用nav_id匹配对应的栏目名称或
     getTitle = (index, opt) => {
         let nav = this.props.data[index].nav_id;//nav_id
@@ -172,10 +167,44 @@ class BannerForm extends Component {
         const { getFieldValue } = this.props.form;
         const keys = getFieldValue('keys');
         return data.map((m, i) => {
+            sessionStorage.removeItem(`Banner${i}picpath`);
+            sessionStorage.removeItem(`Banner${i}iconpath`);
             return this.getBanner(m, data, len, i);
         })
         // forms.push(this.getBanner(data, len, i));
     }
+
+
+    delItem = (i) => {
+        const { apiPath, request } = delBanner(i);
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                message.success("删除成功");
+            })
+    }
+
+    //由于表单设计缺陷，此处过于暴力，待优化
+    handleSubmit = e => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            let value = Object.keys(values);
+            let len = value.length / 3;
+            for (let i = 0; i < len; i++) {
+                let keyName = `passage${i}`
+                for (let j in values) {
+                    if (j === keyName && values[j]) {
+                        //看看是哪个修改过了
+                        console.log('I GET IT ! ' + i);
+                        // const { apiPath, request }
+                    }
+                }
+            }
+            // console.log(len);
+            console.log(values);
+        }
+        )
+    };
 
     getBanner = (m, data, maxlen, index) => {
         // console.log(this.getTitle(index, 1));
@@ -191,12 +220,13 @@ class BannerForm extends Component {
         };
         const { imageUrl } = this.state;
         const { getFieldDecorator } = this.props.form;
+
         return (
             <div>
                 <Card className="banner-card">
-                    <Form id={index} {...formItemLayout}>
+                    <Form id={"form" + index} {...formItemLayout} onSubmit={this.handleSubmit}>
                         <Form.Item label="标题">
-                            {getFieldDecorator(`${data[index].title}`, {
+                            {getFieldDecorator(`Banner${index}`, {
                                 rules: [
                                     {
                                         max: 20,
@@ -211,9 +241,6 @@ class BannerForm extends Component {
                             })(<Input placeholder="20字以内" hideRequiredMark="false" allowClear={`true`} style={{ width: '60%' }} />)
                             }
                         </Form.Item>
-
-
-
 
                         <Form.Item label="跳转文章选择">
                             {getFieldDecorator(`title${index}`, {
@@ -230,11 +257,6 @@ class BannerForm extends Component {
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
                                 </Select>
                             )}
-
-
-
-
-
                             {getFieldDecorator(`passage${index}`, {
                                 rules: [
                                     {
@@ -242,7 +264,6 @@ class BannerForm extends Component {
                                         message: '请选择一篇文章',
                                     },
                                 ],
-                                initialValue: this.getTitle(index, 2),
                             })(
                                 <Select id={index + '-2'} key={index + '-2'} style={{ width: '40%' }} placeholder="请选择一篇文章">
                                     {/* <Option value="-1">请选择</Option> */}
@@ -252,25 +273,22 @@ class BannerForm extends Component {
                             }
                         </Form.Item>
 
-
-
                         {/* 图片上传 */}
                         {/* -------------------------------------------------------------------------------- */}
                         <FileUpLoader type="image" bindTo={"Banner" + index} necessary={true} />
                         {/* -------------------------------------------------------------------------------- */}
                         {/* 图片上传 */}
                         <Col span={24} style={{ textAlign: 'right' }}>
-                            <Button type="default" loading={this.state.isSaved}><Icon type="save" />保存修改</Button>
+                            <Button key={index} type="danger" htmlType="button" onClick={this.delItem.bind(this, data[index].id)}><Icon type="delete" />删除</Button>
+                            <Button key={index} type="default" loading={this.state.isSaved} htmlType="submit"><Icon type="save" />保存修改</Button>
                         </Col>
-
                     </Form>
                 </Card>
-            </div>
+            </div >
         )
     }
 
     render() {
-        console.log("filepath:" + this.state.filePath);
         // console.log("iconpath:" + iconPath);
         let data = this.props.data;
         // console.log(data);
