@@ -17,7 +17,6 @@ class Module extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            navData: null,
             subordData: null,
             navId: this.props.bindInfo.nav_id,
             articleId: this.props.bindInfo.mes_id,
@@ -26,14 +25,6 @@ class Module extends Component {
     componentDidMount = () => {
         const { bindInfo } = this.props;
         this.handleOnchange(bindInfo.nav_id);
-        let { apiPath, request } = getNaviInfo();
-        fetchApi(apiPath, request)
-            .then(res => res.json())
-            .then(data => {
-                this.setState({
-                    navData: data.data,
-                })
-            });
     }
 
     listColumn = (data) => {
@@ -103,38 +94,14 @@ class Module extends Component {
 
     handleSubmit = () => {
         const { navId, articleId } = this.state;
-        const { modelType } = this.props;
-        let apiPath, request;
+        const { type } = this.props;
         let formData = new FormData();
         formData.append("nav_id", navId);
         formData.append("mes_id", articleId);
         let obj;
         this.props.form.validateFieldsAndScroll((err, values) => { //还需要获取文章id鸭。
             if (!err) {
-                switch (modelType) {
-                    case 'A':
-                        obj = updateUpper(1, formData);
-                        apiPath = obj.apiPath;
-                        request = obj.request;
-                        break;
-                    case 'B':
-                        obj = updateUpper(2, formData);
-                        apiPath = obj.apiPath;
-                        request = obj.request;
-                        break;
-                    case 'C':
-                        obj = updateUpper(3, formData);
-                        apiPath = obj.apiPath;
-                        request = obj.request;
-                        break;
-                    case 'D':
-                        obj = updateUpper(4, formData);
-                        apiPath = obj.apiPath;
-                        request = obj.request;
-                        break;
-                    default:
-                        break;
-                }
+                const { apiPath, request } = updateUpper(type, formData);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
@@ -160,7 +127,8 @@ class Module extends Component {
                 sm: { span: 16 },
             },
         };
-        const { navData, subordData } = this.state;
+        const { navData } = this.props;
+        const { subordData } = this.state;
         const { getFieldDecorator } = this.props.form;
         return (
             <div>

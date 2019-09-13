@@ -7,6 +7,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom';
 import { Collapse, Result } from 'antd';
 import './customize.css';
 import Preview from './PreviewModel';
+import { getNaviInfo } from '../../constants/api/navi';
 import { lowwerModelPreview, upperModelPreview } from '../../constants/api/model';
 import { fetchApi } from '../../callApi';
 import ModuleCommon from "./ModuleCommon";
@@ -49,7 +50,7 @@ class BasicForms extends Component {
             modelB: null,
             modelC: null,
             modelD: null,
-            lowwerModuleData: [],
+            // lowwerModuleData: [],
             isModelEReady: false,
             isModelFReady: false,
             isModelGReady: false,
@@ -58,42 +59,35 @@ class BasicForms extends Component {
             isUpperLoaded: false,
             isLowwerLoaded: false,
             bindInfo: null,
+            navData: null,
         }
     }
 
     componentDidMount = () => {
-        if (!this.state.isUpperLoaded) {
-            let { apiPath, request } = upperModelPreview();
-            fetchApi(apiPath, request)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.error_code === 0) {
-                        this.setState({
-                            commonModuleData: data.data,
-                            readyUpperModel: true,
-                            isUpperLoaded: true,
-                        })
-                    }
-                });
-        }
-
-        for (let i = 1; i < 5; i++) {
-            let arr = this.state.lowwerModuleData;
-            let { apiPath, request } = lowwerModelPreview(i);
-            fetchApi(apiPath, request)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.error_code === 0 && data.data.length > 0) {
-                        arr[i] = data.data;
-                        this.setState({
-                            lowwerModuleData: arr
-                        })
-                    }
+        // if (!this.state.isUpperLoaded) {
+        let obj = upperModelPreview();
+        fetchApi(obj.apiPath, obj.request)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error_code === 0) {
+                    this.setState({
+                        commonModuleData: data.data,
+                        // readyUpperModel: true,
+                        // isUpperLoaded: true,
+                    })
+                }
+            })
+        let { apiPath, request } = getNaviInfo();
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    navData: data.data,
                 })
-        };
+            });
     }
     render() {
-        const { commonModuleData, lowwerModuleData } = this.state;
+        const { commonModuleData, navData } = this.state;
         return (
             <div>
                 <BreadcrumbCustom first="模块管理" />
@@ -123,36 +117,36 @@ class BasicForms extends Component {
                             <Row gutter={16}>
                                 <Col span={12}>
                                     {commonModuleData ? <Card className="banner-edit-card" title="管理模块A" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(0)}><Icon type="info-circle" />帮助</Button>}>
-                                        <ModuleCommon modelType="A" bindInfo={commonModuleData[0]} isReady={this.state.isUpperLoaded} />
+                                        <ModuleCommon type={1} bindInfo={commonModuleData[0]} navData={navData} isReady={this.state.isUpperLoaded} />
                                     </Card> : null}
 
                                 </Col>
                                 <Col span={12}>
                                     {commonModuleData ? <Card className="banner-edit-card" title="管理模块B" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(1)}><Icon type="info-circle" />帮助</Button>}>
-                                        <ModuleCommon modelType="B" bindInfo={commonModuleData[1]} isReady={this.state.isUpperLoaded} />
+                                        <ModuleCommon type={2} bindInfo={commonModuleData[1]} navData={navData} isReady={this.state.isUpperLoaded} />
                                     </Card> : null}
                                 </Col>
                                 <Col span={12}>
                                     {commonModuleData ? <Card className="banner-edit-card" title="管理模块C" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(2)}><Icon type="info-circle" />帮助</Button>}>
-                                        <ModuleCommon modelType="C" bindInfo={commonModuleData[2]} isReady={this.state.isUpperLoaded} />
+                                        <ModuleCommon type={3} bindInfo={commonModuleData[2]} navData={navData} isReady={this.state.isUpperLoaded} />
                                     </Card> : null}
 
                                 </Col>
                                 <Col span={12}>
                                     {commonModuleData ? <Card className="banner-edit-card" title="管理模块D" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(3)}><Icon type="info-circle" />帮助</Button>}>
-                                        <ModuleCommon modelType="D" bindInfo={commonModuleData[3]} isReady={this.state.isUpperLoaded} />
+                                        <ModuleCommon type={4} bindInfo={commonModuleData[3]} navData={navData} isReady={this.state.isUpperLoaded} />
                                     </Card> : null}
 
                                 </Col>
                             </Row>
                             <Card className="banner-edit-card" title="管理模块E" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(4)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModuleManager type={1} bindInfo={lowwerModuleData[0]} isReady={this.state.isModelEReady} />
+                                <ModuleManager type={1} navData={navData} isReady={this.state.isModelEReady} />
                             </Card>
                             <Card className="banner-edit-card" title="管理模块G" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(6)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModuleManager type={3} bindInfo={lowwerModuleData[1]} isReady={this.state.isModelGReady} />
+                                <ModuleManager type={3} navData={navData} isReady={this.state.isModelGReady} />
                             </Card>
                             <Card className="banner-edit-card" title="管理模块H" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(7)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModuleManager type={4} bindInfo={lowwerModuleData[2]} isReady={this.state.isModelHReady} />
+                                <ModuleManager type={4} navData={navData} isReady={this.state.isModelHReady} />
                             </Card>
                         </div>
                     </Col>
