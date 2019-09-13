@@ -59,7 +59,7 @@ class UpLoaderModel extends Component {
     }
 
     render() {
-        const bindTo = this.props.bindTo;
+        const { getLink } = this.props;
         const imageReqSettings = {
             name: 'file',
             action: switchModel(this.props.type).url,
@@ -70,9 +70,14 @@ class UpLoaderModel extends Component {
                     //文件上传中
                 }
                 if (info.file.status === 'done') {
+                    
+                    console.log(info.fileList);
                     message.success(`图片上传成功：${info.file.name}`);
-                    sessionStorage.setItem(`${bindTo}picpath`, info.file.response.data.path);
-                    sessionStorage.setItem(`${bindTo}iconpath`, info.file.response.data.icon);
+                    if (info.file.response.data.path && getLink) {
+                        getLink(info.file.response.data.path);
+                    }
+                    sessionStorage.setItem('picpath', info.file.response.data.path);
+                    sessionStorage.setItem('iconpath', info.file.response.data.icon);
                 } else if (info.file.status === 'error') {
                     message.error(`图片上传失败：${info.file.name}`);
                 }
