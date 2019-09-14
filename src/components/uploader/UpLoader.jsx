@@ -70,7 +70,7 @@ class UpLoaderModel extends Component {
                     //文件上传中
                 }
                 if (info.file.status === 'done') {
-                    
+
                     console.log(info.fileList);
                     message.success(`图片上传成功：${info.file.name}`);
                     if (info.file.response.data.path && getLink) {
