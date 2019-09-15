@@ -166,26 +166,44 @@ class Src extends React.Component {
             });
     }
     TextData = (introduce) => {
+        const { subordNavID } = this.state
         return introduce.map((key, i) => {
             const { id, created_at, title } = key;
+            let data = {
+                navID: subordNavID,
+                articleID: id
+            }
+            let path = {
+                pathname: key.contentType === 1 ? "/app/edit/activity" : '/app/edit/news',
+                state: data
+            }
             return {
                 key: id,
                 releaseTime: created_at,
                 title: title,
-                edit: <div style={{ textAlign: "center" }}><Button type="default">编辑</Button></div>,
+                edit: <div style={{ textAlign: "center" }}><Link to={path}><Button type="default">编辑</Button></Link></div>,
             }
         })
     }
 
     ActiData = (introduce) => {
+        const { subordNavID } = this.state
         return introduce.map((key, i) => {
             const { id, created_at, title, start_time } = key
+            let data = {
+                navID: subordNavID,
+                articleID: id
+            }
+            let path = {
+                pathname: key.contentType === 1 ? "/app/edit/activity" : '/app/edit/news',
+                state: data
+            }
             return {
                 key: id,
                 activityTime: created_at,
                 releaseTime: start_time,
                 title: title,
-                edit: <div style={{ textAlign: "center" }}><Button type="default">编辑</Button></div>,
+                edit: <div style={{ textAlign: "center" }}><Link to={path}><Button type="default">编辑</Button></Link></div>,
             }
         })
     }
@@ -209,7 +227,7 @@ class Src extends React.Component {
                 releaseTime: created_at,
                 title: title,
                 abstract: content,
-                edit: <Link to={path}><Button type="default">编辑</Button></Link>,
+                edit: <div style={{ textAlign: "center" }}><Link to={path}><Button type="default">编辑</Button></Link></div>,
             }
         })
     }
