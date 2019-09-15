@@ -65,11 +65,13 @@ class Module extends Component {
 
     //初始值也应该变。
     handleOnchange = (id) => {
+        console.log(id);
         const { navId } = this.state;
         const { apiPath, request } = getArticleTitle(id);
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 if (data.error_code === 0) {
                     this.setState({
                         subordData: data.data,
@@ -80,13 +82,14 @@ class Module extends Component {
                             article_title: data.data.length > 0 ? data.data[0].title : null,
                         })
                         this.setState({
-                            articleId: data.data.length > 0 ? data.data[0].mes_id : null
+                            articleId: data.data.length > 0 ? data.data[0].id : null
                         })
                     }
                 }
             })
     }
     handleArticleChange = (id) => {
+        console.log(id);
         this.setState({
             articleId: id
         })
@@ -98,7 +101,6 @@ class Module extends Component {
         let formData = new FormData();
         formData.append("nav_id", navId);
         formData.append("mes_id", articleId);
-        let obj;
         this.props.form.validateFieldsAndScroll((err, values) => { //还需要获取文章id鸭。
             if (!err) {
                 const { apiPath, request } = updateUpper(type, formData);

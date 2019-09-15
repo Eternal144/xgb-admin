@@ -11,7 +11,7 @@ export const updateUpper = (model, body) => {
     return {
         apiPath: `admin/upper/${model}`,
         request: {
-            body: body,
+            body: JSON.stringify(body),
             method: "POST",
         }
     }
@@ -37,12 +37,12 @@ export const lowwerModelPreview = (name) => {
     }
 };
 
-export const updateLowwer = (body, model, id) => {
+export const updateLowwer = (model, body) => {
     return {
-        apiPath: 'admin/updateLowwer/' + model + '/' + id,
+        apiPath: `admin/uplowwer/${model}`,
         request: {
             method: "POST",
-            body: body,
+            body: JSON.stringify(body),
         }
     }
 }
