@@ -221,6 +221,88 @@ class BindMan extends Component {
         }
     }
 
+    getItems = () => {
+        const { type } = this.props;
+        const { getFieldDecorator } = this.props.form;
+        const { articleData, moduleData } = this.state; //详细信息？
+        const { children } = moduleData
+        const itemArr = [];
+        console.log(children);
+        children.map((key, index) => {
+            itemArr.push(
+                <Form.Item
+                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                    label={index === 0 ? '内容控制' : ''}
+                    required={false}
+                    key={key.id}
+
+                >
+                    <div className="dynamic-box">
+                        <Row>
+                            <div>PART {index + 1}:</div>
+                            {this.imageDisplay()}
+                        </Row>
+                        {getFieldDecorator(`${index}-content1`, {
+                            validateTrigger: ['onChange', 'onBlur'],
+                            rules: [
+                                {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "请填写第一段描述性文字",
+                                },
+                                {
+                                    max: 35,
+                                    message: '字数超过上限，请酌情删减'
+                                },
+                            ],
+                            initialValue: key.content1
+                        })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
+
+                        {
+                            type === 1 ? getFieldDecorator(`${index}-content2`, {
+                                validateTrigger: ['onChange', 'onBlur'],
+                                rules: [
+                                    {
+                                        required: true,
+                                        whitespace: true,
+                                        message: "请填写第二段描述性文字",
+                                    },
+                                    {
+                                        max: 35,
+                                        message: '字数超过上限，请酌情删减'
+                                    },
+                                ],
+                                initialValue: key.content2
+                            })(<Input placeholder="请填写第二段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />) : null
+                        }
+
+                        {getFieldDecorator(`${index}-mes_id`, {
+                            rules: [
+                                {
+                                    required: true,
+                                    message: '请选择一篇文章',
+                                },
+                            ],
+                            initialValue: key.mes_title
+                        })(
+                            <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
+                                {articleData ? this.articleList(articleData) : null}
+                            </Select>
+                        )}
+                        {children.length > 0 ? (
+                            <Button style={{ width: '10%' }} onClick={() => this.remove(index)}>
+                                <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                            </Button>
+                        ) : null}
+                    </div>
+
+                </Form.Item>
+            )
+        })
+        return itemArr;
+
+    }
+
     //当二级标题框。更新了栏目全清空好吧？
     handleNavOnchange = (id) => {
         const { setFieldsValue, getFieldValue } = this.props.form;

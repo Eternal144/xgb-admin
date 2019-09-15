@@ -2,7 +2,8 @@
 // 'type'[string](必要)，type="image"对应图片上传，type="file"对应附件上传
 // 'bindTo'[string](必要)，与当前所使用的父表单相挂钩，当一个页面具有多个<Uploader>组件时，该值应保证互不相等
 // 'necessary'[boolean](可选，默认为false)，是否为表单必填项
-// 'diaLabel'[boolean](可选，默认false)，是否展示表单文本
+// 'disLabel'[boolean](可选，默认false)，是否展示表单Label
+// 'numberLimit'[int](可选，默认无限制)，控制文件列表长度
 
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
@@ -34,8 +35,8 @@ class UpLoaderModel extends Component {
         this.state = {
             loading: false,
             imgPath: null,
+            fileList: [],
         }
-        Object.assign(this.state, this.props);
     }
 
     beforeImageUpload(file) {
@@ -58,50 +59,92 @@ class UpLoaderModel extends Component {
         return limit;
     }
 
-    render() {
+    handleChange = (info) => {
         const { getLink } = this.props;
+        if (this.props.type === "image") {
+            let flist = [];
+            //flist 的第0项用来表示绑定的列表
+            flist.push(this.props.bindTo)
+            //控制列表长度
+            let listLimit = 0 - parseInt(sessionStorage.getItem("listLimit"));
+            console.log(listLimit);
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(listLimit);
+            this.setState({ fileList });
+            if (info.file.status !== 'uploading') {
+                //文件上传中
+            }
+            if (info.file.status === 'done') {
+                // console.log(info.fileList);
+                flist.push(info.fileList[0].response.data.path);
+                if (info.fileList.length > 0) {
+                    for (let i = 1; i < info.fileList.length; i++) {
+                        flist.push(info.fileList[i].response.data.path);
+                    }
+                }
+                message.success(`图片上传成功：${info.file.name}`);
+                if (info.file.response.data.path && getLink) {
+                    getLink(flist);
+                }
+            } else if (info.file.status === 'error') {
+                message.error(`图片上传失败：${info.file.name}`);
+            }
+        } else if (this.props.type === "file") {
+            let flist = [];
+            //flist 的第0项用来表示绑定的列表
+            flist.push(this.props.bindTo)
+            //控制列表长度
+            let listLimit = 0 - parseInt(sessionStorage.getItem("listLimit"));
+            let fileList = [...info.fileList];
+            fileList = fileList.slice(listLimit);
+            this.setState({ fileList });
+            if (info.file.status !== 'uploading') {
+                // console.log(info.file, info.fileList);
+            }
+            if (info.file.status === 'done') {
+                flist.push(info.fileList[0].response.data.path);
+                if (info.fileList.length > 0) {
+                    for (let i = 1; i < info.fileList.length; i++) {
+                        flist.push(info.fileList[i].response.data.path)
+                    }
+                }
+                message.success(`文件上传成功：${info.file.name}`);
+                if (info.file.response.data.path && getLink) {
+                    getLink(flist);
+                }
+                // console.log(info.fileList);
+                // let filelist = JSON.stringify(info.fileList);
+            } else if (info.file.status === 'error') {
+                message.error(`文件上传失败：${info.file.name}`);
+            }
+        }
+    }
+
+
+    render() {
+        //文件列表长度控制
+        if (this.props.numberLimit) {
+            sessionStorage.setItem("listLimit", this.props.numberLimit);
+        } else {
+            sessionStorage.setItem("listLimit", 0);
+        }
+        // console.log(-sessionStorage.getItem("listLimit"));
+        // const { getLink } = this.props;
         const imageReqSettings = {
             name: 'file',
             action: switchModel(this.props.type).url,
             beforeUpload: this.beforeImageUpload,
             listType: 'picture',
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    //文件上传中
-                }
-                if (info.file.status === 'done') {
-
-                    console.log(info.fileList);
-                    message.success(`图片上传成功：${info.file.name}`);
-                    if (info.file.response.data.path && getLink) {
-                        getLink(info.file.response.data.path);
-                    }
-                    sessionStorage.setItem('picpath', info.file.response.data.path);
-                    sessionStorage.setItem('iconpath', info.file.response.data.icon);
-                } else if (info.file.status === 'error') {
-                    message.error(`图片上传失败：${info.file.name}`);
-                }
-            },
+            onChange: this.handleChange,
         }
         const fileReqSettings = {
             name: 'file',
             action: switchModel(this.props.type).url,
             beforeUpload: this.beforeFileUpload,
             listType: 'text',
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    // console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`文件上传成功：${info.file.name}`);
-                    console.log(info.fileList);
-                    // let filelist = JSON.stringify(info.fileList);
-                    sessionStorage.setItem('filepath', info.fileList);
-                } else if (info.file.status === 'error') {
-                    message.error(`文件上传失败：${info.file.name}`);
-                }
-            },
+            onChange: this.handleChange,
         }
+
         const { getFieldDecorator } = this.props.form;
         return (
             <Form.Item label={this.props.disLabel ? null : switchModel(this.props.type).text} >
@@ -117,7 +160,7 @@ class UpLoaderModel extends Component {
                         })(
                             <Row>
                                 <Col span={8}>
-                                    <Upload {...imageReqSettings} >
+                                    <Upload {...imageReqSettings} fileList={this.state.fileList}>
                                         <Tooltip placement="top" title="小于8MB的图片 格式为jpg/png">
                                             <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传图片</Button>
                                         </Tooltip>
