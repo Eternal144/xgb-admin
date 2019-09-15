@@ -217,14 +217,14 @@ class BindMan extends Component {
 
     imageDisplay = (obj) => {
         if (obj && obj.picture) {
-            let initial = {
+            let initial = [{
                 name: "缩略图",
                 uid: 1,
                 url: obj.picture,
                 status: "done"
-            }
-            return < Uploader initialData = { initial } numberLimit = { 1} disLabel = { true} necessary = { true} getLink = {(values) => { this.handlegetLink(values, obj) }
-        } type = "image" bindTo = { "MessageCover"} />
+            }]
+            return < Uploader initialData={initial} numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }
+            } type="image" bindTo={"MessageCover"} />
         } else {
             return <Uploader numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }} type="image" bindTo={"MessageCover"} />
         }
