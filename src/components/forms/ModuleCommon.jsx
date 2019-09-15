@@ -100,6 +100,8 @@ class Module extends Component {
         let formData = new FormData();
         formData.append("nav_id", navId);
         formData.append("mes_id", articleId);
+        console.log(navId);
+        console.log(articleId);
         this.props.form.validateFieldsAndScroll((err, values) => { //还需要获取文章id鸭。
             if (!err) {
                 const { apiPath, request } = updateUpper(type, formData);

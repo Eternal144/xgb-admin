@@ -11,7 +11,7 @@ export const updateUpper = (model, body) => {
     return {
         apiPath: `admin/upper/${model}`,
         request: {
-            body: JSON.stringify(body),
+            body: body,
             method: "POST",
         }
     }
