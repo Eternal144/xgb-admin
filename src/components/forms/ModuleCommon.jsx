@@ -71,7 +71,6 @@ class Module extends Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.error_code === 0) {
                     this.setState({
                         subordData: data.data,

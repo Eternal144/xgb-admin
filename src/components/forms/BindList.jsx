@@ -217,10 +217,11 @@ class BindMan extends Component {
 
     imageDisplay = (obj) => {
         if (obj && obj.picture) {
+
             let initial = [{
                 name: "缩略图",
                 uid: 1,
-                url: obj.picture,
+                url: root + obj.picture,
                 status: "done"
             }]
             return < Uploader initialData={initial} numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }
