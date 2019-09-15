@@ -2,9 +2,9 @@
 // import {camelizeKeys} from 'humps'
 
 
-let API_ROOT = 'https://xuegong.twtstudio.com/api';
+let API_ROOT = 'https://xuegong.twtstudio.com/index.php/api';
 
-export const fetchApi = (apiPath,request = {})=>{
+export const fetchApi = (apiPath, request = {}) => {
     const fullUrl = `${API_ROOT}/${apiPath}`;
     const { headers, body, method } = request;
     let customRequest = {};
@@ -27,13 +27,13 @@ export const fetchApi = (apiPath,request = {})=>{
         }
     }
     return fetch(fullUrl, customRequest)
-        // .then(res => res.json())
-        // .then(json => {
-        //     if (json.err) {
-        //         return Promise.reject(json);
-        //     }
-        //     const camelizedJson = camelizeKeys(json);
-        //     console.log(camelizedJson);
-        //     return camelizedJson;
-        // })
+    // .then(res => res.json())
+    // .then(json => {
+    //     if (json.err) {
+    //         return Promise.reject(json);
+    //     }
+    //     const camelizedJson = camelizeKeys(json);
+    //     console.log(camelizedJson);
+    //     return camelizedJson;
+    // })
 };

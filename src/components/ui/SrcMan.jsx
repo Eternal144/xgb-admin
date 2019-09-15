@@ -168,9 +168,7 @@ class Src extends React.Component {
     }
     TextData = (introduce) => {
         const { subordNavID } = this.state
-        console.log(introduce)
         return introduce.message.map((key, i) => {
-            console.log(key);
             const { id, created_at, title } = key;
             let data = {
                 navID: subordNavID,
@@ -191,9 +189,7 @@ class Src extends React.Component {
 
     ActiData = (introduce) => {
         const { subordNavID } = this.state
-        console.log(introduce)
         return introduce.message.map((key, i) => {
-            // console.log(key);
             const { id, created_at, title, start_time } = key
             let data = {
                 navID: subordNavID,
@@ -214,9 +210,7 @@ class Src extends React.Component {
     }
     PicData = (introduce) => {
         const { subordNavID } = this.state
-        console.log(introduce)
         return introduce.message.map((key, i) => {
-            console.log(key);
             const { id, icon, created_at, title, content } = key;
             let str = `${root}${icon}`;
             let data = {
@@ -239,32 +233,14 @@ class Src extends React.Component {
         })
     }
 
-    onChange = (pagination, filters, sorter) => {
-        console.log('params', pagination, filters, sorter);
-    }
-    TextTab = (value, i, data) => { //每次都要发网络请求？也可以。试一下叭。key用的四序号
+    Tab = (value, i, data) => { //每次都要发网络请求？也可以。试一下叭。key用的四序号
         return (
             <TabPane tab={value.title} key={i}>
-                <Table columns={columns1} bordered dataSource={data} onChange={this.onChange} rowSelection={this.rowSelection} />
+                <Table columns={columns1} bordered dataSource={data} onChange={this.callback} rowSelection={this.rowSelection} />
             </TabPane>
         )
     }
 
-    ActiTab = (value, i, data) => {
-        return (
-            <TabPane tab={value.title} key={i}>
-                <Table columns={columns2} bordered dataSource={data} onChange={this.onChange} rowSelection={this.rowSelection} />
-            </TabPane>
-        )
-    }
-
-    PicTab = (value, i, data) => {
-        return (
-            <TabPane tab={value.title} key={i}>
-                <Table columns={columns3} bordered dataSource={data} onChange={this.onChange} rowSelection={this.rowSelection} />
-            </TabPane>
-        )
-    }
 
     //introduct包含所有的二级导航的信息。
     renderSideMenu() {
@@ -276,29 +252,30 @@ class Src extends React.Component {
             if (listType === 2) { //图文类
                 if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.PicData(introduct[i]);
-                    return this.PicTab(key, i, data);
+                    return this.Tab(key, i, data, columns3);
                 } else {
-                    return this.PicTab(key, i, null);
+                    return this.Tab(key, i, null, columns3);
                 }
             } else if (contentType === 1) { //活动类
                 if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.ActiData(introduct[i]);
-                    return this.ActiTab(key, i, data);
+                    return this.Tab(key, i, data, columns2);
                 } else {
-                    return this.ActiTab(key, i, null)
+                    return this.Tab(key, i, null, columns2)
                 }
             } else {
                 if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.TextData(introduct[i]);
-                    return this.TextTab(key, i, data);
+                    return this.Tab(key, i, data, columns1);
                 } else {
-                    return this.TextTab(key, i, null);
+                    return this.Tab(key, i, null, columns1);
                 }
             }
         })
     }
 
     callback = (key) => { //key为下标。二级标题id。
+        console.log(key)
         let { introduct, sideMenu } = this.state;
         if (sideMenu[key]) {
             this.setState({
@@ -308,7 +285,10 @@ class Src extends React.Component {
         this.setState({
             subordNavIndex: key
         })
-        if (introduct[key] && introduct[key].message === undefined) {
+        console.log(sideMenu[key]);
+        console.log(sideMenu[key].id);
+        console.log(introduct);
+        if (!introduct[key] || introduct[key].message === undefined) {
             const { apiPath, request } = getNavAllArtivle(sideMenu[key].id);
             fetchApi(apiPath, request)
                 .then(res => res.json())
@@ -322,6 +302,7 @@ class Src extends React.Component {
     }
 
     handleSelect = (value) => { //更新要跳转的文章。
+        console.log(value);
         this.setState({
             chooseNavId: value
         })
@@ -388,7 +369,7 @@ class Src extends React.Component {
         return <LocalizedModal onConfirm={this.handleDelete} data={notify} />
     }
     render() {
-        const { sideMenu, navData } = this.state;
+        const { sideMenu, navData, introduct, subordNavIndex } = this.state;
         return (
             <div>
                 <BreadcrumbCustom first="资源管理" />
@@ -397,7 +378,7 @@ class Src extends React.Component {
                         {sideMenu ? this.renderSideMenu() : <Spin tip="Loading..." size="large" />}
                     </Tabs>
                 </div>
-                <div style={{ margin: "-40px 0 0 0", minHeight: "60px" }}>
+                <div className={introduct[subordNavIndex] && introduct[subordNavIndex].message.length > 0 ? "resource-jump" : "resource-margin"}  >
                     <Col span={4} offset={3}>
                         <label>移动到：</label>
                         <Select id={1} style={{ width: "60%" }} onChange={this.handleSelect} key={1} required="true" placeholder="请选择一个栏目" >

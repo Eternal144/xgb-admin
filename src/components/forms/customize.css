@@ -55,3 +55,9 @@
     display: inline-block;
     width: 70px;
 }
+.resource-jump{
+    margin: -20px 0 0 0;
+}
+.resource-margin{
+    margin: 20px 0 0 0;
+}

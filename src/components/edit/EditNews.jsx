@@ -62,6 +62,7 @@ class EditorDemo extends React.Component {
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
+                        console.log(data);
                         this.setState({
                             initialColumn: data.data.message.id,
                             initialTitle: data.data.message.title,
