@@ -194,7 +194,7 @@ class BindMan extends Component {
             return <Uploader getLink={this.handlegetLink} type="image" bindTo={"MessageCover"} />
         }
     }
- 
+
     getItems = () => {
         const { type } = this.props;
         const { getFieldDecorator } = this.props.form;

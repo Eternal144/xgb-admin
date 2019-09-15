@@ -41,7 +41,7 @@ class Banners extends React.Component {
         let lastData = data[data.length - 1];
         let newDataId = lastData.id + 1;
         data.push({
-            "id": lastData.id + 1,
+            "id": -1,
             "title": undefined,
             "rank": parseInt(lastData.rank) + 1,
             "isnew": true,
