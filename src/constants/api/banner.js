@@ -39,7 +39,7 @@ export const editBanner = (pic, title, nav_id, mes_id, rank, id) => {
     return {
         apiPath: `admin/banner/` + id,
         request: {
-            method: "PUT",
+            method: "POST",
             mode: 'no-cors',
             headers: {
                 "Content-Type": "application/json",

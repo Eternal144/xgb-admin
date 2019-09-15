@@ -80,6 +80,7 @@ class UpLoaderModel extends Component {
                 if (info.fileList.length > 0) {
                     for (let i = 1; i < info.fileList.length; i++) {
                         flist.push(info.fileList[i].response.data.path);
+                        flist.push(info.fileList[i].response.data.icon);
                     }
                 }
                 message.success(`图片上传成功：${info.file.name}`);
@@ -122,7 +123,12 @@ class UpLoaderModel extends Component {
 
 
     render() {
-        //文件列表长度控制
+        //文件列表长度控制\
+        if (this.props.initialData) {
+            this.setState({
+                fileList: this.props.initialData,
+            })
+        }
         if (this.props.numberLimit) {
             sessionStorage.setItem("listLimit", this.props.numberLimit);
         } else {
