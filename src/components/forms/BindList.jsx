@@ -25,7 +25,7 @@ const formItemLayoutWithOutLabel = {
         sm: { span: 20, offset: 4 },
     },
 };
-let id = 0;
+const root = "https://xuegong.twtstudio.com/"
 
 //id是以啥为依据的呀？
 const newChild = (idd) => {
@@ -186,121 +186,48 @@ class BindMan extends Component {
         this.setState({
             moduleData: this.resetModuleData()
         }, () => {
-            //执行真正的删除。
+            const { moduleData } = this.state;
+            const { form, type } = this.props;
+            form.validateFields((err, values) => {
+                if (!err) {
+                    let { apiPath, request } = updateLowwer(type, moduleData);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("保存成功");
+                            } else {
+                                message.error("保存失败");
+                            }
+                        })
+                }
+            })
         })
+    }
+    handlegetLink = (src, obj) => {
 
-        // let pic = sessionStorage.getItem('picpath');
-        // console.log(pic);
-        // if (!err) {
-        //     let reqinfo = new FormData();
-        //     reqinfo.append('nav_id', values.bindItModelA);
-        //     reqinfo.append('mes_id', values.TopModelA);
-        //     let { apiPath, request } = updateUpper(reqinfo, 1);
-        //     fetchApi(apiPath, request)
-        //         .then(res => res.json())
-        //         .then(data => {
-        //             if (data.error_code === 0) {
-        //                 message.success("保存成功");
-        //             } else {
-        //                 message.error("保存失败");
-        //             }
-        //         })
-        // }
-    }
-    handlegetLink = (src) => {
         console.log(src);
+        const { moduleData } = this.state;
+        moduleData.children.map((key, i) => {
+            if (key.id === obj.id) {
+                obj.picture = src[1];
+            }
+        })
     }
-    // handleChange = (e) => {
-    //     console.log(e.target.value);
-    // }
+
     imageDisplay = (obj) => {
         if (obj && obj.picture) {
-            return <img src={obj.picture} alt="有图啦" />
+            let initial = [{
+                name: "缩略图",
+                uid: 1,
+                url: obj.picture,
+                status: "done"
+            }]
+            return < Uploader initialData={initial} numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }
+            } type="image" bindTo={"MessageCover"} />
         } else {
-            return <Uploader getLink={this.handlegetLink} type="image" bindTo={"MessageCover"} />
+            return <Uploader numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }} type="image" bindTo={"MessageCover"} />
         }
-    }
-
-    getItems = () => {
-        const { type } = this.props;
-        const { getFieldDecorator } = this.props.form;
-        const { articleData, moduleData } = this.state; //详细信息？
-        const { children } = moduleData
-        const itemArr = [];
-        console.log(children);
-        children.map((key, index) => {
-            itemArr.push(
-                <Form.Item
-                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                    label={index === 0 ? '内容控制' : ''}
-                    required={false}
-                    key={key.id}
-
-                >
-                    <div className="dynamic-box">
-                        <Row>
-                            <div>PART {index + 1}:</div>
-                            {this.imageDisplay()}
-                        </Row>
-                        {getFieldDecorator(`${index}-content1`, {
-                            validateTrigger: ['onChange', 'onBlur'],
-                            rules: [
-                                {
-                                    required: true,
-                                    whitespace: true,
-                                    message: "请填写第一段描述性文字",
-                                },
-                                {
-                                    max: 35,
-                                    message: '字数超过上限，请酌情删减'
-                                },
-                            ],
-                            initialValue: key.content1
-                        })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
-
-                        {
-                            type === 1 ? getFieldDecorator(`${index}-content2`, {
-                                validateTrigger: ['onChange', 'onBlur'],
-                                rules: [
-                                    {
-                                        required: true,
-                                        whitespace: true,
-                                        message: "请填写第二段描述性文字",
-                                    },
-                                    {
-                                        max: 35,
-                                        message: '字数超过上限，请酌情删减'
-                                    },
-                                ],
-                                initialValue: key.content2
-                            })(<Input placeholder="请填写第二段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />) : null
-                        }
-
-                        {getFieldDecorator(`${index}-mes_id`, {
-                            rules: [
-                                {
-                                    required: true,
-                                    message: '请选择一篇文章',
-                                },
-                            ],
-                            initialValue: key.mes_title
-                        })(
-                            <Select style={{ width: '90%' }} placeholder="请选择一篇文章">
-                                {articleData ? this.articleList(articleData) : null}
-                            </Select>
-                        )}
-                        {children.length > 0 ? (
-                            <Button style={{ width: '10%' }} onClick={() => this.remove(index)}>
-                                <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                            </Button>
-                        ) : null}
-                    </div>
-
-                </Form.Item>
-            )
-        })
-        return itemArr;
-
     }
 
     //当二级标题框。更新了栏目全清空好吧？
@@ -354,7 +281,7 @@ class BindMan extends Component {
                     <div className="dynamic-box" >
                         <Row>
                             <div>PART {index + 1}:</div>
-                            {this.imageDisplay()}
+                            {this.imageDisplay(obj)}
                         </Row>
 
                         {getFieldDecorator(`${index}-content1`, {

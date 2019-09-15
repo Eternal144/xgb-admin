@@ -56,6 +56,16 @@ export const getmessageList = (id, page) => {
         }
     }
 }
+//获取二级导航下所有文章
+export const getNavAllArtivle = (id) => {
+    return {
+        apiPath: `admin/allMessage/${id}`,
+        request: {
+            method: 'GET',
+            mode: 'no-cors'
+        }
+    }
+}
 
 export const updateNav = (body) => {
     return {

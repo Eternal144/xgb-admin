@@ -9,7 +9,7 @@ import picture from '../../style/imgs/list-preview.jpg';
 import LocalizedModal from '../ui/Modals'
 import { CONFIRM_JUMP, CONFIRM_DELETE } from '../../constants/common'
 import { fetchApi } from '../../callApi';
-import { getSecNaviList, getmessageList, getNaviInfo } from '../../constants/api/navi'
+import { getSecNaviList, getNavAllArtivle, getNaviInfo } from '../../constants/api/navi'
 import { removeArticle, deleteArticle } from '../../constants/api/source'
 const { TabPane } = Tabs;
 const { Option, OptGroup } = Select;
@@ -141,15 +141,13 @@ class Src extends React.Component {
                 const { sideMenu } = this.state; //获取请求第一个二级导航的简介信息。
                 let firstID = sideMenu[0].id;
                 //默认获取第一页的信息。 ??? 
-                const { apiPath, request } = getmessageList(firstID, 1);
+                const { apiPath, request } = getNavAllArtivle(firstID);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => { //有数据了。更新第一个二级导航。的数据。
+                        console.log(data)
                         let arr = [];
                         arr[0] = data.data.message;
-                        // data.data.message.map((obj, i) => {
-                        //     arr[0].push(obj)
-                        // })
                         this.setState({
                             introduct: arr,
                             subordNavID: sideMenu[0].id,
@@ -286,7 +284,7 @@ class Src extends React.Component {
             subordNavIndex: key
         })
         if (introduct[key] === undefined) {
-            const { apiPath, request } = getmessageList(sideMenu[key].id, 1);
+            const { apiPath, request } = getNavAllArtivle(sideMenu[key].id);
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
