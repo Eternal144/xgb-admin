@@ -196,16 +196,16 @@ class BannerForm extends Component {
                 for (let j in values) {
                     if (j === keyName && values[j]) {
                         //看看是哪个修改过了
-                        console.log('I GET IT ! ' + i);
+                        // console.log('I GET IT ! ' + i);
                         let bindto = `Banner${i}`;
                         let thisTitle = `title${i}`;
                         let thisColumn = `column${i}`;
                         let link = null;
                         //这里处理一下link
                         if (this.state.flist[0] === bindto) {
-                            if (this.state.flist.length > 2) {
+                            if (this.state.flist.length > 3) {
                                 link = this.state.flist[1];
-                                for (let index = 2; index < this.state.flist.length; index++) {
+                                for (let index = 2; index < this.state.flist.length; index += 2) {
                                     link += '@';
                                     link += this.state.flist[index];
                                 }

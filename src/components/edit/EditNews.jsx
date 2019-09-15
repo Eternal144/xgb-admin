@@ -28,12 +28,14 @@ class EditorDemo extends React.Component {
             navData: null,
             imgpath: null,
             filepath: null,
-            icon: null,
             //初始化文章信息
             initialColumn: null,
             initialTitle: null,
             initialJournalist: null,
             editorState: BraftEditor.createEditorState(''),
+            flist: null,
+            imglist: null,
+            iconlist: null,
         }
     }
 
@@ -43,9 +45,6 @@ class EditorDemo extends React.Component {
 
     componentDidMount() {
         if (!this.state.isNaviLoaded) {
-            sessionStorage.removeItem('filepath');
-            sessionStorage.removeItem('picpath');
-            sessionStorage.removeItem('iconpath');
             const { apiPath, request } = getNaviInfo();
             fetchApi(apiPath, request)
                 .then(res => res.json())
@@ -72,20 +71,8 @@ class EditorDemo extends React.Component {
         }
     }
 
-    // async componentDidMount() {
-    //     假设此处从服务端获取html格式的编辑器内容
-    //     const htmlContent = await fetchEditorContent()
-    //     使用BraftEditor.createEditorState将html字符串转换为编辑器需要的editorStat
-    //     this.setState({
-    //         editorState: BraftEditor.createEditorState(htmlContent)
-    //     })
-    // }
-
     submitContent = async () => {
-        // 在编辑器获得焦点时按下ctrl+s会执行此方法
-        // 编辑器内容提交到服务端之前，可直接调用editorState.toHTML()来获取HTML格式的内容
         const htmlContent = this.state.editorState.toHTML()
-        //const result = await saveEditorContent(htmlContent)
     }
 
     handleEditorChange = (editorState) => {
@@ -112,6 +99,7 @@ class EditorDemo extends React.Component {
         }
         return columns;
     }
+
     buildPreviewHtml() {
         return `
           <!Doctype html>
@@ -179,32 +167,48 @@ class EditorDemo extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        console.log(JSON.parse(sessionStorage.getItem('filepath')));
         this.props.form.validateFields((err, values) => {
-            let appendixList = JSON.parse(sessionStorage.getItem('filepath'));
-            // console.log(appendixList);
-            console.log(sessionStorage.getItem('filepath'));
             if (!err) {
-                let appendixList = JSON.parse(sessionStorage.getItem('filepath'));
-                // console.log(appendixList);
-                console.log(sessionStorage.getItem('filepath'));
-                let appendix = '';
-                if (appendixList) {
-                    //拼接附件路径
-                    appendix = appendixList[0].response.data.path;
-                    if (appendixList.length > 1) {
-                        for (let i = 1; i < appendixList.length; i++) {
-                            appendix += '@';
-                            appendix += appendixList[i].response.data.path;
-                        }
+                let imglink = null;
+                let appendix = null;
+                let icon = null;
+                //这里处理一下link
+                if (this.state.imglist.length > 3) {
+                    imglink = this.state.imglist[1];
+                    for (let index = 2; index < this.state.imglist.length; index += 2) {
+                        imglink += '@';
+                        imglink += this.state.imglist[index];
                     }
+                } else {
+                    imglink = this.state.imglist[1];
                 }
-                let pic = sessionStorage.getItem('picpath');
-                let icon = sessionStorage.getItem('iconpath');
+
+                if (this.state.imglist.length > 3) {
+                    icon = this.state.imglist[1];
+                    for (let index = 3; index < this.state.imglist.length; index += 2) {
+                        icon += '@';
+                        icon += this.state.imglist[index];
+                    }
+                } else {
+                    icon = this.state.imglist[1];
+                }
+
+                if (this.state.flist.length > 2) {
+                    appendix = this.state.flist[1];
+                    for (let index = 2; index < this.state.flist.length; index++) {
+                        appendix += '@';
+                        appendix += this.state.flist[index];
+                    }
+                } else {
+                    appendix = this.state.flist[1];
+                }
+
+                console.log(imglink)
+                console.log(appendix)
 
                 if (this.props.location.state) {
                     //保存编辑文章
-                    const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
+                    const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -217,7 +221,7 @@ class EditorDemo extends React.Component {
                     console.log('Received values of form: ', values);
                 } else {
                     //发布新文章
-                    const { apiPath, request } = postNewsMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
+                    const { apiPath, request } = postNewsMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -231,6 +235,24 @@ class EditorDemo extends React.Component {
                 }
             }
         });
+    }
+
+    handlegetFile = (src) => {
+        //在此处接收uploader返回的链接列表，并更新state
+        // console.log("接收到后台返回的数据了。")
+        // console.log(src);
+        this.setState({
+            flist: src,
+        })
+    }
+
+    handlegetImage = (src) => {
+        //在此处接收uploader返回的链接列表，并更新state
+        // console.log("接收到后台返回的数据了。")
+        // console.log(src);
+        this.setState({
+            imglist: src,
+        })
     }
 
     render() {
@@ -326,12 +348,12 @@ class EditorDemo extends React.Component {
                                     message: "文本过长,请酌情删减",
                                 }],
                                 initialValue: this.state.initialJournalist,
-                            })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
+                            })(<Input placeholder={"不超过20字"} style={{ width: "40%" }} />)}
                         </Form.Item>
                         {/* 附件上传 */}
-                        <FileUpLoader type="file" bindTo={"MessageEdit"} />
+                        <FileUpLoader type="file" bindTo={"MessageEdit"} numberLimit={5} getLink={this.handlegetFile} />
                         {/* 图片上传 */}
-                        <FileUpLoader type="image" bindTo={"MessageCover"} />
+                        <FileUpLoader type="image" bindTo={"MessageCover"} numberLimit={1} getLink={this.handlegetImage} />
                         <Row>
                             <Col span={16} offset={4}>
                                 <Form.Item>
@@ -362,8 +384,6 @@ class EditorDemo extends React.Component {
                 </Card>
             </div>
         )
-
     }
-
 }
 export default Form.create()(EditorDemo)
