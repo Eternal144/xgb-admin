@@ -62,6 +62,7 @@ class BindMan extends Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 if (data.error_code === 0) {
                     this.setState({
                         articleData: data.data
@@ -238,7 +239,7 @@ class BindMan extends Component {
         moduleData.nav_id = id;
         moduleData.articleData = null;
         moduleData.description = null;
-        moduleData.children = null;
+        moduleData.children = [];
         this.setState({
             navId: id,
             articleData: null,
@@ -256,11 +257,13 @@ class BindMan extends Component {
             this.getArtiTitle(nav_id);
         }
     }
+
     handleChange = () => {
         this.setState({
             moduleData: this.resetModuleData()
         })
     }
+
     //根据child来渲染。
     getSubDetails = () => {
         const { getFieldDecorator } = this.props.form;
