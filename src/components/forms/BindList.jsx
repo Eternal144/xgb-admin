@@ -73,19 +73,17 @@ class BindMan extends Component {
     noNaviNotification = () => {
         message.error("栏目列表获取失败");
     }
-    //obj.nav_id
+
+
     remove = (id) => {
         const { moduleData } = this.state;
         this.setState({
             moduleData: this.resetModuleData()
         }, () => {
-            console.log(id);
-            console.log(moduleData);
             let arr = moduleData;
             arr.children = moduleData.children.filter((obj) => {
                 return parseInt(obj.id) !== parseInt(id)
             })
-            console.log(arr);
             this.setState({
                 moduleData: arr
             })
@@ -210,7 +208,6 @@ class BindMan extends Component {
         // }
     }
     handlegetLink = (src) => {
-        console.log("接收到后台返回的数据了。")
         console.log(src);
     }
     // handleChange = (e) => {
@@ -346,70 +343,77 @@ class BindMan extends Component {
         console.log(children)
         //根据本地数据渲染。删除的时候根据id删除。
         children.map((obj, index) => {
-            childArr.push((<Form.Item
-                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                label={index === 0 ? '内容控制' : ''}
-                required={false}
-                key={index}
-            >
-                <div className="dynamic-box">
-                    <Row>
-                        <div>PART {index + 1}:</div>
-                        {this.imageDisplay()}
-                    </Row>
-                    {getFieldDecorator(`${index}-content1`, {
-                        validateTrigger: ['onChange', 'onBlur'],
-                        rules: [
-                            {
-                                required: true,
-                                whitespace: true,
-                                message: "请填写第一段描述性文字",
-                            },
-                            {
-                                max: 35,
-                                message: '字数超过上限，请酌情删减'
-                            },
-                        ],
-                        initialValue: obj.content1
-                    })(<Input placeholder="请填写第一段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />)}
+            console.log(obj.content1);
+            childArr.push((
+                <Form.Item
+                    {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                    label={index === 0 ? '内容控制' : ''}
+                    required={false}
+                    key={index}
+                >
+                    <div className="dynamic-box" >
+                        <Row>
+                            <div>PART {index + 1}:</div>
+                            {this.imageDisplay()}
+                        </Row>
 
-                    {
-                        type === 1 ? getFieldDecorator(`${index}-content2`, {
+                        {getFieldDecorator(`${index}-content1`, {
                             validateTrigger: ['onChange', 'onBlur'],
                             rules: [
                                 {
                                     required: true,
                                     whitespace: true,
-                                    message: "请填写第二段描述性文字",
+                                    message: "请填写第一段描述性文字",
                                 },
                                 {
                                     max: 35,
                                     message: '字数超过上限，请酌情删减'
                                 },
                             ],
-                            initialValue: obj.content2
-                        })(<Input placeholder="请填写第二段描述性文字,35字以内" style={{ width: '100%', marginRight: 8 }} />) : null
-                    }
-                    {/* 但是在保存的时候还是需要id的呀 */}
-                    {getFieldDecorator(`${index}-mes_id`, {
-                        rules: [
-                            {
-                                required: true,
-                                message: '请选择一篇文章',
-                            },
-                        ],
-                        initialValue: obj.mes_title
-                    })(
-                        <Select style={{ width: '90%' }} placeholder="请选择一篇文章" >
-                            {articleData ? this.articleList(articleData) : null}
-                        </Select>
-                    )}
-                    {/* 这个时候里面的值都是空的。 */}
-                    <Button style={{ width: '10%' }} onClick={() => this.remove(obj.id)}>
-                        <Icon className="dynamic-delete-button" type="minus-circle-o" />
-                    </Button>
-                </div>
-            </Form.Item>))
+                            initialValue: obj.content1
+                        })(
+                            <Input style={{ width: "90%" }} placeholder="请填写第一段描述性文字,35字以内" />
+                        )}
+
+                        {
+                            type === 1 ? getFieldDecorator(`${index}-content2`, {
+                                validateTrigger: ['onChange', 'onBlur'],
+                                rules: [
+                                    {
+                                        required: true,
+                                        whitespace: true,
+                                        message: "请填写第二段描述性文字",
+                                    },
+                                    {
+                                        max: 35,
+                                        message: '字数超过上限，请酌情删减'
+                                    },
+                                ],
+                                initialValue: obj.content2
+                            })(
+                                <Input style={{ width: "90%" }} value={obj.content2} placeholder="请填写第二段描述性文字,35字以内" />
+                            ) : null
+                        }
+                        {/* 但是在保存的时候还是需要id的呀 */}
+                        {getFieldDecorator(`${index}-mes_id`, {
+                            rules: [
+                                {
+                                    required: true,
+                                    message: '请选择一篇文章',
+                                },
+                            ],
+                            initialValue: obj.mes_title
+                        })(
+                            <Select style={{ width: "80%" }} placeholder="请选择一篇文章"  >
+                                {articleData ? this.articleList(articleData) : null}
+                            </Select>
+                        )}
+                        {/* 这个时候里面的值都是空的。 */}
+                        <Button style={{ width: '10%' }} onClick={() => this.remove(obj.id)}>
+                            <Icon className="dynamic-delete-button" type="minus-circle-o" />
+                        </Button>
+                    </div>
+                </Form.Item>))
         })
         return childArr;
     }
@@ -430,7 +434,7 @@ class BindMan extends Component {
                                 },
                             ],
                             initialValue: moduleData ? moduleData.nav_name : null
-                        })(<Select required="true" style={{ width: '40%' }} placeholder="请选择一个栏目" onChange={this.handleNavOnchange}>
+                        })(<Select required="true" style={{ width: '40%' }} onChange={this.handleNavOnchange}>
                             {navData ? this.listColumn(navData) : null}
                         </Select>)}
                     </Form.Item>
@@ -449,7 +453,9 @@ class BindMan extends Component {
                         )
                         }
                     </Form.Item> : null}
-                    {moduleData && moduleData.children ? this.getSubDetails() : null}
+                    <div >
+                        {moduleData && moduleData.children ? this.getSubDetails() : null}
+                    </div>
                     <Form.Item {...formItemLayoutWithOutLabel}>
                         <Button type="dashed" onClick={this.add} style={{ width: '60%' }}><Icon type="plus" /></Button>
                     </Form.Item>

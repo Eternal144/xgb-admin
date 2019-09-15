@@ -140,12 +140,16 @@ class Src extends React.Component {
                 })
                 const { sideMenu } = this.state; //获取请求第一个二级导航的简介信息。
                 let firstID = sideMenu[0].id;
+                //默认获取第一页的信息。 ??? 
                 const { apiPath, request } = getmessageList(firstID, 1);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
-                    .then(data => { //有数据了。更新第一个的数据。
+                    .then(data => { //有数据了。更新第一个二级导航。的数据。
                         let arr = [];
                         arr[0] = data.data.message;
+                        // data.data.message.map((obj, i) => {
+                        //     arr[0].push(obj)
+                        // })
                         this.setState({
                             introduct: arr,
                             subordNavID: sideMenu[0].id,
@@ -170,7 +174,7 @@ class Src extends React.Component {
                 key: id,
                 releaseTime: created_at,
                 title: title,
-                edit: <div><Button type="default">编辑</Button></div>,
+                edit: <div style={{ textAlign: "center" }}><Button type="default">编辑</Button></div>,
             }
         })
     }
@@ -183,13 +187,12 @@ class Src extends React.Component {
                 activityTime: created_at,
                 releaseTime: start_time,
                 title: title,
-                edit: <div><Button type="default">编辑</Button></div>,
+                edit: <div style={{ textAlign: "center" }}><Button type="default">编辑</Button></div>,
             }
         })
     }
     PicData = (introduce) => {
         const { subordNavID } = this.state
-
         return introduce.map((key, i) => {
             const { id, icon, created_at, title, content } = key;
             let str = `${root}${icon}`;
@@ -240,6 +243,7 @@ class Src extends React.Component {
         )
     }
 
+    //introduct包含所有的二级导航的信息。
     renderSideMenu() {
         const { sideMenu, introduct } = this.state;
         return sideMenu.map((key, i) => { // key是一个对象
@@ -370,7 +374,7 @@ class Src extends React.Component {
                         {sideMenu ? this.renderSideMenu() : <Spin tip="Loading..." size="large" />}
                     </Tabs>
                 </div>
-                <div style={{ margin: "-40px 0 0 0" }}>
+                <div style={{ margin: "-40px 0 0 0", minHeight: "60px" }}>
                     <Col span={4} offset={3}>
                         <label>移动到：</label>
                         <Select id={1} style={{ width: "60%" }} onChange={this.handleSelect} key={1} required="true" placeholder="请选择一个栏目" >

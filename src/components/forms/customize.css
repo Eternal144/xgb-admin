@@ -45,6 +45,13 @@
 
 .dynamic-box{
     background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
     width: 60%;
     margin-top:10px;
+    padding: 10px 20px;
+}
+.input-label{
+    text-align: right;
+    display: inline-block;
+    width: 70px;
 }
