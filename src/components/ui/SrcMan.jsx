@@ -135,6 +135,7 @@ class Src extends React.Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => { //用来更新侧边栏。根据类型来调用Table三种Tabel
+                console.log(data);
                 this.setState({
                     sideMenu: data.data
                 })
@@ -147,7 +148,7 @@ class Src extends React.Component {
                     .then(data => { //有数据了。更新第一个二级导航。的数据。
                         console.log(data)
                         let arr = [];
-                        arr[0] = data.data.message;
+                        arr[0] = data.data;
                         this.setState({
                             introduct: arr,
                             subordNavID: sideMenu[0].id,
@@ -167,14 +168,16 @@ class Src extends React.Component {
     }
     TextData = (introduce) => {
         const { subordNavID } = this.state
-        return introduce.map((key, i) => {
+        console.log(introduce)
+        return introduce.message.map((key, i) => {
+            console.log(key);
             const { id, created_at, title } = key;
             let data = {
                 navID: subordNavID,
                 articleID: id
             }
             let path = {
-                pathname: key.contentType === 1 ? "/app/edit/activity" : '/app/edit/news',
+                pathname: introduce.contentType === "1" ? "/app/edit/activity" : '/app/edit/news',
                 state: data
             }
             return {
@@ -188,14 +191,16 @@ class Src extends React.Component {
 
     ActiData = (introduce) => {
         const { subordNavID } = this.state
-        return introduce.map((key, i) => {
+        console.log(introduce)
+        return introduce.message.map((key, i) => {
+            // console.log(key);
             const { id, created_at, title, start_time } = key
             let data = {
                 navID: subordNavID,
                 articleID: id
             }
             let path = {
-                pathname: key.contentType === 1 ? "/app/edit/activity" : '/app/edit/news',
+                pathname: introduce.contentType === "1" ? "/app/edit/activity" : '/app/edit/news',
                 state: data
             }
             return {
@@ -209,7 +214,9 @@ class Src extends React.Component {
     }
     PicData = (introduce) => {
         const { subordNavID } = this.state
-        return introduce.map((key, i) => {
+        console.log(introduce)
+        return introduce.message.map((key, i) => {
+            console.log(key);
             const { id, icon, created_at, title, content } = key;
             let str = `${root}${icon}`;
             let data = {
@@ -217,7 +224,7 @@ class Src extends React.Component {
                 articleID: id
             }
             let path = {
-                pathname: key.contentType === 1 ? "/app/edit/activity" : '/app/edit/news',
+                pathname: introduce.contentType === "1" ? "/app/edit/activity" : '/app/edit/news',
                 state: data
             }
             return {
@@ -267,21 +274,21 @@ class Src extends React.Component {
             let listType = parseInt(key.listType);
             let contentType = parseInt(key.contentType);
             if (listType === 2) { //图文类
-                if (introduct[i] !== undefined) {
+                if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.PicData(introduct[i]);
                     return this.PicTab(key, i, data);
                 } else {
                     return this.PicTab(key, i, null);
                 }
             } else if (contentType === 1) { //活动类
-                if (introduct[i] !== undefined) {
+                if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.ActiData(introduct[i]);
                     return this.ActiTab(key, i, data);
                 } else {
                     return this.ActiTab(key, i, null)
                 }
             } else {
-                if (introduct[i] !== undefined) {
+                if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.TextData(introduct[i]);
                     return this.TextTab(key, i, data);
                 } else {
@@ -301,12 +308,12 @@ class Src extends React.Component {
         this.setState({
             subordNavIndex: key
         })
-        if (introduct[key] === undefined) {
+        if (introduct[key] && introduct[key].message === undefined) {
             const { apiPath, request } = getNavAllArtivle(sideMenu[key].id);
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    introduct[key] = data.data.message;
+                    introduct[key] = data.data;
                     this.setState({
                         introduct: introduct
                     })
@@ -332,7 +339,7 @@ class Src extends React.Component {
                 .then(res => res.json())
                 .then(data => {  //
                     if (data.error_code === 0) {
-                        introduct[subordNavIndex] = introduct[subordNavIndex].filter((obj) => {
+                        introduct[subordNavIndex].message = introduct[subordNavIndex].message.filter((obj) => {
                             for (let i of chooseArticleId) {
                                 if (obj.id === i) {
                                     return false
@@ -358,7 +365,7 @@ class Src extends React.Component {
                 .then(res => res.json())
                 .then(data => {
                     if (data.error_code === 0) {
-                        introduct[subordNavIndex] = introduct[subordNavIndex].filter((obj) => {
+                        introduct[subordNavIndex].message = introduct[subordNavIndex].message.filter((obj) => {
                             for (let i of chooseArticleId) {
                                 if (obj.id === i) {
                                     return false
