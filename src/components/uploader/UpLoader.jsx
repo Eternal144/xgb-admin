@@ -121,14 +121,16 @@ class UpLoaderModel extends Component {
         }
     }
 
-
-    render() {
-        //文件列表长度控制\
+    componentDidMount = () => {
         if (this.props.initialData) {
             this.setState({
                 fileList: this.props.initialData,
             })
         }
+    }
+
+    render() {
+        //文件列表长度控制
         if (this.props.numberLimit) {
             sessionStorage.setItem("listLimit", this.props.numberLimit);
         } else {
