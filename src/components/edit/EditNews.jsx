@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 // 引入编辑器组件
-import BraftEditor from 'braft-editor'
+import BraftEditor from 'braft-editor';
 import { Card, Input, Button, Form, Select, DatePicker, TimePicker, Upload, Icon, message, Row, Col } from 'antd'
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // 引入编辑器样式
@@ -208,9 +208,9 @@ class EditorDemo extends React.Component {
                     appendix = this.state.flist[1];
                 }
 
-                console.log(imglink)
-                console.log(appendix)
-
+                // console.log(imglink)
+                // console.log(appendix)
+                console.log('Received values of form: ', values);
                 if (this.props.location.state) {
                     //保存编辑文章
                     const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
