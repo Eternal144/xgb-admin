@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 // 引入编辑器组件
-import BraftEditor from 'braft-editor'
+import BraftEditor from 'braft-editor';
 import { Card, Input, Button, Form, Select, DatePicker, TimePicker, Upload, Icon, message, Row, Col } from 'antd'
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // 引入编辑器样式
@@ -32,6 +32,8 @@ class EditorDemo extends React.Component {
             initialColumn: null,
             initialTitle: null,
             initialJournalist: null,
+            initialFile: null,
+            initialImage: null,
             editorState: BraftEditor.createEditorState(''),
             flist: null,
             imglist: null,
@@ -65,6 +67,8 @@ class EditorDemo extends React.Component {
                             initialColumn: data.data.message.id,
                             initialTitle: data.data.message.title,
                             initialJournalist: data.data.message.remark,
+                            initialFile: data.data.message.appendix,
+                            initialImage: data.data.message.picture,
                             editorState: BraftEditor.createEditorState(data.data.message.content),
                         })
                     });
@@ -204,9 +208,9 @@ class EditorDemo extends React.Component {
                     appendix = this.state.flist[1];
                 }
 
-                console.log(imglink)
-                console.log(appendix)
-
+                // console.log(imglink)
+                // console.log(appendix)
+                console.log('Received values of form: ', values);
                 if (this.props.location.state) {
                     //保存编辑文章
                     const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
@@ -352,9 +356,9 @@ class EditorDemo extends React.Component {
                             })(<Input placeholder={"不超过20字"} style={{ width: "40%" }} />)}
                         </Form.Item>
                         {/* 附件上传 */}
-                        <FileUpLoader type="file" bindTo={"MessageEdit"} numberLimit={5} getLink={this.handlegetFile} />
+                        <FileUpLoader type="file" bindTo={"MessageEdit"} numberLimit={5} getLink={this.handlegetFile} initialData={this.state.initialFile} />
                         {/* 图片上传 */}
-                        <FileUpLoader type="image" bindTo={"MessageCover"} numberLimit={1} getLink={this.handlegetImage} />
+                        <FileUpLoader type="image" bindTo={"MessageCover"} numberLimit={1} getLink={this.handlegetImage} initialData={this.state.initialImage} />
                         <Row>
                             <Col span={16} offset={4}>
                                 <Form.Item>

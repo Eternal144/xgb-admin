@@ -12,12 +12,12 @@ import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
 const switchModel = (type, file) => {
     if (type === "image") {
         return ({
-            "url": "https://xuegong.twtstudio.com/api/uploadPic",
+            "url": "https://xuegong.twtstudio.com/index.php/api/uploadPic",
             "text": "上传图片",
         });
     } else if (type === "file") {
         return ({
-            "url": "https://xuegong.twtstudio.com/api/uploadApp",
+            "url": "https://xuegong.twtstudio.com/index.php/api/uploadApp",
             "text": "上传附件",
         });
     }

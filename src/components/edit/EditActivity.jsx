@@ -8,7 +8,7 @@ import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
-import { postActivityMessage } from '../../constants/api/edit';
+import { postActivityMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
@@ -24,9 +24,16 @@ class EditorDemo extends React.Component {
             loading: false,
             isNaviLoaded: false,
             navData: null,
-            imgpath: null,
-            filepath: null,
-            icon: null,
+            //初始化文章信息
+            initialColumn: null,
+            initialTitle: null,
+            initialJournalist: null,
+            initialFile: null,
+            initialImage: null,
+            editorState: BraftEditor.createEditorState(''),
+            flist: null,
+            imglist: null,
+            iconlist: null,
         }
     }
 
@@ -49,6 +56,22 @@ class EditorDemo extends React.Component {
                         isNaviLoaded: true,
                     })
                 });
+            if (this.props.location.state) {
+                const { apiPath, request } = editMessage(this.props.location.state.navID, this.props.location.state.articleID);
+                fetchApi(apiPath, request)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        this.setState({
+                            initialColumn: data.data.message.id,
+                            initialTitle: data.data.message.title,
+                            initialJournalist: data.data.message.remark,
+                            initialFile: data.data.message.appendix,
+                            initialImage: data.data.message.picture,
+                            editorState: BraftEditor.createEditorState(data.data.message.content),
+                        })
+                    });
+            }
         }
     }
 
@@ -322,9 +345,9 @@ class EditorDemo extends React.Component {
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
                         {/* 附件上传 */}
-                        <FileUpLoader type="file" bindTo={"MessageEdit"} />
+                        <FileUpLoader type="file" bindTo={"MessageEdit"} numberLimit={5} getLink={this.handlegetFile} initialData={this.state.initialFile} />
                         {/* 图片上传 */}
-                        <FileUpLoader type="image" bindTo={"MessageCover"} />
+                        <FileUpLoader type="image" bindTo={"MessageCover"} numberLimit={1} getLink={this.handlegetImage} initialData={this.state.initialImage} />
                         <Row>
                             <Col span={16} offset={4}>
                                 <Form.Item>
