@@ -174,46 +174,52 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                console.log(values)
+                console.log(this.state.editorState.toHTML())
+
                 let imglink = null;
                 let appendix = null;
                 let icon = null;
                 //这里处理一下link
-                if (this.state.imglist.length > 3) {
-                    imglink = this.state.imglist[1];
-                    for (let index = 2; index < this.state.imglist.length; index += 2) {
-                        imglink += '@';
-                        imglink += this.state.imglist[index];
+                if (this.state.imglist) {
+                    if (this.state.imglist.length > 3) {
+                        imglink = this.state.imglist[1];
+                        for (let index = 2; index < this.state.imglist.length; index += 2) {
+                            imglink += '@';
+                            imglink += this.state.imglist[index];
+                        }
+                    } else {
+                        imglink = this.state.imglist[1];
                     }
-                } else {
-                    imglink = this.state.imglist[1];
                 }
-
-                if (this.state.imglist.length > 3) {
-                    icon = this.state.imglist[1];
-                    for (let index = 3; index < this.state.imglist.length; index += 2) {
-                        icon += '@';
-                        icon += this.state.imglist[index];
+                if (this.state.imglist) {
+                    if (this.state.imglist.length > 3) {
+                        icon = this.state.imglist[1];
+                        for (let index = 3; index < this.state.imglist.length; index += 2) {
+                            icon += '@';
+                            icon += this.state.imglist[index];
+                        }
+                    } else {
+                        icon = this.state.imglist[1];
                     }
-                } else {
-                    icon = this.state.imglist[1];
                 }
-
-                if (this.state.flist.length > 2) {
-                    appendix = this.state.flist[1];
-                    for (let index = 2; index < this.state.flist.length; index++) {
-                        appendix += '@';
-                        appendix += this.state.flist[index];
+                if (this.state.flist) {
+                    if (this.state.flist.length > 2) {
+                        appendix = this.state.flist[1];
+                        for (let index = 2; index < this.state.flist.length; index++) {
+                            appendix += '@';
+                            appendix += this.state.flist[index];
+                        }
+                    } else {
+                        appendix = this.state.flist[1];
                     }
-                } else {
-                    appendix = this.state.flist[1];
                 }
-
-                // console.log(imglink)
-                // console.log(appendix)
-                console.log('Received values of form: ', values);
+                console.log(imglink)
+                console.log(appendix)
                 if (this.props.location.state) {
                     //保存编辑文章
-                    const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    console.log("保存操作")
+                    const { apiPath, request } = postNewsMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix, values.journalist);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -226,7 +232,8 @@ class EditorDemo extends React.Component {
                     console.log('Received values of form: ', values);
                 } else {
                     //发布新文章
-                    const { apiPath, request } = postNewsMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    console.log("发布新闻")
+                    const { apiPath, request } = postNewsMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix, values.journalist);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
