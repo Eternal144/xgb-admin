@@ -2,15 +2,15 @@
  * Created by hao.cheng on 2017/4/23.
  */
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { Col, Spin, Select, Button, Table, Tabs, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import picture from '../../style/imgs/list-preview.jpg';
-import LocalizedModal from '../ui/Modals'
-import { CONFIRM_JUMP, CONFIRM_DELETE } from '../../constants/common'
+import LocalizedModal from '../ui/Modals';
+import { CONFIRM_JUMP, CONFIRM_DELETE } from '../../constants/common';
 import { fetchApi } from '../../callApi';
-import { getSecNaviList, getNavAllArtivle, getNaviInfo } from '../../constants/api/navi'
-import { removeArticle, deleteArticle } from '../../constants/api/source'
+import { getSecNaviList, getNavAllArtivle, getNaviInfo } from '../../constants/api/navi';
+import { removeArticle, deleteArticle } from '../../constants/api/source';
 const { TabPane } = Tabs;
 const { Option, OptGroup } = Select;
 const success = (content) => {
@@ -96,6 +96,7 @@ class Src extends React.Component {
             subordNavIndex: null
         }
     }
+
     rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             // console.log(selectedRowKeys);
