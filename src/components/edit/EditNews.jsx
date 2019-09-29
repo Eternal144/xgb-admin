@@ -8,7 +8,7 @@ import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
-import { postNewsMessage, editMessage } from '../../constants/api/edit';
+import { postNewsMessage, editNewsMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
@@ -45,7 +45,7 @@ class EditorDemo extends React.Component {
         message.error("栏目列表获取失败");
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (!this.state.isNaviLoaded) {
             const { apiPath, request } = getNaviInfo();
             fetchApi(apiPath, request)
@@ -64,13 +64,18 @@ class EditorDemo extends React.Component {
                     .then(data => {
                         console.log(data);
                         this.setState({
-                            initialColumn: data.data.message.id,
+                            initialId: data.data.message.id,
+                            initialColumn: data.data.message.nav_id,
                             initialTitle: data.data.message.title,
                             initialJournalist: data.data.message.remark,
-                            initialFile: data.data.message.appendix,
+                            initialFile: data.data.message.files,
                             initialImage: data.data.message.picture,
-                            editorState: BraftEditor.createEditorState(data.data.message.content),
-                        })
+                        });
+                        setTimeout(() => {
+                            this.props.form.setFieldsValue({
+                                content: BraftEditor.createEditorState(data.data.message.content)
+                            })
+                        }, 300)
                     });
             }
         }
@@ -174,46 +179,54 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                console.log(values)
+                console.log(this.state.editorState.toHTML())
                 let imglink = null;
                 let appendix = null;
                 let icon = null;
+                if (this.state.initialImage) {
+                    imglink = this.state.initialImage[0].url;
+                }
                 //这里处理一下link
-                if (this.state.imglist.length > 3) {
-                    imglink = this.state.imglist[1];
-                    for (let index = 2; index < this.state.imglist.length; index += 2) {
-                        imglink += '@';
-                        imglink += this.state.imglist[index];
+                if (this.state.imglist) {
+                    if (this.state.imglist.length > 3) {
+                        imglink = this.state.imglist[1];
+                        for (let index = 2; index < this.state.imglist.length; index += 2) {
+                            imglink += '@';
+                            imglink += this.state.imglist[index];
+                        }
+                    } else {
+                        imglink = this.state.imglist[1];
                     }
-                } else {
-                    imglink = this.state.imglist[1];
                 }
-
-                if (this.state.imglist.length > 3) {
-                    icon = this.state.imglist[1];
-                    for (let index = 3; index < this.state.imglist.length; index += 2) {
-                        icon += '@';
-                        icon += this.state.imglist[index];
+                if (this.state.imglist) {
+                    if (this.state.imglist.length > 3) {
+                        icon = this.state.imglist[1];
+                        for (let index = 3; index < this.state.imglist.length; index += 2) {
+                            icon += '@';
+                            icon += this.state.imglist[index];
+                        }
+                    } else {
+                        icon = this.state.imglist[1];
                     }
-                } else {
-                    icon = this.state.imglist[1];
                 }
-
-                if (this.state.flist.length > 2) {
-                    appendix = this.state.flist[1];
-                    for (let index = 2; index < this.state.flist.length; index++) {
-                        appendix += '@';
-                        appendix += this.state.flist[index];
+                if (this.state.flist) {
+                    if (this.state.flist.length > 2) {
+                        appendix = this.state.flist[1];
+                        for (let index = 2; index < this.state.flist.length; index++) {
+                            appendix += '@';
+                            appendix += this.state.flist[index];
+                        }
+                    } else {
+                        appendix = this.state.flist[1];
                     }
-                } else {
-                    appendix = this.state.flist[1];
                 }
-
-                // console.log(imglink)
-                // console.log(appendix)
-                console.log('Received values of form: ', values);
+                console.log(imglink);
+                console.log(appendix);
                 if (this.props.location.state) {
                     //保存编辑文章
-                    const { apiPath, request } = postNewsMessage(this.state.initialColumn, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    console.log("保存修改");
+                    const { apiPath, request } = editNewsMessage(this.state.initialId, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix, values.journalist);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -226,7 +239,8 @@ class EditorDemo extends React.Component {
                     console.log('Received values of form: ', values);
                 } else {
                     //发布新文章
-                    const { apiPath, request } = postNewsMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    console.log("发布新闻");
+                    const { apiPath, request } = postNewsMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix, values.journalist);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -264,7 +278,6 @@ class EditorDemo extends React.Component {
         let appendixList = sessionStorage.getItem('filepath');
         // console.log(appendixList);
         // console.log(this.props.location.state);
-        const { editorState } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const PlaceDefault = "50字以内（若缺省则取正文前50字）";
         const formItemLayout = {
@@ -375,7 +388,7 @@ class EditorDemo extends React.Component {
                                             }
                                         }],
                                     })(
-                                        <BraftEditor value={editorState} className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} placeholder="请输入正文内容" />
+                                        <BraftEditor value={this.state.editorState} className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} />
                                     )}
                                 </Form.Item>
                             </Col>
@@ -383,9 +396,7 @@ class EditorDemo extends React.Component {
                         <Col span={20} style={{ textAlign: 'right' }}>
                             <Button size="default" type="default" htmlType="submit" >保存</Button>
                         </Col>
-
                     </Form>
-
                 </Card>
             </div>
         )
