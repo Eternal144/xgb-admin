@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import { Form, Icon, Input, Button, message } from 'antd';
-import { PwaInstaller } from '../widget';
 import { connectAlita } from 'redux-alita';
 import { fetchApi } from '../../callApi';
 import { getLogin } from '../../constants/api/login';
@@ -54,7 +53,6 @@ class Login extends React.Component {
                 <div className="login-form" >
                     <div className="login-logo">
                         <span>学工部后台管理系统</span>
-                        <PwaInstaller />
                     </div>
                     <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>
                         <FormItem>

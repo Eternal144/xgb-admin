@@ -97,20 +97,6 @@ class Src extends React.Component {
         }
     }
 
-    rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            // console.log(selectedRowKeys);
-            this.setState({
-                chooseArticleId: selectedRowKeys
-            })
-            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: record => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
-    };
-
     listColumn(data) {
         let columns = [];
         if (data.length > 0) {
@@ -167,6 +153,22 @@ class Src extends React.Component {
                 })
             });
     }
+
+
+    rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            // console.log(selectedRowKeys);
+            this.setState({
+                chooseArticleId: selectedRowKeys
+            })
+            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: record => ({
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
+        }),
+    };
+
     TextData = (introduce) => {
         const { subordNavID } = this.state
         return introduce.message.map((key, i) => {
@@ -319,7 +321,7 @@ class Src extends React.Component {
             const { apiPath, request } = removeArticle(subordNavID, chooseNavId, chooseArticleId)
             fetchApi(apiPath, request)
                 .then(res => res.json())
-                .then(data => {  //
+                .then(data => {
                     if (data.error_code === 0) {
                         introduct[subordNavIndex].message = introduct[subordNavIndex].message.filter((obj) => {
                             for (let i of chooseArticleId) {
@@ -379,7 +381,7 @@ class Src extends React.Component {
                         {sideMenu ? this.renderSideMenu() : <Spin tip="Loading..." size="large" />}
                     </Tabs>
                 </div>
-                <div className={introduct[subordNavIndex] && introduct[subordNavIndex].message.length > 0 ? "resource-jump" : "resource-margin"}  >
+                <div className={introduct[subordNavIndex] && introduct[subordNavIndex].message.length > 0 ? "resource-jump" : "resource-margin"} >
                     <Col span={4} offset={3}>
                         <label>移动到：</label>
                         <Select id={1} style={{ width: "60%" }} onChange={this.handleSelect} key={1} required="true" placeholder="请选择一个栏目" >
