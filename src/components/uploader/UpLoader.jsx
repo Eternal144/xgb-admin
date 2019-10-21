@@ -121,13 +121,24 @@ class UpLoaderModel extends Component {
         }
     }
 
-    componentDidMount = () => {
-        if (this.props.initialData) {
-            this.setState({
-                fileList: this.props.initialData,
-            })
-        }
-    }
+    // componentDidMount = () => {
+    //     if (this.props.initialData) {
+    //         console.log(this.props.initialData)
+    //         let data = this.props.initialData;
+    //         let list = [];
+    //         for (let i = 0; i < data.length; i++) {
+    //             list.push(
+    //                 {
+    //                     uid: i + 1,
+    //                     name: data[i].filename,
+    //                     status: 'done',
+    //                     url: data[i].url,
+    //                 }
+    //             )
+    //         }
+    //         console.log(list)
+    //     }
+    // }
 
     render() {
         //文件列表长度控制
@@ -168,7 +179,7 @@ class UpLoaderModel extends Component {
                         })(
                             <Row>
                                 <Col span={8}>
-                                    <Upload {...imageReqSettings} fileList={this.state.fileList}>
+                                    <Upload {...imageReqSettings} fileList={this.state.fileList} >
                                         <Tooltip placement="top" title="小于8MB的图片 格式为jpg/png">
                                             <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传图片</Button>
                                         </Tooltip>
@@ -190,7 +201,7 @@ class UpLoaderModel extends Component {
                         })(
                             <Row>
                                 <Col span={8}>
-                                    <Upload {...fileReqSettings}>
+                                    <Upload {...fileReqSettings} fileList={this.state.fileList}>
                                         <Tooltip placement="top" title="小于8MB的文件 格式不限">
                                             <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传附件</Button>
                                         </Tooltip>

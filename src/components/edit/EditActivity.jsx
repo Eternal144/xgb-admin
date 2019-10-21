@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 // 引入编辑器组件
-import BraftEditor from 'braft-editor'
-import { Card, Input, Button, Form, Select, DatePicker, TimePicker, Upload, Icon, message, Row, Col } from 'antd'
+import BraftEditor from 'braft-editor';
+import { Card, Input, Button, Form, Select, DatePicker, TimePicker, Upload, Icon, message, Row, Col } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
 // 引入编辑器样式
 import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
-import { postActivityMessage, editMessage } from '../../constants/api/edit';
+import { postActivityMessage, editActivityMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
@@ -63,13 +63,22 @@ class EditorDemo extends React.Component {
                     .then(data => {
                         console.log(data);
                         this.setState({
-                            initialColumn: data.data.message.id,
-                            initialTitle: data.data.message.title,
-                            initialJournalist: data.data.message.remark,
-                            initialFile: data.data.message.appendix,
-                            initialImage: data.data.message.picture,
-                            editorState: BraftEditor.createEditorState(data.data.message.content),
+                            initialId: data.data.activity.id,
+                            initialColumn: data.data.activity.id,
+                            initialTitle: data.data.activity.title,
+                            initialPeople: data.data.activity.speaker,
+                            initialJournalist: data.data.activity.remark,
+                            initialLocation: data.data.activity.location,
+                            initialFile: data.data.activity.appendix,
+                            initialImage: data.data.activity.picture,
+                            initialDate: data.data.activity.start_date,
+                            initialTime: data.data.activity.start_time,
                         })
+                        setTimeout(() => {
+                            this.props.form.setFieldsValue({
+                                content: BraftEditor.createEditorState(data.data.activity.details)
+                            })
+                        }, 300)
                     });
             }
         }
@@ -114,6 +123,7 @@ class EditorDemo extends React.Component {
         }
         return columns;
     }
+
     buildPreviewHtml() {
         return `
           <!Doctype html>
@@ -183,37 +193,77 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let pic = sessionStorage.getItem('picpath');
-                let icon = sessionStorage.getItem('iconpath');
+                let imglink = null;
                 let appendix = null;
-                const { apiPath, request } = postActivityMessage(values.section, values.title, pic, icon, this.state.editorState.toHTML(), appendix);
-                fetchApi(apiPath, request)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.error_code === 0) {
-                            message.success("文章发表成功");
-                        } else {
-                            message.error("文章发布失败，请检查网络");
+                let icon = null;
+                if (this.state.initialImage) {
+                    imglink = this.state.initialImage[0].url;
+                }
+                if (this.state.imglist) {
+                    if (this.state.imglist.length > 3) {
+                        imglink = this.state.imglist[1];
+                        for (let index = 2; index < this.state.imglist.length; index += 2) {
+                            imglink += '@';
+                            imglink += this.state.imglist[index];
                         }
-                    });
-                console.log('Received values of form: ', values);
-                console.log(this.state.editorState)
+                    } else {
+                        imglink = this.state.imglist[1];
+                    }
+                }
+                if (this.state.imglist) {
+                    if (this.state.imglist.length > 3) {
+                        icon = this.state.imglist[1];
+                        for (let index = 3; index < this.state.imglist.length; index += 2) {
+                            icon += '@';
+                            icon += this.state.imglist[index];
+                        }
+                    } else {
+                        icon = this.state.imglist[1];
+                    }
+                }
+                if (this.state.flist) {
+                    if (this.state.flist.length > 2) {
+                        appendix = this.state.flist[1];
+                        for (let index = 2; index < this.state.flist.length; index++) {
+                            appendix += '@';
+                            appendix += this.state.flist[index];
+                        }
+                    } else {
+                        appendix = this.state.flist[1];
+                    }
+                }
+                if (this.props.location.state) {
+                    console.log("保存修改");
+                    const { apiPath, request } = editActivityMessage(this.state.initialId, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("文章发表成功");
+                            } else {
+                                message.error("文章发布失败，请检查网络");
+                            }
+                        });
+                    console.log('Received values of form: ', values);
+                    console.log(this.state.editorState)
+                } else {
+                    console.log("发布新闻");
+                    const { apiPath, request } = postActivityMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    fetchApi(apiPath, request)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error_code === 0) {
+                                message.success("文章发表成功");
+                            } else {
+                                message.error("文章发布失败，请检查网络");
+                            }
+                        });
+                    console.log('Received values of form: ', values);
+                    console.log(this.state.editorState)
+                }
             }
         });
     }
-
-    // formFilePath = (paths) => {
-    //     this.setState({
-    //         filepath: paths,
-    //     })
-    // }
-
-    // formImgPath = (imgPath, iconPath) => {
-    //     this.setState({
-    //         imgpath: imgPath,
-    //         icon: iconPath,
-    //     })
-    // }
 
     render() {
         const { editorState } = this.state;
@@ -290,6 +340,7 @@ class EditorDemo extends React.Component {
                                     message: "标题名称过长,请酌情删减",
                                 }
                                 ],
+                                initialValue: this.state.initialTitle,
                             })(<Input placeholder="35字以内" style={{ width: "40%" }} />)
                             }
                         </Form.Item>
@@ -299,6 +350,7 @@ class EditorDemo extends React.Component {
                                     required: false,
                                 },
                                 ],
+                                defaultPickerValue: this.state.initialDate,
                             })(<DatePicker style={{ width: "40%" }} />)}
                         </Form.Item>
 
@@ -306,7 +358,8 @@ class EditorDemo extends React.Component {
                             {getFieldDecorator('time', {
                                 rules: [{
                                     required: false,
-                                }]
+                                }],
+                                defaultValue: this.state.initialTime,
                             })(<TimePicker style={{ width: "40%" }} />)}
                         </Form.Item>
 
@@ -318,7 +371,8 @@ class EditorDemo extends React.Component {
                                 {
                                     max: 50,
                                     message: "活动地点过长，请酌情删减"
-                                }]
+                                }],
+                                initialValue: this.state.initialLocation,
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
 
@@ -330,7 +384,8 @@ class EditorDemo extends React.Component {
                                 {
                                     max: 50,
                                     message: "人物介绍过长,请酌情删减",
-                                }]
+                                }],
+                                initialValue: this.state.initialJournalist,
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
 
@@ -340,14 +395,18 @@ class EditorDemo extends React.Component {
                                     required: false,
                                 }, {
                                     max: 50,
-                                    message: "人物介绍过长,请酌情删减",
-                                }]
+                                    message: "补充说明过长,请酌情删减",
+                                }],
+                                initialValue: this.state.initialPeople,
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
+
                         {/* 附件上传 */}
                         <FileUpLoader type="file" bindTo={"MessageEdit"} numberLimit={5} getLink={this.handlegetFile} initialData={this.state.initialFile} />
+
                         {/* 图片上传 */}
                         <FileUpLoader type="image" bindTo={"MessageCover"} numberLimit={1} getLink={this.handlegetImage} initialData={this.state.initialImage} />
+
                         <Row>
                             <Col span={16} offset={4}>
                                 <Form.Item>
@@ -364,7 +423,7 @@ class EditorDemo extends React.Component {
                                             }
                                         }],
                                     })(
-                                        <BraftEditor className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} placeholder="请输入正文内容" />
+                                        <BraftEditor value={this.state.editorState} className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} />
                                     )}
                                 </Form.Item>
                             </Col>
