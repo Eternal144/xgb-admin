@@ -15,7 +15,7 @@ import LocalizedModal from '../ui/Modals'
 import { CONFIRM_MODIFY, CONFIRM_ADD } from '../../constants/common'
 import { fetchApi } from '../../callApi'
 
-import { addSuperior, addNav, deleteNavi, updateNav } from '../../constants/api/navi'
+import { addNav, deleteNavi, updateNav } from '../../constants/api/navi'
 
 
 const { Option } = Select;

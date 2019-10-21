@@ -60,12 +60,12 @@ const rowSelection = {
     }),
 };
 
-export default class TextTab extends Component{
-    render(){
+export default class TextTab extends Component {
+    render() {
         function onChange(pagination, filters, sorter) {
             console.log('params', pagination, filters, sorter);
         }
-        return(
+        return (
             <TabPane tab={`Tab-1`} key="1">
                 <Table columns={columns} bordered dataSource={data} onChange={onChange} rowSelection={rowSelection} />
             </TabPane>
