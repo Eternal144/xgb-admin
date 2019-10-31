@@ -122,7 +122,7 @@ class Src extends React.Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => { //用来更新侧边栏。根据类型来调用Table三种Tabel
-                console.log(data);
+                // console.log(data);
                 this.setState({
                     sideMenu: data.data
                 })
@@ -132,8 +132,8 @@ class Src extends React.Component {
                 const { apiPath, request } = getNavAllArtivle(firstID);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
-                    .then(data => { //有数据了。更新第一个二级导航。的数据。
-                        console.log(data)
+                    .then(data => { //有数据了。更新第一个二级导航的数据。
+                        // console.log(data)
                         let arr = [];
                         arr[0] = data.data;
                         this.setState({
@@ -278,7 +278,7 @@ class Src extends React.Component {
     }
 
     callback = (key) => { //key为下标。二级标题id。
-        console.log(key)
+        // console.log(key)
         let { introduct, sideMenu } = this.state;
         if (sideMenu[key]) {
             this.setState({
@@ -288,9 +288,9 @@ class Src extends React.Component {
         this.setState({
             subordNavIndex: key
         })
-        console.log(sideMenu[key]);
-        console.log(sideMenu[key].id);
-        console.log(introduct);
+        // console.log(sideMenu[key]);
+        // console.log(sideMenu[key].id);
+        // console.log(introduct);
         if (!introduct[key] || introduct[key].message === undefined) {
             const { apiPath, request } = getNavAllArtivle(sideMenu[key].id);
             fetchApi(apiPath, request)
@@ -305,7 +305,7 @@ class Src extends React.Component {
     }
 
     handleSelect = (value) => { //更新要跳转的文章。
-        console.log(value);
+        // console.log(value);
         this.setState({
             chooseNavId: value
         })

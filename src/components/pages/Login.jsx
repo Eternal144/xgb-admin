@@ -30,8 +30,6 @@ class Login extends React.Component {
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-                        // console.log(data);
-                        // console.log('Received values of form: ', values);
                         const { setAlitaState } = this.props;
                         if (data.error_code === 0) {
                             sessionStorage.setItem('username', values.userName);

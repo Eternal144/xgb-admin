@@ -61,7 +61,7 @@ class EditorDemo extends React.Component {
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data);
+                        // console.log(data);
                         this.setState({
                             initialId: data.data.activity.id,
                             initialColumn: data.data.activity.id,
@@ -233,7 +233,7 @@ class EditorDemo extends React.Component {
                     }
                 }
                 if (this.props.location.state) {
-                    console.log("保存修改");
+                    // console.log("保存修改");
                     const { apiPath, request } = editActivityMessage(this.state.initialId, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
@@ -244,10 +244,10 @@ class EditorDemo extends React.Component {
                                 message.error("文章发布失败，请检查网络");
                             }
                         });
-                    console.log('Received values of form: ', values);
-                    console.log(this.state.editorState)
+                    // console.log('Received values of form: ', values);
+                    // console.log(this.state.editorState)
                 } else {
-                    console.log("发布新闻");
+                    // console.log("发布新闻");
                     const { apiPath, request } = postActivityMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
@@ -258,8 +258,8 @@ class EditorDemo extends React.Component {
                                 message.error("文章发布失败，请检查网络");
                             }
                         });
-                    console.log('Received values of form: ', values);
-                    console.log(this.state.editorState)
+                    // console.log('Received values of form: ', values);
+                    // console.log(this.state.editorState)
                 }
             }
         });

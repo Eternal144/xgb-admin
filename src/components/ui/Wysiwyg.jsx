@@ -9,7 +9,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
 import draftToMarkdown from 'draftjs-to-markdown';
 
-const rawContentState = {"entityMap":{"0":{"type":"IMAGE","mutability":"MUTABLE","data":{"src":"http://i.imgur.com/aMtBIep.png","height":"auto","width":"100%"}}},"blocks":[{"key":"9unl6","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"95kn","text":" ","type":"atomic","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}],"data":{}},{"key":"7rjes","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]};
+const rawContentState = { "entityMap": { "0": { "type": "IMAGE", "mutability": "MUTABLE", "data": { "src": "http://i.imgur.com/aMtBIep.png", "height": "auto", "width": "100%" } } }, "blocks": [{ "key": "9unl6", "text": "", "type": "unstyled", "depth": 0, "inlineStyleRanges": [], "entityRanges": [], "data": {} }, { "key": "95kn", "text": " ", "type": "atomic", "depth": 0, "inlineStyleRanges": [], "entityRanges": [{ "offset": 0, "length": 1, "key": 0 }], "data": {} }, { "key": "7rjes", "text": "", "type": "unstyled", "depth": 0, "inlineStyleRanges": [], "entityRanges": [], "data": {} }] };
 
 class Wysiwyg extends Component {
     state = {
@@ -31,7 +31,7 @@ class Wysiwyg extends Component {
     };
 
     onContentStateChange = (contentState) => {
-        console.log('contentState', contentState);
+        // console.log('contentState', contentState);
     };
 
     onEditorStateChange = (editorState) => {
@@ -84,10 +84,10 @@ class Wysiwyg extends Component {
                                     onContentStateChange={this.onEditorChange}
                                     placeholder="请输入正文~~尝试@哦，有惊喜"
                                     spellCheck
-                                    onFocus={() => {console.log('focus')}}
-                                    onBlur={() => {console.log('blur')}}
-                                    onTab={() => {console.log('tab'); return true;}}
-                                    localization={{ locale: 'zh', translations: {'generic.add': 'Test-Add'} }}
+                                    onFocus={() => { console.log('focus') }}
+                                    onBlur={() => { console.log('blur') }}
+                                    onTab={() => { console.log('tab'); return true; }}
+                                    localization={{ locale: 'zh', translations: { 'generic.add': 'Test-Add' } }}
                                     mention={{
                                         separator: ' ',
                                         trigger: '@',
@@ -119,12 +119,12 @@ class Wysiwyg extends Component {
                     </Col>
                     <Col className="gutter-row" md={8}>
                         <Card title="同步转换MarkDown" bordered={false}>
-                            <pre style={{whiteSpace: 'pre-wrap'}}>{draftToMarkdown(editorContent)}</pre>
+                            <pre style={{ whiteSpace: 'pre-wrap' }}>{draftToMarkdown(editorContent)}</pre>
                         </Card>
                     </Col>
                     <Col className="gutter-row" md={8}>
                         <Card title="同步转换JSON" bordered={false}>
-                            <pre style={{whiteSpace: 'normal'}}>{JSON.stringify(editorContent)}</pre>
+                            <pre style={{ whiteSpace: 'normal' }}>{JSON.stringify(editorContent)}</pre>
                         </Card>
                     </Col>
                 </Row>

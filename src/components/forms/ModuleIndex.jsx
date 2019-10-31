@@ -69,7 +69,7 @@ class BasicForms extends Component {
         fetchApi(obj.apiPath, obj.request)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 if (data.error_code === 0) {
                     this.setState({
                         commonModuleData: data.data,
