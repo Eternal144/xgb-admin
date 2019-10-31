@@ -13,7 +13,7 @@ class NormalLoginForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                // console.log('Received values of form: ', values);
                 if (values.password !== values.confirmPass) {
                     message.error("两次密码输入不一致！请重新输入")
                 } else {

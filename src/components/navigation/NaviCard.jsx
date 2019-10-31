@@ -115,12 +115,12 @@ class RegistrationForm extends React.Component {
                         }
                     }
                 }
-                console.log(data);
+                // console.log(data);
                 const { apiPath, request } = updateNav(data);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(resData => {
-                        console.log(resData)
+                        // console.log(resData)
                         this.setState({
                             data: data
                         })

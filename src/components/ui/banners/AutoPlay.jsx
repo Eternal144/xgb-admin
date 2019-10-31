@@ -17,7 +17,6 @@ class AutoPlay extends React.Component {
     render() {
         let data = this.props.bannerData;
         let elements = [];
-        // console.log(data);
         if (this.props.isLoaded) {
             if (data.length > 0) {
                 for (let i = 0; i < data.length; i++) {

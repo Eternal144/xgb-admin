@@ -97,20 +97,6 @@ class Src extends React.Component {
         }
     }
 
-    rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            // console.log(selectedRowKeys);
-            this.setState({
-                chooseArticleId: selectedRowKeys
-            })
-            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: record => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
-    };
-
     listColumn(data) {
         let columns = [];
         if (data.length > 0) {
@@ -136,7 +122,7 @@ class Src extends React.Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => { //用来更新侧边栏。根据类型来调用Table三种Tabel
-                console.log(data);
+                // console.log(data);
                 this.setState({
                     sideMenu: data.data
                 })
@@ -146,8 +132,8 @@ class Src extends React.Component {
                 const { apiPath, request } = getNavAllArtivle(firstID);
                 fetchApi(apiPath, request)
                     .then(res => res.json())
-                    .then(data => { //有数据了。更新第一个二级导航。的数据。
-                        console.log(data)
+                    .then(data => { //有数据了。更新第一个二级导航的数据。
+                        // console.log(data)
                         let arr = [];
                         arr[0] = data.data;
                         this.setState({
@@ -167,6 +153,22 @@ class Src extends React.Component {
                 })
             });
     }
+
+
+    rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            // console.log(selectedRowKeys);
+            this.setState({
+                chooseArticleId: selectedRowKeys
+            })
+            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: record => ({
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
+        }),
+    };
+
     TextData = (introduce) => {
         const { subordNavID } = this.state
         return introduce.message.map((key, i) => {
@@ -276,7 +278,7 @@ class Src extends React.Component {
     }
 
     callback = (key) => { //key为下标。二级标题id。
-        console.log(key)
+        // console.log(key)
         let { introduct, sideMenu } = this.state;
         if (sideMenu[key]) {
             this.setState({
@@ -286,9 +288,9 @@ class Src extends React.Component {
         this.setState({
             subordNavIndex: key
         })
-        console.log(sideMenu[key]);
-        console.log(sideMenu[key].id);
-        console.log(introduct);
+        // console.log(sideMenu[key]);
+        // console.log(sideMenu[key].id);
+        // console.log(introduct);
         if (!introduct[key] || introduct[key].message === undefined) {
             const { apiPath, request } = getNavAllArtivle(sideMenu[key].id);
             fetchApi(apiPath, request)
@@ -303,7 +305,7 @@ class Src extends React.Component {
     }
 
     handleSelect = (value) => { //更新要跳转的文章。
-        console.log(value);
+        // console.log(value);
         this.setState({
             chooseNavId: value
         })
@@ -319,7 +321,7 @@ class Src extends React.Component {
             const { apiPath, request } = removeArticle(subordNavID, chooseNavId, chooseArticleId)
             fetchApi(apiPath, request)
                 .then(res => res.json())
-                .then(data => {  //
+                .then(data => {
                     if (data.error_code === 0) {
                         introduct[subordNavIndex].message = introduct[subordNavIndex].message.filter((obj) => {
                             for (let i of chooseArticleId) {
@@ -379,7 +381,7 @@ class Src extends React.Component {
                         {sideMenu ? this.renderSideMenu() : <Spin tip="Loading..." size="large" />}
                     </Tabs>
                 </div>
-                <div className={introduct[subordNavIndex] && introduct[subordNavIndex].message.length > 0 ? "resource-jump" : "resource-margin"}  >
+                <div className={introduct[subordNavIndex] && introduct[subordNavIndex].message.length > 0 ? "resource-jump" : "resource-margin"} >
                     <Col span={4} offset={3}>
                         <label>移动到：</label>
                         <Select id={1} style={{ width: "60%" }} onChange={this.handleSelect} key={1} required="true" placeholder="请选择一个栏目" >
