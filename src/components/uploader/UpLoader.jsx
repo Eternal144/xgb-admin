@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
+import ContentLoader from 'react-content-loader';
 
 const switchModel = (type, file) => {
     if (type === "image") {
@@ -20,6 +21,12 @@ const switchModel = (type, file) => {
             "text": "上传附件",
         });
     }
+}
+
+function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
 }
 
 class UpLoaderModel extends Component {
@@ -111,6 +118,25 @@ class UpLoaderModel extends Component {
             } else if (info.file.status === 'error') {
                 message.error(`文件上传失败：${info.file.name}`);
             }
+        }
+    }
+
+    componentDidMount = () => {
+        if (this.props.initialData) {
+            console.log(this.props.initialData)
+            let data = this.props.initialData;
+            let list = [];
+            for (let i = 0; i < data.length; i++) {
+                list.push(
+                    {
+                        uid: i + 1,
+                        name: data[i].filename,
+                        status: 'done',
+                        url: data[i].url,
+                    }
+                )
+            }
+            console.log(list)
         }
     }
 

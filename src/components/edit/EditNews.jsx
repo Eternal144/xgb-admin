@@ -45,6 +45,40 @@ class EditorDemo extends React.Component {
         message.error("栏目列表获取失败");
     }
 
+    myUploadFn = (param) => {
+        //富文本编辑器媒体库文件的上传
+        const serverURL = 'https://xuegong.twtstudio.com/index.php/api/uploadPic';
+        const xhr = new XMLHttpRequest;
+        const fd = new FormData();
+        const successFn = (res) => {
+            var json = JSON.parse(xhr.responseText)
+            param.success({
+                url: 'https://xuegong.twtstudio.com/' + json.data.path,
+                meta: {
+                    //相关配置
+                }
+            })
+        }
+        const progressFn = (event) => {
+            //上传进度
+            param.progress(event.loaded / event.total * 100)
+        }
+        const errorFn = (res) => {
+            //上传出错
+            param.error({
+                mes: '上传失败',
+            })
+        }
+
+        xhr.upload.addEventListener("progress", progressFn, false)
+        xhr.addEventListener("load", successFn, false)
+        xhr.addEventListener("error", errorFn, false)
+        xhr.addEventListener("abort", errorFn, false)
+        fd.append('file', param.file)
+        xhr.open('POST', serverURL, true)
+        xhr.send(fd)
+    }
+
     async componentDidMount() {
         if (!this.state.isNaviLoaded) {
             const { apiPath, request } = getNaviInfo();
@@ -388,7 +422,7 @@ class EditorDemo extends React.Component {
                                             }
                                         }],
                                     })(
-                                        <BraftEditor value={this.state.editorState} className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} />
+                                        <BraftEditor media={{ uploadFn: this.myUploadFn }} value={this.state.editorState} className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} />
                                     )}
                                 </Form.Item>
                             </Col>
