@@ -62,7 +62,7 @@ class BindMan extends Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
+                // console.log(data)
                 if (data.error_code === 0) {
                     this.setState({
                         articleData: data.data
@@ -206,8 +206,7 @@ class BindMan extends Component {
         })
     }
     handlegetLink = (src, obj) => {
-
-        console.log(src);
+        // console.log(src);
         const { moduleData } = this.state;
         moduleData.children.map((key, i) => {
             if (key.id === obj.id) {
@@ -271,10 +270,10 @@ class BindMan extends Component {
         const { articleData, moduleData, subIdRecord } = this.state; //详细信息？
         const { children } = moduleData
         let childArr = [];
-        console.log(children)
+        // console.log(children)
         //根据本地数据渲染。删除的时候根据id删除。
         children.map((obj, index) => {
-            console.log(obj.content1);
+            // console.log(obj.content1);
             childArr.push((
                 <Form.Item
                     {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}

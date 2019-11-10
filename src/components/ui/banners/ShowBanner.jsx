@@ -229,7 +229,7 @@ class BannerForm extends Component {
                                 })
                         } else {
                             //这是个原有的！调用update
-                            console.log('改了！' + this.props.data[i].id)
+                            // console.log('改了！' + this.props.data[i].id)
                             let { apiPath, request } = editBanner(link, values[thisTitle], values[thisColumn], values[j], i + 1, this.props.data[i].id);
                             fetchApi(apiPath, request)
                                 .then(res => res.json())
@@ -245,7 +245,7 @@ class BannerForm extends Component {
                 }
             }
             // console.log(len);
-            console.log(values);
+            // console.log(values);
         }
         )
     };
@@ -342,9 +342,7 @@ class BannerForm extends Component {
     }
 
     render() {
-        // console.log("iconpath:" + iconPath);
         let data = this.props.data;
-        // console.log(data);
         return (
             <div>
                 {this.props.isLoaded && this.state.isNaviLoaded ? this.formIt(data, data.length) : <Skeleton active />}

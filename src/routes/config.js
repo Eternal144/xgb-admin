@@ -25,9 +25,6 @@ export default {
                 { key: '/app/category/modify', title: '栏目编辑', icon: 'folder-add', component: 'CateModify' },
             ],
         },
-        // {
-        //     key: '/app/navigation', title: '导航栏管理', icon: 'control', component: 'NaviManage',
-        // },
         {
             key: '/app/navigation', title: '导航栏管理', icon: 'control', component: '',
             subs: [

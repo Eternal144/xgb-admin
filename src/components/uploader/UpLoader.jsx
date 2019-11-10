@@ -7,7 +7,6 @@
 
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
-// import ContentLoader from 'react-content-loader';
 
 const switchModel = (type, file) => {
     if (type === "image") {
@@ -22,12 +21,6 @@ const switchModel = (type, file) => {
         });
     }
 }
-
-// function getBase64(img, callback) {
-//     const reader = new FileReader();
-//     reader.addEventListener('load', () => callback(reader.result));
-//     reader.readAsDataURL(img);
-// }
 
 class UpLoaderModel extends Component {
     constructor(props) {
@@ -67,7 +60,7 @@ class UpLoaderModel extends Component {
             flist.push(this.props.bindTo)
             //控制列表长度
             let listLimit = 0 - parseInt(sessionStorage.getItem("listLimit"));
-            console.log(listLimit);
+            // console.log(listLimit);
             let fileList = [...info.fileList];
             fileList = fileList.slice(listLimit);
             this.setState({ fileList });
@@ -120,25 +113,6 @@ class UpLoaderModel extends Component {
             }
         }
     }
-
-    // componentDidMount = () => {
-    //     if (this.props.initialData) {
-    //         console.log(this.props.initialData)
-    //         let data = this.props.initialData;
-    //         let list = [];
-    //         for (let i = 0; i < data.length; i++) {
-    //             list.push(
-    //                 {
-    //                     uid: i + 1,
-    //                     name: data[i].filename,
-    //                     status: 'done',
-    //                     url: data[i].url,
-    //                 }
-    //             )
-    //         }
-    //         console.log(list)
-    //     }
-    // }
 
     render() {
         //文件列表长度控制

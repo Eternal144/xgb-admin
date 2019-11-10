@@ -47,7 +47,7 @@ class Notifications extends Component {
         });
     };
     close = () => {
-        console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
+        // console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
     };
     openNotification4 = () => {
         notification.open({

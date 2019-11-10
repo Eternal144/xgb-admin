@@ -45,7 +45,7 @@ class NaviManage extends React.Component {
 
     render() {
         let data = this.state.data;
-        console.log(data);
+        // console.log(data);
         const formItemLayoutWithOutLabel = {
             wrapperCol: {
                 xs: { span: 12, offset: 6 },
