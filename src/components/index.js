@@ -26,6 +26,8 @@ import Cssmodule from './cssmodule';
 import QueryParams from './extension/QueryParams';
 import CateListContainer from './category/CateListContainer'
 import CateModify from './category/CateModify'
+import NaviListContainer from './navigation/NaviListContainer'
+import NaviModify from './navigation/NaviModifyContainer'
 
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
@@ -39,5 +41,5 @@ export default {
     Tabs, Banners, Drags, Dashboard, Gallery,
     AuthBasic, RouterEnter, WysiwygBundle, SrcMan,
     Cssmodule, QueryParams, EditActivity, NaviManage, EditNews
-    , CateListContainer, CateModify
+    , CateListContainer, CateModify, NaviListContainer, NaviModify
 }

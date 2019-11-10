@@ -17,7 +17,7 @@ const data = [
     {
         key: '2',
         title: "海鲜芝士焗饭",
-        type: 1, //如果为0 就为链接
+        type: 1, //如果为0 就为链s接
         content_type: 1,
         list_type: 1
     },

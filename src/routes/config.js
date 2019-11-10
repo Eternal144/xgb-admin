@@ -29,7 +29,15 @@ export default {
         //     key: '/app/navigation', title: '导航栏管理', icon: 'control', component: 'NaviManage',
         // },
         {
-            key: '/app/navigation', title: '导航栏管理', icon: 'control', component: 'NaviManage',
+            key: '/app/navigation', title: '导航栏管理', icon: 'control', component: '',
+            subs: [
+                {
+                    key: '/app/navigation/list', title: '导航栏列表', icon: 'unordered-list', component: 'NaviListContainer'
+                },
+                {
+                    key: '/app/navigation/modify', title: '导航栏编辑', icon: 'scissor', component: 'NaviModify'
+                }
+            ]
         },
 
     ],
