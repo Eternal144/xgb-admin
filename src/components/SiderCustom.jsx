@@ -1,6 +1,3 @@
-/**
- * Created by hao.cheng on 2017/4/13.
- */
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
@@ -47,14 +44,23 @@ class SiderCustom extends Component {
         firstHide: true, // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
         routesConfig: routes
     };
+
     componentDidMount = () => {
         const { apiPath, request } = getNaviInfo();
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => {
-                const aaa = data.data;
+                let aaa = data.data;
                 //在这里要获取一级所有的一级。
-                let arr = aaa.map((key, i) => { //
+                let defClass = {
+                    id: 99,
+                    title: "未分类",
+                    icon: 'database',
+                    component: 'SrcMan',
+                    key: `/app/resource/99`
+                };
+                aaa.push(defClass);
+                let arr = aaa.map((key, i) => {
                     //应该是返回一个对象。key component?
                     let obj = {
                         id: key.id,
@@ -65,6 +71,9 @@ class SiderCustom extends Component {
                     };
                     return obj;
                 })
+                console.log(aaa)
+                console.log(arr)
+                console.log(defClass)
                 let { routesConfig } = this.state;
                 // console.log(arr);
                 routesConfig.menus[1].subs = arr;

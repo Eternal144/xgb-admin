@@ -82,7 +82,6 @@ const columns3 = [
 
 const root = "https://xuegong.twtstudio.com/";
 
-
 class Src extends React.Component {
     constructor(props) {
         super(props);
@@ -95,26 +94,6 @@ class Src extends React.Component {
             subordNavID: null, //二级标题ID
             subordNavIndex: null
         }
-    }
-
-    listColumn(data) {
-        let columns = [];
-        if (data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-                let opts = [];
-                for (let j = 0; j < data[i].children.length; j++) {
-                    opts.push(
-                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
-                    )
-                }
-                columns.push(
-                    <OptGroup label={data[i].title}>{opts}</OptGroup>
-                )
-            }
-        } else {
-            return this.noNaviNotification();
-        }
-        return columns;
     }
 
     componentDidMount() { //获取sideMenu和第一个数组的信息。
@@ -154,6 +133,25 @@ class Src extends React.Component {
             });
     }
 
+    listColumn(data) {
+        let columns = [];
+        if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let opts = [];
+                for (let j = 0; j < data[i].children.length; j++) {
+                    opts.push(
+                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
+                    )
+                }
+                columns.push(
+                    <OptGroup label={data[i].title}>{opts}</OptGroup>
+                )
+            }
+        } else {
+            return this.noNaviNotification();
+        }
+        return columns;
+    }
 
     rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {

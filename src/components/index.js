@@ -24,6 +24,8 @@ import AuthBasic from './auth/Basic';
 import RouterEnter from './auth/RouterEnter';
 import Cssmodule from './cssmodule';
 import QueryParams from './extension/QueryParams';
+import CateListContainer from './category/CateListContainer'
+import CateModify from './category/CateModify'
 
 
 const WysiwygBundle = Loadable({ // 按需加载富文本配置
@@ -37,4 +39,5 @@ export default {
     Tabs, Banners, Drags, Dashboard, Gallery,
     AuthBasic, RouterEnter, WysiwygBundle, SrcMan,
     Cssmodule, QueryParams, EditActivity, NaviManage, EditNews
+    , CateListContainer, CateModify
 }
