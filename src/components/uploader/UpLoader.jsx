@@ -39,6 +39,25 @@ class UpLoaderModel extends Component {
         }
     }
 
+    componentDidMount = () => {
+        if (this.props.initialData) {
+            console.log(this.props.initialData)
+            let data = this.props.initialData;
+            let list = [];
+            for (let i = 0; i < data.length; i++) {
+                list.push(
+                    {
+                        uid: i + 1,
+                        name: data[i].filename,
+                        status: 'done',
+                        url: data[i].url,
+                    }
+                )
+            }
+            console.log(list)
+        }
+    }
+
     beforeImageUpload(file) {
         let isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         const isLt8M = file.size / 1024 / 1024 < 8;
@@ -118,25 +137,6 @@ class UpLoaderModel extends Component {
             } else if (info.file.status === 'error') {
                 message.error(`文件上传失败：${info.file.name}`);
             }
-        }
-    }
-
-    componentDidMount = () => {
-        if (this.props.initialData) {
-            console.log(this.props.initialData)
-            let data = this.props.initialData;
-            let list = [];
-            for (let i = 0; i < data.length; i++) {
-                list.push(
-                    {
-                        uid: i + 1,
-                        name: data[i].filename,
-                        status: 'done',
-                        url: data[i].url,
-                    }
-                )
-            }
-            console.log(list)
         }
     }
 
