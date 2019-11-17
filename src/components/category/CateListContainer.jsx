@@ -9,7 +9,7 @@ class CateListContainer extends React.Component {
     render() {
         return (
             <div>
-                <BreadcrumbCustom first="导航栏列表" />
+                <BreadcrumbCustom first="栏目列表" />
                 <Button type="primary" className="right-btn" onClick={this.handleAddItem}><Link to="/app/category/modify">添加栏目</Link></Button>
                 <div className="clear"></div>
                 <CateList />

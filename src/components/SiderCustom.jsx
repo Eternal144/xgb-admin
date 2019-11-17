@@ -71,11 +71,7 @@ class SiderCustom extends Component {
                     };
                     return obj;
                 })
-                console.log(aaa)
-                console.log(arr)
-                console.log(defClass)
                 let { routesConfig } = this.state;
-                // console.log(arr);
                 routesConfig.menus[1].subs = arr;
                 this.setState({
                     routesConfig: routesConfig
@@ -110,7 +106,7 @@ class SiderCustom extends Component {
                 style={{ overflowY: 'auto' }}
             >
                 <div className="logo" >
-                    {/* <img src={logoImg} /> */}
+
                 </div>
                 <SiderMenu
                     menus={routesConfig.menus}

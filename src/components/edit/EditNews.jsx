@@ -176,6 +176,7 @@ class EditorDemo extends React.Component {
     }
 
     handleSubmit = e => {
+
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -187,8 +188,10 @@ class EditorDemo extends React.Component {
                 if (this.state.initialImage) {
                     imglink = this.state.initialImage[0].url;
                 }
+
                 //这里处理一下link
                 if (this.state.imglist) {
+                    
                     if (this.state.imglist.length > 3) {
                         imglink = this.state.imglist[1];
                         for (let index = 2; index < this.state.imglist.length; index += 2) {
@@ -199,6 +202,7 @@ class EditorDemo extends React.Component {
                         imglink = this.state.imglist[1];
                     }
                 }
+
                 if (this.state.imglist) {
                     if (this.state.imglist.length > 3) {
                         icon = this.state.imglist[1];

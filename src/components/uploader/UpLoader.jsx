@@ -95,6 +95,7 @@ class UpLoaderModel extends Component {
             if (info.file.status !== 'uploading') {
                 // console.log(info.file, info.fileList);
             }
+            
             if (info.file.status === 'done') {
                 flist.push(info.fileList[0].response.data.path);
                 if (info.fileList.length > 0) {

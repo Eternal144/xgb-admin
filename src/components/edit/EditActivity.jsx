@@ -30,7 +30,7 @@ class EditorDemo extends React.Component {
             initialJournalist: null,
             initialFile: null,
             initialImage: null,
-            editorState: BraftEditor.createEditorState(''),
+            // editorState: BraftEditor.createEditorState(''),
             flist: null,
             imglist: null,
             iconlist: null,

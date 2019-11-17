@@ -11,6 +11,7 @@ import {
 
 } from 'antd';
 import { Link } from 'react-router-dom'
+import BreadcrumbCustom from '../BreadcrumbCustom';
 
 
 const { Option } = Select;
@@ -117,69 +118,73 @@ class CateModifyCon extends React.Component {
         };
         const { restrict, data } = this.state;
         return (
-            <Row>
-                <Col span={18} offset={3}>
-                    <Card style={{ margin: "30px" }} >
-                        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                            <Form.Item label="栏目标题">
-                                {getFieldDecorator('title', {
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入该栏目名称'
-                                    }],
-                                    initialValue: data && data.title
-                                })(
-                                    <Input
-                                        placeholder="请输入栏目标题"
-                                    />,
-                                )}
-                            </Form.Item>
+            <div>
+                <BreadcrumbCustom first="栏目编辑" />
+                <Row>
+                    <Col span={18} offset={3}>
 
-                            {restrict ? <Form.Item label="选择栏目类型">
-                                {getFieldDecorator('type', {
-                                    rules: [{
-                                        required: true
-                                    }],
-                                    initialValue: 0
-                                })(
-                                    <Radio.Group disabled={true} >
-                                        <Radio value={0} >链接</Radio>
-                                        <Radio value={1}>文章列表</Radio>
-                                    </Radio.Group>,
-                                )}
-                            </Form.Item> :
-                                <Form.Item label="选择栏目类型">
+                        <Card style={{ margin: "30px" }} >
+                            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                                <Form.Item label="栏目标题">
+                                    {getFieldDecorator('title', {
+                                        rules: [{
+                                            required: true,
+                                            message: '请输入该栏目名称'
+                                        }],
+                                        initialValue: data && data.title
+                                    })(
+                                        <Input
+                                            placeholder="请输入栏目标题"
+                                        />,
+                                    )}
+                                </Form.Item>
+
+                                {restrict ? <Form.Item label="选择栏目类型">
                                     {getFieldDecorator('type', {
                                         rules: [{
                                             required: true
-                                        }]
+                                        }],
+                                        initialValue: 0
                                     })(
-                                        <Radio.Group onChange={this.handleSelectChange}>
+                                        <Radio.Group disabled={true} >
                                             <Radio value={0} >链接</Radio>
                                             <Radio value={1}>文章列表</Radio>
                                         </Radio.Group>,
                                     )}
-                                </Form.Item>
-                            }
+                                </Form.Item> :
+                                    <Form.Item label="选择栏目类型">
+                                        {getFieldDecorator('type', {
+                                            rules: [{
+                                                required: true
+                                            }]
+                                        })(
+                                            <Radio.Group onChange={this.handleSelectChange}>
+                                                <Radio value={0} >链接</Radio>
+                                                <Radio value={1}>文章列表</Radio>
+                                            </Radio.Group>,
+                                        )}
+                                    </Form.Item>
+                                }
 
-                            {/* 判断该栏目类型，
+                                {/* 判断该栏目类型，
                     如果是文章列表，就选择类型
                     如果是链接，可以直接改链接
                      */}
-                            {this.renderForm()}
-                            {/* <Form.Item label="Switch">
+                                {this.renderForm()}
+                                {/* <Form.Item label="Switch">
                     {getFieldDecorator('switch', { valuePropName: 'checked' })(<Switch />)}
                 </Form.Item> */}
 
-                            <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-                                <Button type="primary" htmlType="submit">
-                                    Submit
+                                <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+                                    <Button type="primary" htmlType="submit">
+                                        Submit
                     </Button>
-                            </Form.Item>
-                        </Form>
-                    </Card>
-                </Col>
-            </Row>
+                                </Form.Item>
+                            </Form>
+                        </Card>
+                    </Col>
+                </Row>
+            </div>
         );
     }
 
