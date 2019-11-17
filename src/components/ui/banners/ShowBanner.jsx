@@ -261,6 +261,12 @@ class BannerForm extends Component {
         })
     }
 
+    handlegetImg = (src) => {
+        this.setState({
+
+        })
+    }
+
     getBanner = (m, data, maxlen, index) => {
         // console.log(this.getTitle(index, 1));
         const formItemLayout = {
@@ -331,7 +337,7 @@ class BannerForm extends Component {
                         {/* 图片上传 */}
                         {/* -------------------------------------------------------------------------------- */}
 
-                        <ImgCropper w={3} h={2} />
+                        <ImgCropper w="3" h="2" getLink={this.handlegetImg} />
 
                         {/* <FileUpLoader type="image" bindTo={"Banner" + index} necessary={true} getLink={this.handlegetLink} numberLimit={1} /> */}
                         {/* -------------------------------------------------------------------------------- */}
