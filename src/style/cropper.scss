@@ -1,17 +1,20 @@
   .app {
       display: flex;
-      height: 200px;
-      align-items: stretch;
+      //   height: 200px;
+      flex-direction: column;
+      margin-bottom: 20px;
 
       .half-area {
-          margin-top: 50px;
-          margin-right: 50px;
+          //   margin-top: 50px;
+          //   margin-right: 50px;
           flex: 1;
+          width: 80px;
 
           .upload-input-label {
               border: 1px solid #eaeaea;
               border-radius: 4px;
               padding: 8px;
+
 
               .base-upload-input {
                   display: none;
@@ -23,9 +26,8 @@
           }
 
           .img-container {
-              height: 300px;
+              //   height: 300px;
               margin-top: 24px;
-              padding: 20px;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -64,17 +66,7 @@
               display: flex;
               justify-content: center;
 
-              .submit-button {
-                  border: 1px solid #eaeaea;
-                  padding: 0 20px;
-                  height: 100%;
-                  color: #383838;
-                  font-size: 14px;
-              }
 
-              .submit-button:hover {
-                  cursor: pointer;
-              }
           }
 
           .cropper-container-container {
@@ -108,4 +100,16 @@
               }
           }
       }
+  }
+
+  .submit-button {
+      border: 1px solid #eaeaea;
+      text-align: center;
+      font-size: 1.2rem;
+      height: 100%;
+      color: #383838;
+  }
+
+  .submit-button:hover {
+      cursor: pointer;
   }
