@@ -10,7 +10,9 @@ import {
     Row
 
 } from 'antd';
-import { Link } from 'react-router-dom'
+import { fetchApi } from '../../callApi'
+import { addCate, updateCate } from '../../constants/api/category';
+// import { Link } from 'react-router-dom'
 import BreadcrumbCustom from '../BreadcrumbCustom';
 
 
@@ -25,17 +27,37 @@ class CateModifyCon extends React.Component {
             restrict: false //如果修改，不可修改类型。添加可修改
         }
     }
-    // handleSubmit = e => {
-    //     e.preventDefault();
-    //     this.props.form.validateFields((err, values) => {
-    //         if (!err) {
-    //             console.log('Received values of form: ', values);
-    //         }
-    //     });
-    // };
+    handleSubmit = e => {
+        const { data } = this.state;
+        console.log(data);
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            let formData = new FormData();
+            for (let props in values) {
+                formData.append(props, values[props]);
+            }
+            let url, request = null;
+            if (data && data.id) {
+                url = updateCate(formData, data.id).url;
+                request = updateCate(formData, data.id).request;
+            } else {
+                console.log("我是添加");
+                url = addCate(formData).url;
+                request = addCate(formData).request;
+            }
+            fetchApi(url, request)
+                .then(res => res.json())
+                .then(data => {
+                    // 这里要拿到
+                    console.log(data);
+                })
+
+        });
+    };
     //如果有props的话初始化数据。
     componentDidMount = () => {
         const { state } = this.props.location
+
         // let state = {
         //     key: '1',
         //     title: "学工之家",
@@ -44,7 +66,6 @@ class CateModifyCon extends React.Component {
         //     list_type: 2,
         //     link: "www.baidu.com",
         // }
-
         if (state) {
             this.setState({
                 data: state,
@@ -60,17 +81,20 @@ class CateModifyCon extends React.Component {
         })
     }
 
+    //1是链接
+    //0文章列表
     renderForm = () => {
         const { getFieldDecorator } = this.props.form;
         const { checkType, data } = this.state;
+        // console.log(data);
         if (checkType !== null) {
-            if (parseInt(checkType) === 1) {
+            if (parseInt(checkType) === 0) {
                 return (
                     <div>
                         <Form.Item label="内容类型" >
-                            {getFieldDecorator('content', {
+                            {getFieldDecorator('contentType', {
                                 rules: [{ required: true, message: '请选择内容类型' }],
-                                initialValue: data && data.content_type
+                                initialValue: data && data.contentType
                             })(
                                 <Select placeholder="请选择内容类型">
                                     <Option value={1}>活动预告类</Option>
@@ -79,9 +103,9 @@ class CateModifyCon extends React.Component {
                             )}
                         </Form.Item>
                         <Form.Item label="排版类型" >
-                            {getFieldDecorator('list', {
+                            {getFieldDecorator('listType', {
                                 rules: [{ required: true, message: '请选择排版类型' }],
-                                initialValue: data && data.list_type
+                                initialValue: data && data.listType
                             })(
                                 <Select placeholder="请选择排版类型">
                                     <Option value={1}>图文类型</Option>
@@ -117,6 +141,8 @@ class CateModifyCon extends React.Component {
             wrapperCol: { span: 14 },
         };
         const { restrict, data } = this.state;
+        // console.log(data);
+        // console.log(restrict);
         return (
             <div>
                 <BreadcrumbCustom first="栏目编辑" />
@@ -124,7 +150,7 @@ class CateModifyCon extends React.Component {
                     <Col span={18} offset={3}>
 
                         <Card style={{ margin: "30px" }} >
-                            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                            <Form {...formItemLayout} >
                                 <Form.Item label="栏目标题">
                                     {getFieldDecorator('title', {
                                         rules: [{
@@ -144,11 +170,11 @@ class CateModifyCon extends React.Component {
                                         rules: [{
                                             required: true
                                         }],
-                                        initialValue: 0
+                                        initialValue: parseInt(data.type)
                                     })(
                                         <Radio.Group disabled={true} >
-                                            <Radio value={0} >链接</Radio>
-                                            <Radio value={1}>文章列表</Radio>
+                                            <Radio value={1} >链接</Radio>
+                                            <Radio value={0}>文章列表</Radio>
                                         </Radio.Group>,
                                     )}
                                 </Form.Item> :
@@ -159,8 +185,8 @@ class CateModifyCon extends React.Component {
                                             }]
                                         })(
                                             <Radio.Group onChange={this.handleSelectChange}>
-                                                <Radio value={0} >链接</Radio>
-                                                <Radio value={1}>文章列表</Radio>
+                                                <Radio value={1} >链接</Radio>
+                                                <Radio value={0}>文章列表</Radio>
                                             </Radio.Group>,
                                         )}
                                     </Form.Item>
@@ -176,9 +202,9 @@ class CateModifyCon extends React.Component {
                 </Form.Item> */}
 
                                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-                                    <Button type="primary" htmlType="submit">
+                                    <Button type="primary" onClick={this.handleSubmit}>
                                         Submit
-                    </Button>
+                                    </Button>
                                 </Form.Item>
                             </Form>
                         </Card>

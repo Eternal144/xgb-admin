@@ -6,7 +6,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 const renderMenuItem = (
     item // item.route 菜单单独跳转的路由
 ) => {
-    console.log(item);
+    // console.log(item);
     if (item.show) {
         return (
             < Menu.Item key={item.key} >

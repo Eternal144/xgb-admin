@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom'
+import { addCate } from '../../constants/api/navi';
+import { fetchApi } from '../../callApi';
 import CateList from './CateList'
 import BreadcrumbCustom from '../BreadcrumbCustom';
 
@@ -15,13 +17,6 @@ class CateListContainer extends React.Component {
                 <CateList />
             </div>
         )
-    }
-    // componentDidMount() {
-
-    // }
-    //跳转到栏目添加或者编辑页
-    handleAddItem = () => {
-        console.log("aa");
     }
 }
 
