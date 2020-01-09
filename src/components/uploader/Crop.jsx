@@ -17,7 +17,8 @@ export default class CropperModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            src: null
+            src: null,
+            link: null,
         }
     }
 
@@ -54,7 +55,8 @@ export default class CropperModal extends Component {
                     // 创造提交表单数据对象
                     const formData = new FormData()
                     // 添加要上传的文件
-                    formData.append('file', blob)
+                    let filename = this.props.uploadedImageFile.name
+                    formData.append('file', blob, filename)
                     let url = `https://xuegong.twtstudio.com/api/uploadPic`;
                     const settings = {
                         method: 'POST',
@@ -66,14 +68,14 @@ export default class CropperModal extends Component {
                     fetch(url, settings)
                         .then(res => res.json())
                         .then(data => {
-                            console.log(data)
+                            console.log(data.data.path)
                             this.setState({
-                                src: data.data.path
+                                link: data.data.path
                             })
                         }
                         )
                     // 把选中裁切好的的图片传出去
-                    this.props.onSubmit(this.state.src);
+                    this.props.onSubmit(this.state.link);
                     // 关闭弹窗
                     this.props.onClose()
                 })
@@ -93,6 +95,8 @@ export default class CropperModal extends Component {
                                 // Cropper.js options
                                 viewMode={1}
                                 zoomable={1}
+                                width={this.props.wid}
+                                height={this.props.hei}
                                 aspectRatio={this.props.wid / this.props.hei} // 固定为1:1  可以自己设置比例, 默认情况为自由比例
                                 guides={1}
                                 preview=".cropper-preview"

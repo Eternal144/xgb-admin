@@ -57,6 +57,7 @@ class BannerForm extends Component {
             //栏目下的文章列表加载状态
             flist: undefined,
             //文件列表
+            imgLink: null,
         }
     }
 
@@ -202,23 +203,24 @@ class BannerForm extends Component {
                         let bindto = `Banner${i}`;
                         let thisTitle = `title${i}`;
                         let thisColumn = `column${i}`;
-                        let link = null;
+                        let link = this.state.imgLink;
                         //这里处理一下link
-                        if (this.state.flist[0] === bindto) {
-                            if (this.state.flist.length > 3) {
-                                link = this.state.flist[1];
-                                for (let index = 2; index < this.state.flist.length; index += 2) {
-                                    link += '@';
-                                    link += this.state.flist[index];
-                                }
-                            } else {
-                                link = this.state.flist[1];
-                            }
-                        }
+                        // if (this.state.flist[0] === bindto) {
+                        //     if (this.state.flist.length > 3) {
+                        //         link = this.state.flist[1];
+                        //         for (let index = 2; index < this.state.flist.length; index += 2) {
+                        //             link += '@';
+                        //             link += this.state.flist[index];
+                        //         }
+                        //     } else {
+                        //         link = this.state.flist[1];
+                        //     }
+                        // }
                         // console.log(link)
                         // console.log(this.state.flist)
                         if (this.props.data[i].id === -1) {
                             //这是个新增的！调用add
+                            //这里因为调用了cropper，将link改为了imglink，下同
                             let { apiPath, request } = addBanner(link, values[thisTitle], values[thisColumn], values[j], i + 1);
                             fetchApi(apiPath, request)
                                 .then(res => res.json())
@@ -263,7 +265,7 @@ class BannerForm extends Component {
 
     handlegetImg = (src) => {
         this.setState({
-
+            imgLink: src
         })
     }
 
@@ -337,7 +339,7 @@ class BannerForm extends Component {
                         {/* 图片上传 */}
                         {/* -------------------------------------------------------------------------------- */}
 
-                        <ImgCropper w="3" h="2" getLink={this.handlegetImg} />
+                        <ImgCropper w="1600" h="350" getLink={this.handlegetImg} />
 
                         {/* <FileUpLoader type="image" bindTo={"Banner" + index} necessary={true} getLink={this.handlegetLink} numberLimit={1} /> */}
                         {/* -------------------------------------------------------------------------------- */}
