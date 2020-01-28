@@ -1,0 +1,33 @@
+{
+    "data": [{
+            "type": "banner",
+            "width": 1600,
+            "height": 600
+        },
+        {
+            "type": "B",
+            "width": 285,
+            "height": 160
+        },
+        {
+            "type": "D",
+            "width": 285,
+            "height": 160
+        },
+        {
+            "type": "E",
+            "width": 270,
+            "height": 290
+        },
+        {
+            "type": "G",
+            "width": 143,
+            "height": 200
+        },
+        {
+            "type": "H",
+            "width": 320,
+            "height": 210
+        }
+    ]
+}

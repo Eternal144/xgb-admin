@@ -69,13 +69,15 @@ export default class CropperModal extends Component {
                         .then(res => res.json())
                         .then(data => {
                             console.log(data.data.path)
-                            this.setState({
-                                link: data.data.path
-                            })
+                            sessionStorage.setItem("imgUrl", data.data.path);
+                            // this.setState({
+                            //     link: data.data.path
+                            // })
                         }
                         )
                     // 把选中裁切好的的图片传出去
-                    this.props.onSubmit(this.state.link);
+                    // this.props.getLink(this.state.link);
+
                     // 关闭弹窗
                     this.props.onClose()
                 })

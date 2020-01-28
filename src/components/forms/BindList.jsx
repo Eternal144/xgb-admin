@@ -5,6 +5,7 @@ import { getArticleTitle } from '../../constants/api/navi';
 import './customize.css';
 import Uploader from '../uploader/UpLoader';
 import { updateLowwer, addlowwer, lowwerModelPreview, upperModelPreview, messageList, updateUpper, } from '../../constants/api/model';
+import ImgCropper from '../uploader/Cropper';
 // import { getFileItem } from 'antd/lib/upload/utils';
 const { Option, OptGroup } = Select;
 const confirmSaveText = '是否保存设置?';
@@ -284,7 +285,8 @@ class BindMan extends Component {
                     <div className="dynamic-box" >
                         <Row>
                             <div>PART {index + 1}:</div>
-                            {this.imageDisplay(obj)}
+                            {/* {this.imageDisplay(obj)} */}
+                            <ImgCropper w={300} h={300} />
                         </Row>
 
                         {getFieldDecorator(`${index}-content1`, {

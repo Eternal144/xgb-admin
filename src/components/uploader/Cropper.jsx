@@ -84,7 +84,7 @@ export default class ImgCropper extends Component {
                         onClose={() => {
                             this.setState({ modalVisible: false })
                         }}
-                        onSubmit={this.handleGetresultImgUrl}
+                        getLink={this.handleGetresultImgUrl}
                     />
                 )}
             </div>

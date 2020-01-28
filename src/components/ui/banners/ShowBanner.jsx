@@ -203,7 +203,8 @@ class BannerForm extends Component {
                         let bindto = `Banner${i}`;
                         let thisTitle = `title${i}`;
                         let thisColumn = `column${i}`;
-                        let link = this.state.imgLink;
+                        let link = sessionStorage.getItem("imgUrl");
+                        // console.log(link)
                         //这里处理一下link
                         // if (this.state.flist[0] === bindto) {
                         //     if (this.state.flist.length > 3) {
@@ -264,6 +265,7 @@ class BannerForm extends Component {
     }
 
     handlegetImg = (src) => {
+        console.log(src)
         this.setState({
             imgLink: src
         })
@@ -339,7 +341,7 @@ class BannerForm extends Component {
                         {/* 图片上传 */}
                         {/* -------------------------------------------------------------------------------- */}
 
-                        <ImgCropper w="1600" h="350" getLink={this.handlegetImg} />
+                        <ImgCropper w="1600" h="350" />
 
                         {/* <FileUpLoader type="image" bindTo={"Banner" + index} necessary={true} getLink={this.handlegetLink} numberLimit={1} /> */}
                         {/* -------------------------------------------------------------------------------- */}

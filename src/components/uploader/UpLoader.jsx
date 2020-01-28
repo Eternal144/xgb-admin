@@ -41,7 +41,7 @@ class UpLoaderModel extends Component {
 
     componentDidMount = () => {
         if (this.props.initialData) {
-            console.log(this.props.initialData)
+            // console.log(this.props.initialData)
             let data = this.props.initialData;
             let list = [];
             for (let i = 0; i < data.length; i++) {
@@ -54,7 +54,7 @@ class UpLoaderModel extends Component {
                     }
                 )
             }
-            console.log(list)
+            // console.log(list)
         }
     }
 
@@ -121,7 +121,7 @@ class UpLoaderModel extends Component {
             if (info.file.status !== 'uploading') {
                 // console.log(info.file, info.fileList);
             }
-            
+
             if (info.file.status === 'done') {
                 flist.push(info.fileList[0].response.data.path);
                 if (info.fileList.length > 0) {
