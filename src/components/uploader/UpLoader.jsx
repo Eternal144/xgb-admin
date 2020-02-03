@@ -12,12 +12,12 @@ import ContentLoader from 'react-content-loader';
 const switchModel = (type, file) => {
     if (type === "image") {
         return ({
-            "url": "https://xuegong.twtstudio.com/index.php/api/uploadPic",
+            "url": "https://xuegong.twt.edu.cn/api/uploadPic",
             "text": "上传图片",
         });
     } else if (type === "file") {
         return ({
-            "url": "https://xuegong.twtstudio.com/index.php/api/uploadApp",
+            "url": "https://xuegong.twt.edu.cn/api/uploadApp",
             "text": "上传附件",
         });
     }
@@ -92,6 +92,7 @@ class UpLoaderModel extends Component {
             this.setState({ fileList });
             if (info.file.status !== 'uploading') {
                 //文件上传中
+                console.log(info.file);
             }
             if (info.file.status === 'done') {
                 // console.log(info.fileList);
@@ -119,7 +120,7 @@ class UpLoaderModel extends Component {
             fileList = fileList.slice(listLimit);
             this.setState({ fileList });
             if (info.file.status !== 'uploading') {
-                // console.log(info.file, info.fileList);
+                console.log(info.file, info.fileList);
             }
 
             if (info.file.status === 'done') {
@@ -152,6 +153,7 @@ class UpLoaderModel extends Component {
         // const { getLink } = this.props;
         const imageReqSettings = {
             name: 'file',
+            method: 'post',
             action: switchModel(this.props.type).url,
             beforeUpload: this.beforeImageUpload,
             listType: 'picture',
@@ -159,6 +161,7 @@ class UpLoaderModel extends Component {
         }
         const fileReqSettings = {
             name: 'file',
+            method: 'post',
             action: switchModel(this.props.type).url,
             beforeUpload: this.beforeFileUpload,
             listType: 'text',

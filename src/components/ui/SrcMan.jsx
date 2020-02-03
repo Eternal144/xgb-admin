@@ -9,8 +9,9 @@ import picture from '../../style/imgs/list-preview.jpg';
 import LocalizedModal from '../ui/Modals';
 import { CONFIRM_JUMP, CONFIRM_DELETE } from '../../constants/common';
 import { fetchApi } from '../../callApi';
-import { getSecNaviList, getNavAllArtivle, getNaviInfo } from '../../constants/api/navi';
+import { getSecNaviList, getNavAllArtivle } from '../../constants/api/navi';
 import { removeArticle, deleteArticle } from '../../constants/api/source';
+import { getAllCat } from '../../constants/api/category';
 const { TabPane } = Tabs;
 const { Option, OptGroup } = Select;
 const success = (content) => {
@@ -80,7 +81,7 @@ const columns3 = [
     },
 ]
 
-const root = "https://xuegong.twtstudio.com/";
+const root = "https://xuegong.twt.edu.cn/";
 
 class Src extends React.Component {
     constructor(props) {
@@ -122,8 +123,8 @@ class Src extends React.Component {
                         })
                     })
             })
-        let api = getNaviInfo().apiPath;
-        let quest = getNaviInfo().request;
+        let api = getAllCat().apiPath;
+        let quest = getAllCat().request;
         fetchApi(api, quest)
             .then(res => res.json())
             .then(data => {

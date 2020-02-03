@@ -7,6 +7,25 @@ export const getCateLists = () => {
     }
 }
 
+export const getCategory = () => {
+    return {
+        apiPath: `admin/category`,
+        request: {
+            method: 'GET',
+            mode: 'no-cors',
+
+        }
+    }
+}
+
+export const getAllCat = () => {
+    return {
+        url: 'admin/allCat',
+        request: {
+            method: 'GET',
+        }
+    }
+}
 
 export const addCate = (body) => {
     return {

@@ -2,7 +2,7 @@
 // import {camelizeKeys} from 'humps'
 
 
-let API_ROOT = 'https://xuegong.twtstudio.com/index.php/api';
+let API_ROOT = 'https://xuegong.twt.edu.cn/api';
 
 export const fetchApi = (apiPath, request = {}) => {
     const fullUrl = `${API_ROOT}/${apiPath}`;

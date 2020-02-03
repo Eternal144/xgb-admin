@@ -26,7 +26,7 @@ const formItemLayoutWithOutLabel = {
         sm: { span: 20, offset: 4 },
     },
 };
-const root = "https://xuegong.twtstudio.com/"
+const root = "https://xuegong.twt.edu.cn/"
 
 //id是以啥为依据的呀？
 const newChild = (idd) => {

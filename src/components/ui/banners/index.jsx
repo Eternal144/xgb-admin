@@ -39,11 +39,16 @@ class Banners extends React.Component {
     handleAddItem = () => {
         let { data } = this.state;
         let lastData = data[data.length - 1];
-        let newDataId = lastData.id + 1;
+        let newDataId = 0;
+        let newRank = 0;
+        if (lastData) {
+            newDataId = lastData.id + 1;
+            newRank = parseInt(lastData.rank);
+        };
         data.push({
             "id": -1,
             "title": undefined,
-            "rank": parseInt(lastData.rank) + 1,
+            "rank": newRank + 1,
             "isnew": true,
         })
         this.setState({

@@ -7,7 +7,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom';
 import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
-import { getNaviInfo } from '../../constants/api/navi';
+import { getCategory } from '../../constants/api/category';
 import { postNewsMessage, editNewsMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
@@ -25,7 +25,7 @@ class EditorDemo extends React.Component {
             editorState: null,
             loading: false,
             isNaviLoaded: false,
-            navData: null,
+            catData: null,
             imgpath: null,
             filepath: null,
             //初始化文章信息
@@ -47,13 +47,13 @@ class EditorDemo extends React.Component {
 
     myUploadFn = (param) => {
         //富文本编辑器媒体库文件的上传
-        const serverURL = 'https://xuegong.twtstudio.com/index.php/api/uploadPic';
+        const serverURL = 'https://xuegong.twtw.edu.cn/api/uploadPic';
         const xhr = new XMLHttpRequest;
         const fd = new FormData();
         const successFn = (res) => {
             var json = JSON.parse(xhr.responseText)
             param.success({
-                url: 'https://xuegong.twtstudio.com/' + json.data.path,
+                url: 'https://xuegong.twt.edu.cn/' + json.data.path,
                 meta: {
                     //相关配置
                 }
@@ -81,13 +81,13 @@ class EditorDemo extends React.Component {
 
     async componentDidMount() {
         if (!this.state.isNaviLoaded) {
-            const { apiPath, request } = getNaviInfo();
+            const { apiPath, request } = getCategory();
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
                     // console.log(data.data)
                     this.setState({
-                        navData: data.data,
+                        catData: data.data,
                         isNaviLoaded: true,
                     })
                 });
@@ -125,19 +125,17 @@ class EditorDemo extends React.Component {
 
     listColumn(data) {
         let columns = [];
-        // console.log(data);
         if (data.length > 0) {
+            let opts = [];
             for (let i = 0; i < data.length; i++) {
-                let opts = [];
-                for (let j = 0; j < data[i].children.length; j++) {
+                if (data[i].listType === "2")
                     opts.push(
-                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
+                        <Option value={data[i].id}>{data[i].title}</Option>
                     )
-                }
-                columns.push(
-                    <OptGroup label={data[i].title}>{opts}</OptGroup>
-                )
             }
+            columns.push(
+                <OptGroup>{opts}</OptGroup>
+            )
         } else {
             return this.noNaviNotification();
         }
@@ -225,7 +223,7 @@ class EditorDemo extends React.Component {
 
                 //这里处理一下link
                 if (this.state.imglist) {
-                    
+
                     if (this.state.imglist.length > 3) {
                         imglink = this.state.imglist[1];
                         for (let index = 2; index < this.state.imglist.length; index += 2) {
@@ -374,8 +372,8 @@ class EditorDemo extends React.Component {
                                 }],
                                 initialValue: this.state.initialColumn,
                             })(
-                                <Select required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
-                                    {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
+                                <Select key="editNewsCat" required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
+                                    {this.state.isNaviLoaded ? this.listColumn(this.state.catData) : null}
                                 </Select>
                             )}
                         </Form.Item>

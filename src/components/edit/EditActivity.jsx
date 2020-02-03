@@ -8,6 +8,7 @@ import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo } from '../../constants/api/navi';
+import { getCategory } from '../../constants/api/category';
 import { postActivityMessage, editActivityMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
@@ -23,7 +24,7 @@ class EditorDemo extends React.Component {
             editorState: BraftEditor.createEditorState("<p>在这里输入文章正文</p>"),
             loading: false,
             isNaviLoaded: false,
-            navData: null,
+            catData: null,
             //初始化文章信息
             initialColumn: null,
             initialTitle: null,
@@ -43,13 +44,13 @@ class EditorDemo extends React.Component {
 
     myUploadFn = (param) => {
         //富文本编辑器媒体库文件的上传
-        const serverURL = 'https://xuegong.twtstudio.com/index.php/api/uploadPic';
+        const serverURL = 'https://xuegong.twt.edu.cn/api/uploadPic';
         const xhr = new XMLHttpRequest;
         const fd = new FormData();
         const successFn = (res) => {
             var json = JSON.parse(xhr.responseText)
             param.success({
-                url: 'https://xuegong.twtstudio.com/' + json.data.path,
+                url: 'https://xuegong.twt.edu.cn/' + json.data.path,
                 meta: {
                     //相关配置
                 }
@@ -81,13 +82,13 @@ class EditorDemo extends React.Component {
             sessionStorage.removeItem('filepath');
             sessionStorage.removeItem('picpath');
             sessionStorage.removeItem('iconpath');
-            const { apiPath, request } = getNaviInfo();
+            const { apiPath, request } = getCategory();
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
                     // console.log(data.data)
                     this.setState({
-                        navData: data.data,
+                        catData: data.data,
                         isNaviLoaded: true,
                     })
                 });
@@ -142,17 +143,16 @@ class EditorDemo extends React.Component {
     listColumn(data) {
         let columns = [];
         if (data.length > 0) {
+            let opts = [];
             for (let i = 0; i < data.length; i++) {
-                let opts = [];
-                for (let j = 0; j < data[i].children.length; j++) {
+                if (data[i].listType === "1")
                     opts.push(
-                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
+                        <Option value={data[i].id}>{data[i].title}</Option>
                     )
-                }
-                columns.push(
-                    <OptGroup label={data[i].title}>{opts}</OptGroup>
-                )
             }
+            columns.push(
+                <OptGroup>{opts}</OptGroup>
+            )
         } else {
             return this.noNaviNotification();
         }
@@ -303,7 +303,7 @@ class EditorDemo extends React.Component {
     render() {
         const { editorState } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const PlaceDefault = "50字以内（若缺省则取正文前50字）";
+        const PlaceDefault = "50字以内";
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -359,8 +359,8 @@ class EditorDemo extends React.Component {
                                     message: "请选择栏目"
                                 }],
                             })(
-                                <Select required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
-                                    {this.state.isNaviLoaded ? this.listColumn(this.state.navData) : null}
+                                <Select key="editActCat" required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
+                                    {this.state.isNaviLoaded ? this.listColumn(this.state.catData) : null}
                                 </Select>
                             )}
                         </Form.Item>

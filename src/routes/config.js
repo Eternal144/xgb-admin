@@ -3,12 +3,12 @@ export default {
     menus: [ // 菜单相关路由
         { key: '/app/dashboard/index', title: '账户管理', icon: 'user', component: 'Dashboard', show: true },
         {
-            key: '/app/resource', title: '资源管理', icon: 'folder', component: '', show: true
+            key: '/app/resource', title: '资源管理', icon: 'folder', component: 'SrcMan', show: true
         },
         {
             key: '/app/edit', title: '发帖编辑', icon: 'edit', component: '', show: true,
             subs: [
-                { key: '/app/edit/activity', title: '活动类', icon: 'flag', component: 'EditActivity',show: true },
+                { key: '/app/edit/activity', title: '活动类', icon: 'flag', component: 'EditActivity', show: true },
                 { key: '/app/edit/news', title: '新闻类', icon: 'profile', component: 'EditNews', show: true },
             ],
         },
