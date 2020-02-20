@@ -41,7 +41,7 @@ const rowSource = {
         };
     },
     canDrag(props) {
-        if (props.children[0].props.record.parent_id === -1) {
+        if (props.children[0].props.record.parent_id === 0) {
             return true;
         } else {
             return false;
@@ -115,6 +115,9 @@ export default class NaviList extends React.Component {
     moveRow = (dragIndex, hoverIndex) => {
         const { data } = this.state;
         const dragRow = data[dragIndex];
+        console.log("dragIndex", dragIndex)
+        console.log("hoverIndex", hoverIndex)
+        console.log("dragRow", dragRow)
         this.setState(
             update(this.state, {
                 data: {
@@ -137,6 +140,7 @@ export default class NaviList extends React.Component {
                             index,
                             moveRow: this.moveRow,
                         })}
+                        rowKey="id"
                     >
                         <Column title="标题" dataIndex="title" key="title" />
                         <Column title="类型" dataIndex="type" key="type" render={(text, record) => {
