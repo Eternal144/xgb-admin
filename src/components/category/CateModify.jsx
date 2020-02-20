@@ -32,7 +32,7 @@ class CateModifyCon extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         const { data } = this.state;
-        const { form } = this.props
+        const { form } = this.props;
         form.validateFields((err, values) => {
             let formData = new FormData();
             for (let props in values) {
@@ -49,7 +49,6 @@ class CateModifyCon extends React.Component {
                 if (!msg) {
                     msg = "添加"
                 }
-
             }
 
             fetchApi(url, request)

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom'
-import { addCate } from '../../constants/api/navi';
-import { fetchApi } from '../../callApi';
 import CateList from './CateList'
 import BreadcrumbCustom from '../BreadcrumbCustom';
 

@@ -60,6 +60,7 @@ class CateList extends React.Component {
             </Card >
         )
     }
+    
     componentDidMount = () => {
         let { apiPath, request } = getCateLists();
         fetchApi(apiPath, request)

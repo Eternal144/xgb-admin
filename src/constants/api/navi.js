@@ -26,15 +26,7 @@ export const addNav = (body) => {
     }
 }
 
-export const deleteNavi = (id) => {
-    return {
-        apiPath: `admin/delnav/${id}`,
-        request: {
-            method: 'GET',
-            // mode: 'no-cors',
-        }
-    }
-}
+
 
 export const getSecNaviList = (id) => {
     return {
@@ -94,8 +86,39 @@ export const getArticleTitle = (nav_id) => {
 
 //修改以后
 
+// 获取所有的导航信息
+export const getNaviLists = () => {
+    return {
+        apiPath: `admin/menu`,
+        request: {
+            method: 'GET',
+        }
+    }
+}
 
+// 添加新导航
+export const addNewNavi = (body) => {
+    return {
+        url: `admin/menu`,
+        request: {
+            body: JSON.stringify(body),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    }
+}
 
+// 删除导航
+export const deleteNavi = (id) => {
+    return {
+        apiPath: `admin/Menu/${id}`,
+        request: {
+            method: 'POST',
+        }
+    }
+}
 
 
 

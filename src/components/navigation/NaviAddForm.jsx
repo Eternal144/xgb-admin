@@ -4,9 +4,11 @@ import {
     Input,
     Select,
     Modal,
-    Radio
+    Radio,
+    message
 } from 'antd';
 import { getCateLists } from '../../constants/api/category'
+import { addNewNavi } from '../../constants/api/navi'
 import { fetchApi } from '../../callApi';
 
 const { Option } = Select;
@@ -21,22 +23,24 @@ const { Option } = Select;
 //     }
 // }
 
-const formatData = (values) => {
-    console.log(formatData)
-    return null;
-}
+// const formatData = (values) => {
+//     console.log(formatData)
+//     return null;
+// }
+
 
 
 class NaviAdd extends React.Component {
-    base = `/${this.props.id}/`
     state = {
         type: null,
         ctgs: null,
-        content: this.base,
+        content: `//`,
     }
-    //把数据整合然后发送。
-    submit = () => {
 
+    // 用于新导航排序和设置路由
+    rank = 0;
+    componentWillReceiveProps = (props) => {
+        this.rank = props.id
     }
 
     //获取选项。
@@ -53,14 +57,30 @@ class NaviAdd extends React.Component {
         return columns;
     }
     handleSubmit = () => {
-        const { validateFields } = this.props.form;
-        validateFields((err, values) => {
-            if (!err) {
-                let data = formatData(values);
-                if (this.props.naviAdd) {
-                    this.props.naviAdd(data);
-                }
+        const { form } = this.props
+        form.validateFields((err, values) => {
+            values.rank = this.rank
+            delete values["cate"]
+            if (parseInt(values.type) === 2) {
+                values.link = null
+            } else if (parseInt(values.type) === 1) {
+                values.link = this.state.content
             }
+            const { url, request } = addNewNavi(values)
+            fetchApi(url, request)
+                .then(res => res.json())
+                .then(resData => {
+                    if (!resData.error_code) {
+                        message.success("添加成功");
+                    }
+                    values.parent_id = 0
+                    // 传到上一层，作为新增
+                    if (this.props.update) {
+                        this.props.update(values)
+                    }
+                    // 清空表单
+                    form.resetFields();
+                })
         })
     }
 
@@ -69,18 +89,18 @@ class NaviAdd extends React.Component {
             this.props.cancel();
         }
     }
+
     //导航类型改变
     handleChange = (e) => {
         this.setState({
             type: e.target.value
         })
-
     }
 
     // 绑定栏目改变
     handleCateChange = (e) => {
         this.setState({
-            content: `${this.base}column?columnId=${e}`
+            content: `/${this.rank}/column?columnId=${e}`
         })
     }
     componentDidMount = () => {
@@ -114,11 +134,11 @@ class NaviAdd extends React.Component {
                 </div>
             )
         } else if (type === 1) {//直接绑定文章列表,先请求栏目列表。
+            const { id } = this.props;
             return (
                 <div>
                     <Form.Item label="内容">
-                        {getFieldDecorator('link', {
-                        })(<div className="ant-form-text">{content}</div>)}
+                        <div className="ant-form-text">{`/${id}/`}</div>
                     </Form.Item>
                     <Form.Item label="绑定栏目">
                         {getFieldDecorator('cate', {
@@ -174,7 +194,6 @@ class NaviAdd extends React.Component {
                             ],
                         })(<Input />)}
                     </Form.Item>
-
                     <Form.Item label="导航类型" >
                         {getFieldDecorator('type', {
                             rules: [

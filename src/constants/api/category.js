@@ -7,6 +7,7 @@ export const getCateLists = () => {
     }
 }
 
+//有别的组件在使用
 export const getCategory = () => {
     return {
         apiPath: `admin/category`,

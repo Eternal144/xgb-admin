@@ -2,12 +2,15 @@ import React from 'react'
 import {
     Table,
     Button,
-    Card
+    Card,
+    Spin
 } from 'antd';
 import { Link } from 'react-router-dom'
 import { DndProvider, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import { deleteNavi } from '../../constants/api/navi'
+import { fetchApi } from '../../callApi'
 
 let dragingIndex = -1; //拖拽的index
 const { Column } = Table;
@@ -41,7 +44,7 @@ const rowSource = {
         };
     },
     canDrag(props) {
-        if (props.children[0].props.record.parent_id === 0) {
+        if (parseInt(props.children[0].props.record.parent_id) === 0) {
             return true;
         } else {
             return false;
@@ -83,15 +86,18 @@ const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
 );
 
 export default class NaviList extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         data
-    //     }
-    // }
-    state = {
-        data: this.props.data
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        }
+    }
+
+    componentWillReceiveProps = (props) => {
+        this.setState({
+            data: props.data
+        })
+    }
 
     components = {
         body: {
@@ -115,9 +121,6 @@ export default class NaviList extends React.Component {
     moveRow = (dragIndex, hoverIndex) => {
         const { data } = this.state;
         const dragRow = data[dragIndex];
-        console.log("dragIndex", dragIndex)
-        console.log("hoverIndex", hoverIndex)
-        console.log("dragRow", dragRow)
         this.setState(
             update(this.state, {
                 data: {
@@ -127,12 +130,23 @@ export default class NaviList extends React.Component {
         );
     };
 
+    handleDeleteNav = (id) => {
+        console.log(id)
+        const { apiPath, request } = deleteNavi(id);
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(resData => {
+                console.log(resData)
+            })
+    }
+
     // 0表示外链接，1表示栏目，2表示父节点
     render() {
         const { data } = this.state;
+        // const { data } = this.props;
         return (
             <Card>
-                <DndProvider backend={HTML5Backend} >
+                {data ? <DndProvider backend={HTML5Backend} >
                     <Table
                         dataSource={data}
                         components={this.components}
@@ -164,7 +178,7 @@ export default class NaviList extends React.Component {
                                     return (
                                         <span>
                                             <Button size="small" type="primary"><Link to={this.getPath(i)}>修改</Link></Button>
-                                            <Button size="small" type="primary">删除</Button>
+                                            <Button size="small" type="primary" onClick={this.handleDeleteNav.bind(this, record.id)}>删除</Button>
                                         </span>
                                     )
                                 }
@@ -172,7 +186,8 @@ export default class NaviList extends React.Component {
                             }
                         />
                     </Table>
-                </DndProvider>
+                </DndProvider> : <Spin size="large" />}
+
             </Card>
         );
     }
