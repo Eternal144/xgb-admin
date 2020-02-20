@@ -11,14 +11,14 @@ import { parse } from 'url';
 const { Option } = Select;
 
 //新增都要在本地保持一致性。添加完了就返回给我正确的。
-const getObj = () => {
-    return {
-        title: null,
-        type: null,
-        parent_id: -1,
-        link: null,
-    }
-}
+// const getObj = () => {
+//     return {
+//         title: null,
+//         type:f null,
+//         parent_id: -1,
+//         link: null,
+//     }
+// }
 
 const formatData = (values) => {
     return null;

@@ -90,6 +90,12 @@ const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
 // 2: 父节点
 
 export default class NaviList extends React.Component {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         data
+    //     }
+    // }
     state = {
         data: this.props.data
     };
@@ -99,6 +105,7 @@ export default class NaviList extends React.Component {
             row: DragableBodyRow,
         },
     };
+    
     handleModify = () => {
 
     }
@@ -111,6 +118,7 @@ export default class NaviList extends React.Component {
             state: arr
         }
     }
+
     moveRow = (dragIndex, hoverIndex) => {
         const { data } = this.state;
         const dragRow = data[dragIndex];
@@ -131,7 +139,7 @@ export default class NaviList extends React.Component {
                     {/* {console.log(this.state.data)} */}
                     <Table
                         // columns={columns}
-                        dataSource={this.state.data}
+                        dataSource={data}
                         components={this.components}
                         onRow={(record, index) => ({
                             index,
@@ -161,10 +169,8 @@ export default class NaviList extends React.Component {
                                             <Button size="small" type="primary">删除</Button>
                                         </span>
                                     )
-
                                 }
                             }
-
                             }
                         />
                     </Table>

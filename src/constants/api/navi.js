@@ -2,10 +2,10 @@
 
 export const getNaviInfo = () => {
     return {
-        apiPath: `admin/nav`,
+        apiPath: `admin/navigation`,
         request: {
             method: 'GET',
-            mode: 'no-cors',
+            // mode: 'no-cors',
 
         }
     }
@@ -20,7 +20,7 @@ export const addNav = (body) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            mode: 'no-cors',
+            // mode: 'no-cors',
 
         }
     }
@@ -31,7 +31,7 @@ export const deleteNavi = (id) => {
         apiPath: `admin/delnav/${id}`,
         request: {
             method: 'GET',
-            mode: 'no-cors',
+            // mode: 'no-cors',
         }
     }
 }
@@ -41,7 +41,7 @@ export const getSecNaviList = (id) => {
         apiPath: `admin/secNav/${id}`,
         request: {
             method: 'GET',
-            mode: 'no-cors'
+            // mode: 'no-cors'
         }
     }
 }
@@ -52,7 +52,7 @@ export const getmessageList = (id, page) => {
         apiPath: `admin/messageList/${id}/${page}`,
         request: {
             method: 'GET',
-            mode: 'no-cors'
+            // mode: 'no-cors'
         }
     }
 }
@@ -62,7 +62,7 @@ export const getNavAllArtivle = (id) => {
         apiPath: `admin/allMessage/${id}`,
         request: {
             method: 'GET',
-            mode: 'no-cors'
+            // mode: 'no-cors'
         }
     }
 }
@@ -73,7 +73,7 @@ export const updateNav = (body) => {
         request: {
             body: JSON.stringify(body),
             method: 'POST',
-            mode: 'no-cors',
+            // mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -86,7 +86,7 @@ export const getArticleTitle = (nav_id) => {
         apiPath: `admin/list/${nav_id}`,
         request: {
             method: 'GET',
-            mode: 'no-cors'
+            // mode: 'no-cors'
         }
     }
 }

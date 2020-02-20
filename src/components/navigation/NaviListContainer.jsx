@@ -7,13 +7,20 @@ import {
 import NaviList from './NaviList'
 import BreadcrumbCustom from '../BreadcrumbCustom';
 import NaviAddForm from './NaviAddForm'
-
-
+import { getNaviInfo } from '../../constants/api/navi';
+import { fetchApi } from '../../callApi';
 // 0: 链接
 // 1: 文章列表
 // 2: 父节点
 
 export default class NaviListContainer extends React.Component {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         data: null,
+    //         visible: false
+    //     }
+    // }
     //这里管理总数据
     state = {
         data: [
@@ -75,8 +82,19 @@ export default class NaviListContainer extends React.Component {
                 content: 4
             },
         ],
-        visible: false
     }
+
+    // componentDidMount = () => {
+    //     const { apiPath, request } = getNaviInfo();
+    //     fetchApi(apiPath, request)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             this.setState({
+    //                 data: data.data
+    //             })
+    //         })
+    // }
+
     handleVisiable = () => {
         this.setState({
             visible: true
@@ -91,6 +109,7 @@ export default class NaviListContainer extends React.Component {
 
     render() {
         const { data, visible } = this.state;
+        // console.log(data);
         return (
             <div>
                 <BreadcrumbCustom first="导航栏列表" />
