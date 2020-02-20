@@ -82,13 +82,6 @@ const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
     }))(BodyRow),
 );
 
-// is_parents 0 1
-// is_link 0 1
-
-// 0: 链接
-// 1: 文章列表
-// 2: 父节点
-
 export default class NaviList extends React.Component {
     // constructor(props) {
     //     super(props);
@@ -105,7 +98,7 @@ export default class NaviList extends React.Component {
             row: DragableBodyRow,
         },
     };
-    
+
     handleModify = () => {
 
     }
@@ -131,14 +124,13 @@ export default class NaviList extends React.Component {
         );
     };
 
+    // 0表示外链接，1表示栏目，2表示父节点
     render() {
         const { data } = this.state;
         return (
             <Card>
                 <DndProvider backend={HTML5Backend} >
-                    {/* {console.log(this.state.data)} */}
                     <Table
-                        // columns={columns}
                         dataSource={data}
                         components={this.components}
                         onRow={(record, index) => ({
@@ -147,24 +139,26 @@ export default class NaviList extends React.Component {
                         })}
                     >
                         <Column title="标题" dataIndex="title" key="title" />
-                        <Column title="导航类型" dataIndex="type" key="type" render={(text, record) => {
+                        <Column title="类型" dataIndex="type" key="type" render={(text, record) => {
                             let n = parseInt(record.type);
                             if (n === 0) {
-                                return "链接";
+                                return "外链";
                             } if (n === 1) {
-                                return "文章列表"
+                                return "栏目"
                             } else {
                                 return "父节点";
                             }
+                        }} />
+                        <Column title="内容" dataIndex="link" key="link" render={(text, record) => {
+                            return record.link
                         }} />
                         <Column
                             title="操作"
                             key="action"
                             render={(text, record, i) => {
-                                if (record.parent_id < 0) {
+                                if (parseInt(record.parent_id) === 0) {
                                     return (
                                         <span>
-                                            {/* {console.log(i)} */}
                                             <Button size="small" type="primary"><Link to={this.getPath(i)}>修改</Link></Button>
                                             <Button size="small" type="primary">删除</Button>
                                         </span>

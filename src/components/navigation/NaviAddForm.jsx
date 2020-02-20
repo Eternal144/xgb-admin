@@ -6,7 +6,8 @@ import {
     Modal,
     Radio
 } from 'antd';
-import { parse } from 'url';
+import { getCateLists } from '../../constants/api/category'
+import { fetchApi } from '../../callApi';
 
 const { Option } = Select;
 
@@ -21,12 +22,17 @@ const { Option } = Select;
 // }
 
 const formatData = (values) => {
+    console.log(formatData)
     return null;
 }
 
+
 class NaviAdd extends React.Component {
+    base = `/${this.props.id}/`
     state = {
         type: null,
+        ctgs: null,
+        content: this.base,
     }
     //把数据整合然后发送。
     submit = () => {
@@ -35,7 +41,16 @@ class NaviAdd extends React.Component {
 
     //获取选项。
     getOptions = () => {
-
+        const { ctgs } = this.state;
+        let columns = [];
+        if (ctgs.length > 0) {
+            for (let i = 0; i < ctgs.length; i++) {
+                columns.push(
+                    <Option value={ctgs[i].id}>{ctgs[i].title}</Option>
+                )
+            }
+        }
+        return columns;
     }
     handleSubmit = () => {
         const { validateFields } = this.props.form;
@@ -54,7 +69,7 @@ class NaviAdd extends React.Component {
             this.props.cancel();
         }
     }
-    //e.target.value
+    //导航类型改变
     handleChange = (e) => {
         this.setState({
             type: e.target.value
@@ -62,13 +77,31 @@ class NaviAdd extends React.Component {
 
     }
 
+    // 绑定栏目改变
+    handleCateChange = (e) => {
+        this.setState({
+            content: `${this.base}column?columnId=${e}`
+        })
+    }
+    componentDidMount = () => {
+        const { apiPath, request } = getCateLists()
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(resData => {
+                if (!resData.error_code) {
+                    this.setState({
+                        ctgs: resData.data
+                    })
+                }
+            })
+    }
     renderDetails = () => {
         const { getFieldDecorator } = this.props.form;
-        const { type } = this.state;
-        if (type === 0) {
+        const { type, content } = this.state;
+        if (type === 0) { //外链
             return (
                 <div>
-                    <Form.Item label="链接">
+                    <Form.Item label="链接内容">
                         {getFieldDecorator('link', {
                             rules: [
                                 {
@@ -80,22 +113,26 @@ class NaviAdd extends React.Component {
                     </Form.Item>
                 </div>
             )
-        } else if (type === 1) {//直接绑定文章列表
+        } else if (type === 1) {//直接绑定文章列表,先请求栏目列表。
             return (
                 <div>
-                    <Form.Item label="绑定栏目">
+                    <Form.Item label="内容">
                         {getFieldDecorator('link', {
+                        })(<div className="ant-form-text">{content}</div>)}
+                    </Form.Item>
+                    <Form.Item label="绑定栏目">
+                        {getFieldDecorator('cate', {
                             rules: [
                                 {
                                     required: true,
                                     message: '请输入该导航绑定的栏目!',
                                 },
                             ],
-                        })(<Select >
+                        })(<Select onChange={this.handleCateChange} >
                             {this.getOptions()}
                         </Select>)}
                     </Form.Item>
-                </div>
+                </div >
             )
         } else { //父节点型
             return null;
@@ -127,7 +164,6 @@ class NaviAdd extends React.Component {
                 cancelText="取消"
             >
                 <Form {...formItemLayout} onSubmit={this.submit}>
-                    {/* {console.log(this.props.form)} */}
                     <Form.Item label="导航标题">
                         {getFieldDecorator('title', {
                             rules: [
@@ -149,24 +185,13 @@ class NaviAdd extends React.Component {
                             ],
                         })(
                             <Radio.Group onChange={this.handleChange}>
-                                <Radio value={0}>链接</Radio>
-                                <Radio value={1}>文章列表</Radio>
+                                <Radio value={0}>外链</Radio>
+                                <Radio value={1}>栏目</Radio>
                                 <Radio value={2}>父节点</Radio>
                             </Radio.Group>
                         )}
                     </Form.Item>
                     {this.renderDetails()}
-
-                    {/* <Form.Item label="title">
-                        {getFieldDecorator('title', {
-                            rules: [
-                                {
-                                    required: true,
-                                    message: '请输入导航标题!',
-                                },
-                            ],
-                        })(<Input />)}
-                    </Form.Item> */}
                 </Form>
             </Modal>
         );

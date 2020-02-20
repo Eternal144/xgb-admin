@@ -13,7 +13,6 @@ export const getCategory = () => {
         request: {
             method: 'GET',
             mode: 'no-cors',
-
         }
     }
 }
@@ -58,7 +57,3 @@ export const deleteCate = (id) => {
         }
     }
 }
-
-
-
-// export const
