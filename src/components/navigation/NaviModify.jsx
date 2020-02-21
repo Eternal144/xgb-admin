@@ -5,12 +5,16 @@ import {
     Select,
     Card,
     Table,
-    Input
+    Input,
+    message
 } from 'antd';
 import { DndProvider, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
-
+import { updateNavi, saveSecNavSort } from '../../constants/api/navi';
+import { getCateLists } from '../../constants/api/category'
+import { fetchApi } from '../../callApi';
+import { string } from 'prop-types';
 
 const { Option } = Select;
 // 可排序状态
@@ -113,6 +117,21 @@ class EditableCell extends React.Component {
         });
     };
 
+    getOptions = () => {
+        const { cateLists } = this.props;
+        // console.log(ctgs)
+        // console.log(ctgs && ctgs.length)
+        let columns = [];
+        if (cateLists && cateLists.length > 0) {
+            for (let i = 0; i < cateLists.length; i++) {
+                columns.push(
+                    <Option value={cateLists[i].id}>{cateLists[i].title}</Option>
+                )
+            }
+        }
+        return columns;
+    }
+
     save = e => {
         const { record, handleSave } = this.props;
         this.form.validateFields((error, values) => {
@@ -121,6 +140,7 @@ class EditableCell extends React.Component {
             }
             this.toggleEdit();
             handleSave({ ...record, ...values });
+            // console.log(record, values)
         });
     };
 
@@ -142,6 +162,7 @@ class EditableCell extends React.Component {
                         initialValue: record[dataIndex],
                     })(<Input ref={node => (this.input = node)}
                         onPressEnter={this.save} onBlur={this.save}
+                        placeholder={'此项必填'}
                     />)}
                 </Form.Item>)
             } else if (dataIndex === "type") {
@@ -162,7 +183,7 @@ class EditableCell extends React.Component {
                     </Select>)}
                 </Form.Item>)
             } else if (dataIndex === "link") {
-                if (parseInt(record.type) === 0) {
+                if (parseInt(record.type) === 0) { //内链
                     return (
                         <Form.Item style={{ margin: 0 }}>
                             {form.getFieldDecorator(dataIndex, {
@@ -193,7 +214,7 @@ class EditableCell extends React.Component {
                             })(<Select ref={node => (this.input = node)}
                                 onPressEnter={this.save} onBlur={this.save}
                             >
-
+                                {this.getOptions()}
                             </Select>)}
                         </Form.Item>
                     )
@@ -223,6 +244,7 @@ class EditableCell extends React.Component {
             index,
             handleSave,
             children,
+            cateLists,
             ...restProps
         } = this.props;
         return (
@@ -241,6 +263,15 @@ class EditableCell extends React.Component {
 class NaviModify extends React.Component {
     constructor(props) {
         super(props);
+        this.base_id = 999
+        this.state = {
+            data: null,
+            editWords: "编辑内容",
+            sortWords: "子导航排序",
+            components: {},
+            pageState: 0, //0代表页面展示状态，1代表编辑状态，2代表排序状态
+            ctgs: [],
+        }
         this.columns = [
             {
                 title: '标题',
@@ -268,14 +299,6 @@ class NaviModify extends React.Component {
                 dataIndex: 'link',
                 editable: true,
                 render: (text, record) => {
-                    // let n = parseInt(record.type);
-                    // if (n === 0) {
-                    //     return "外链";
-                    // } if (n === 1) {
-                    //     return "栏目"
-                    // } else {
-                    //     return "父节点";
-                    // }
                     return record.link
                 }
             },
@@ -283,25 +306,19 @@ class NaviModify extends React.Component {
                 title: '操作',
                 dataIndex: 'action',
                 render: (text, record, i) => {
-                    return <Button size="small" type="danger" onClick={this.handleDelect.bind(this, i)}>删除</Button>
+                    return (
+                        this.state.pageState === 1 ?
+                            <Button size="small" type="danger" onClick={this.handleDelect.bind(this, i)} > 删除</Button >
+                            : null
+                    )
                 }
             }
         ]
-        this.state = {
-            data: null,
-            editWords: "编辑内容",
-            sortWords: "子导航排序",
-            components: {},
-            pageState: 0, //0代表页面展示状态，1代表编辑状态，2代表排序状态
-            count: 0, //记录子导航的数量
-        }
     }
 
     moveRow = (dragIndex, hoverIndex) => {
         const { data } = this.state;
         const dragRow = data[dragIndex];
-        console.log(dragIndex)
-        console.log(hoverIndex)
         this.setState(
             update(this.state, {
                 data: {
@@ -309,20 +326,32 @@ class NaviModify extends React.Component {
                 },
             }),
         );
+        //更新link值。
     };
 
-    //合并这个数组。
-    componentDidMount() {
-        // console.log(this.props.data)
-        let data = this.props.data[0];
+    concatNav = (data) => {
         let children = data.children;
-        console.log(children)
         delete data.children;
         let container = [data];
         container = container.concat(children);
         this.setState({
             data: container
         })
+    }
+    //合并这个数组。
+    componentDidMount() {
+        this.concatNav(this.props.data[0])
+        const { apiPath, request } = getCateLists()
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(resData => {
+                console.log(resData)
+                if (!resData.error_code) {
+                    this.setState({
+                        ctgs: resData.data
+                    })
+                }
+            })
     }
 
     //删除子导航
@@ -334,6 +363,22 @@ class NaviModify extends React.Component {
         this.setState({
             data: newNavs
         })
+    }
+
+    //上传更新数据
+    submitUpdate = () => {
+        const { data } = this.state;
+        let newNav = data[0];
+        newNav.children = data.slice(1);
+        const { apiPath, request } = updateNavi(data[0].id, newNav);
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(resData => {
+                if (!resData.error_code) {
+                    message.success("更新成功")
+                    this.concatNav(resData.data)
+                }
+            })
     }
 
     // 开启可编辑
@@ -357,11 +402,42 @@ class NaviModify extends React.Component {
                 editWords: "编辑内容",
                 pageState: 0
             })
+            this.submitUpdate()
         } else { //提示先结束排序状态
 
         }
     }
 
+    // id和link,在这里更新总数据
+    saveSort = () => {
+        const { data } = this.state;
+        for (let i = 1; i < data.length; i++) {
+            let id = data[i].link.split('=')[1]
+            data[i].link = `/${data[0].id}/${i}/column?columnId=${id}`
+        }
+
+        let children = data.slice(1);
+        let sort = [];
+        children.forEach((x, i) => {
+            sort.push({
+                id: x.id,
+                link: x.link,
+            })
+        })
+
+        const { apiPath, request } = saveSecNavSort(sort);
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(resData => {
+                if (!resData.error_code) {
+                    message.success("排序保存成功")
+                    this.setState({
+                        data: data
+                    })
+                }
+            })
+        console.log(sort)
+    }
 
     // 开启和结束排序
     handleSort = () => {
@@ -383,6 +459,7 @@ class NaviModify extends React.Component {
                 sortWords: "子导航排序",
                 pageState: 0
             })
+            this.saveSort()
         } else { //提示先结束可编辑状态
 
         }
@@ -392,20 +469,36 @@ class NaviModify extends React.Component {
     handleAddSecNav = () => {
         const { data } = this.state;
         const newData = {
-            id: data.length,
-            title: '',
+            id: this.base_id,
+            title: '无',
             type: 1, //默认栏目列表，可下拉选择
-            link: '', //根据length决定 //如果是栏目，也是一个下拉框
+            link: '无', //根据length决定 //如果是栏目，也是一个下拉框
             parent_id: data[0].id
         }
         this.setState({
             data: [...data, newData]
         })
+        this.base_id++;
     }
+
+    // 更新子导航值
+    handleSave = row => {
+        // 如果更新的是栏目的link
+        const { data } = this.state;
+        const newData = [...this.state.data];
+        const index = newData.findIndex(item => row.id === item.id);
+        if (parseInt(row.type) === 1) {
+            let arr = ("" + row.link).split('=');
+            let id = arr.length === 2 ? arr[1] : row.link
+            row.link = `/${data[0].rank}/${index}/column?columnId=${id}`
+        }
+        newData[index] = row
+        this.setState({ data: newData });
+    };
 
     //给每个column都建一个form，然后各自管理各自的修改
     render() {
-        const { data, editWords, sortWords, pageState, components } = this.state;
+        const { data, editWords, sortWords, pageState, components, ctgs } = this.state;
         const { getFieldDecorator } = this.props.form;
         const columns = this.columns.map(col => {
             if (!col.editable) {
@@ -418,7 +511,8 @@ class NaviModify extends React.Component {
                     editable: col.editable,
                     dataIndex: col.dataIndex,
                     title: col.title,
-                    // handleSave: this.handleSave,
+                    handleSave: this.handleSave,
+                    cateLists: ctgs
                 }),
             };
         });

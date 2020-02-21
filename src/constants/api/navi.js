@@ -120,5 +120,32 @@ export const deleteNavi = (id) => {
     }
 }
 
+// 更新导航
+export const updateNavi = (id, body) => {
+    return {
+        apiPath: `admin/menu/${id}`,
+        request: {
+            body: JSON.stringify(body),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    }
+}
+
+export const saveSecNavSort = (body) => {
+    return {
+        apiPath: `admin/rankMenu`,
+        request: {
+            body: JSON.stringify(body),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    }
+}
+
 
 
