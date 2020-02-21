@@ -330,7 +330,8 @@ class NaviModify extends React.Component {
     };
 
     concatNav = (data) => {
-        let children = data.children;
+        console.log(data)
+        let children = data.children ? data.children : [];
         delete data.children;
         let container = [data];
         container = container.concat(children);
@@ -345,7 +346,7 @@ class NaviModify extends React.Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(resData => {
-                console.log(resData)
+                // console.log(resData)
                 if (!resData.error_code) {
                     this.setState({
                         ctgs: resData.data

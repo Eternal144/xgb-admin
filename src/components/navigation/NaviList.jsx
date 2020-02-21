@@ -106,10 +106,6 @@ export default class NaviList extends React.Component {
         },
     };
 
-    // handleModify = () => {
-
-    // }
-
     getPath = (i) => {
         let data = this.state.data[i];
         let arr = [data];
@@ -149,7 +145,6 @@ export default class NaviList extends React.Component {
                 this.setState({
                     data: newNav
                 })
-                // console.log(resData)
             })
     }
 
