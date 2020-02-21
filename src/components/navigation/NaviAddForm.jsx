@@ -56,6 +56,7 @@ class NaviAdd extends React.Component {
         }
         return columns;
     }
+    
     handleSubmit = () => {
         const { form } = this.props
         form.validateFields((err, values) => {

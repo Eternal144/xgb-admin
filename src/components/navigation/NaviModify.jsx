@@ -11,8 +11,10 @@ import { DndProvider, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 
+
+const { Option } = Select;
+// 可排序状态
 let dragingIndex = -1; //拖拽的index
-// const { Column } = Table;
 class BodyRow extends React.Component {
     render() {
         const { isOver, connectDragSource, connectDropTarget, moveRow, ...restProps } = this.props;
@@ -43,12 +45,12 @@ const rowSource = {
         };
     },
     canDrag(props) {
-        // if (props.children[0].props.record.parent_id > 0) {
+        // if (parseInt(props.children[0].props.record.parent_id) !== 0) {
         //     return true;
         // } else {
         //     return false;
         // }
-        // console.log(this.state)
+        return true
     }
 };
 
@@ -84,6 +86,7 @@ const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
         connectDragSource: connect.dragSource(),
     }))(BodyRow),
 );
+
 
 // 可编辑状态
 const EditableContext = React.createContext();
@@ -121,25 +124,85 @@ class EditableCell extends React.Component {
         });
     };
 
+    //内链，栏目
     renderCell = form => {
         this.form = form;
         const { children, dataIndex, record, title } = this.props;
         const { editing } = this.state;
-        return editing ? (
-            <Form.Item style={{ margin: 0 }}>
-                {form.getFieldDecorator(dataIndex, {
-                    rules: [
-                        {
-                            required: true,
-                            message: `${title} is required.`,
-                        },
-                    ],
-                    initialValue: record[dataIndex],
-                })(<Input ref={node => (this.input = node)}
-                // onPressEnter={this.save} onBlur={this.save}
-                />)}
-            </Form.Item>
-        ) : (
+        if (editing) {
+            if (dataIndex === "title") {
+                return (<Form.Item style={{ margin: 0 }}>
+                    {form.getFieldDecorator(dataIndex, {
+                        rules: [
+                            {
+                                required: true,
+                                message: `${title} is required.`,
+                            },
+                        ],
+                        initialValue: record[dataIndex],
+                    })(<Input ref={node => (this.input = node)}
+                        onPressEnter={this.save} onBlur={this.save}
+                    />)}
+                </Form.Item>)
+            } else if (dataIndex === "type") {
+                return (<Form.Item style={{ margin: 0 }}>
+                    {form.getFieldDecorator(dataIndex, {
+                        rules: [
+                            {
+                                required: true,
+                                message: `${title} is required.`,
+                            },
+                        ],
+                        initialValue: record[dataIndex],
+                    })(<Select ref={node => (this.input = node)}
+                        onPressEnter={this.save} onBlur={this.save}
+                    >
+                        <Option value={0}>外链</Option>
+                        <Option value={1}>栏目</Option>
+                    </Select>)}
+                </Form.Item>)
+            } else if (dataIndex === "link") {
+                if (parseInt(record.type) === 0) {
+                    return (
+                        <Form.Item style={{ margin: 0 }}>
+                            {form.getFieldDecorator(dataIndex, {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: `${title} is required.`,
+                                    },
+                                ],
+                                initialValue: record[dataIndex],
+                            })(<Input ref={node => (this.input = node)}
+                                onPressEnter={this.save} onBlur={this.save}
+                            />)}
+                        </Form.Item>
+                    )
+
+                } else {
+                    return (
+                        <Form.Item style={{ margin: 0 }}>
+                            {form.getFieldDecorator(dataIndex, {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: `${title} is required.`,
+                                    },
+                                ],
+                                initialValue: record[dataIndex],
+                            })(<Select ref={node => (this.input = node)}
+                                onPressEnter={this.save} onBlur={this.save}
+                            >
+
+                            </Select>)}
+                        </Form.Item>
+                    )
+
+                }
+            }
+        }
+        else {
+            return (
                 <div
                     className="editable-cell-value-wrap"
                     style={{ paddingRight: 24 }}
@@ -148,6 +211,7 @@ class EditableCell extends React.Component {
                     {children}
                 </div>
             );
+        }
     };
 
     render() {
@@ -172,9 +236,6 @@ class EditableCell extends React.Component {
         );
     }
 }
-const { Option } = Select;
-
-
 
 //接收默认数据
 class NaviModify extends React.Component {
@@ -191,46 +252,63 @@ class NaviModify extends React.Component {
                 title: '导航类型',
                 dataIndex: 'type',
                 editable: true,
-
+                render: (text, record) => {
+                    let n = parseInt(record.type);
+                    if (n === 0) {
+                        return "外链";
+                    } if (n === 1) {
+                        return "栏目"
+                    } else {
+                        return "父节点";
+                    }
+                }
             },
             {
                 title: '内容',
-                dataIndex: 'type',
+                dataIndex: 'link',
                 editable: true,
+                render: (text, record) => {
+                    // let n = parseInt(record.type);
+                    // if (n === 0) {
+                    //     return "外链";
+                    // } if (n === 1) {
+                    //     return "栏目"
+                    // } else {
+                    //     return "父节点";
+                    // }
+                    return record.link
+                }
             },
-            // {
-            //     title: '操作',
-            //     dataIndex: 'action',
-            //     render: (text, record, i) => {
-            //         return <Button size="small" type="danger" onClick={this.handleDelect.bind(this, i)}>删除</Button>
-            //     }
-            // }
+            {
+                title: '操作',
+                dataIndex: 'action',
+                render: (text, record, i) => {
+                    return <Button size="small" type="danger" onClick={this.handleDelect.bind(this, i)}>删除</Button>
+                }
+            }
         ]
         this.state = {
             data: null,
-            // editable: false,
             editWords: "编辑内容",
             sortWords: "子导航排序",
-            // sortable: false
             components: {},
             pageState: 0, //0代表页面展示状态，1代表编辑状态，2代表排序状态
             count: 0, //记录子导航的数量
         }
     }
 
-
     moveRow = (dragIndex, hoverIndex) => {
         const { data } = this.state;
         const dragRow = data[dragIndex];
-        if (this.state.sortable) {
-            this.setState(
-                update(this.state, {
-                    data: {
-                        $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
-                    },
-                }),
-            );
-        }
+        console.log(dragIndex)
+        console.log(hoverIndex)
+        this.setState(
+            update(this.state, {
+                data: {
+                    $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
+                },
+            }),
+        );
     };
 
     //合并这个数组。
@@ -273,9 +351,13 @@ class NaviModify extends React.Component {
                 editWords: "结束编辑",
                 pageState: 1
             })
-        } else if (pageState === 2) { //结束排序状态
-
-        } else { //提示先结束可编辑状态
+        } else if (pageState === 1) { //结束编辑状态
+            this.setState({
+                components: {},
+                editWords: "编辑内容",
+                pageState: 0
+            })
+        } else { //提示先结束排序状态
 
         }
     }
@@ -361,39 +443,9 @@ class NaviModify extends React.Component {
                                     index,
                                     moveRow: this.moveRow,
                                 })}
-                                rowKey="id"
                                 columns={columns}
+                                rowKey="id"
                             >
-
-                                {/* <Column title="标题" dataIndex="title" key="title" />
-                                
-                                <Column title="导航类型" dataIndex="type" key="type" render={(text, record) => {
-                                    let n = parseInt(record.type);
-                                    if (n === 0) {
-                                        return "外链";
-                                    } if (n === 1) {
-                                        return "栏目"
-                                    } else {
-                                        return "父节点";
-                                    }
-                                }} />
-                               
-                                <Column title="内容" dataIndex="content" key="content" render={(text, record) => {
-                                    if (record.type === 0) {
-                                        return record.content
-                                    } if (record.type === 2) {
-                                        return null;
-                                    } else {
-                                        return "下拉框"
-                                    }
-                                }} />
-
-                                <Column title="操作" dataIndex="action" key="action" render={(text, record, i) => {
-                                    if (parseInt(record.parent_id) !== 0) {
-                                        return <Button size="small" type="danger" onClick={this.handleDelect.bind(this, i)}>删除</Button>
-                                    }
-                                }} /> */}
-
                             </Table>
                         </DndProvider>
                     </Form>
