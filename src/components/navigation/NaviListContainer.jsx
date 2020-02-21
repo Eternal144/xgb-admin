@@ -86,7 +86,7 @@ export default class NaviListContainer extends React.Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(resData => {
-                console.log(resData.data)
+                // console.log(resData.data)
                 this.setState({
                     data: resData.data
                 })
@@ -101,6 +101,7 @@ export default class NaviListContainer extends React.Component {
 
     handleUpdate = (newNav) => {
         const { data } = this.state
+        
         data.push(newNav)
         this.setState({
             data: data

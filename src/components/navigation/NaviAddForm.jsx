@@ -63,6 +63,7 @@ class NaviAdd extends React.Component {
             delete values["cate"]
             if (parseInt(values.type) === 2) {
                 values.link = null
+                values.children = []
             } else if (parseInt(values.type) === 1) {
                 values.link = this.state.content
             }
@@ -72,14 +73,14 @@ class NaviAdd extends React.Component {
                 .then(resData => {
                     if (!resData.error_code) {
                         message.success("添加成功");
+                        console.log(resData)
+                        // 传到上一层，作为新增
+                        if (this.props.update) {
+                            this.props.update(resData.data)
+                        }
+                        // 清空表单
+                        form.resetFields();
                     }
-                    values.parent_id = 0
-                    // 传到上一层，作为新增
-                    if (this.props.update) {
-                        this.props.update(values)
-                    }
-                    // 清空表单
-                    form.resetFields();
                 })
         })
     }

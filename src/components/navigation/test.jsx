@@ -1,144 +1,209 @@
-import { Table } from 'antd';
-import { DndProvider, DragSource, DropTarget } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import update from 'immutability-helper';
+import { Table, Input, Button, Popconfirm, Form } from 'antd';
 
-let dragingIndex = -1;
+const EditableContext = React.createContext();
 
-class BodyRow extends React.Component {
+const EditableRow = ({ form, index, ...props }) => (
+    <EditableContext.Provider value={form}>
+        <tr {...props} />
+    </EditableContext.Provider>
+);
+
+const EditableFormRow = Form.create()(EditableRow);
+
+class EditableCell extends React.Component {
+    state = {
+        editing: false,
+    };
+
+    toggleEdit = () => {
+        const editing = !this.state.editing;
+        this.setState({ editing }, () => {
+            if (editing) {
+                this.input.focus();
+            }
+        });
+    };
+
+    save = e => {
+        const { record, handleSave } = this.props;
+        this.form.validateFields((error, values) => {
+            if (error && error[e.currentTarget.id]) {
+                return;
+            }
+            this.toggleEdit();
+            handleSave({ ...record, ...values });
+        });
+    };
+
+    renderCell = form => {
+        this.form = form;
+        const { children, dataIndex, record, title } = this.props;
+        const { editing } = this.state;
+        return editing ? (
+            <Form.Item style={{ margin: 0 }}>
+                {form.getFieldDecorator(dataIndex, {
+                    rules: [
+                        {
+                            required: true,
+                            message: `${title} is required.`,
+                        },
+                    ],
+                    initialValue: record[dataIndex],
+                })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+            </Form.Item>
+        ) : (
+                <div
+                    className="editable-cell-value-wrap"
+                    style={{ paddingRight: 24 }}
+                    onClick={this.toggleEdit}
+                >
+                    {children}
+                </div>
+            );
+    };
+
     render() {
-        const { isOver, connectDragSource, connectDropTarget, moveRow, ...restProps } = this.props;
-        const style = { ...restProps.style, cursor: 'move' };
-
-        let { className } = restProps;
-        if (isOver) {
-            if (restProps.index > dragingIndex) {
-                className += ' drop-over-downward';
-            }
-            if (restProps.index < dragingIndex) {
-                className += ' drop-over-upward';
-            }
-        }
-
-        return connectDragSource(
-            connectDropTarget(<tr {...restProps} className={className} style={style} />),
+        const {
+            editable,
+            dataIndex,
+            title,
+            record,
+            index,
+            handleSave,
+            children,
+            ...restProps
+        } = this.props;
+        return (
+            <td {...restProps}>
+                {editable ? (
+                    <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+                ) : (
+                        children
+                    )}
+            </td>
         );
     }
 }
 
-const rowSource = {
-    beginDrag(props) {
-        dragingIndex = props.index;
-        return {
-            index: props.index,
-        };
-    },
-};
-
-const rowTarget = {
-    drop(props, monitor) {
-        const dragIndex = monitor.getItem().index;
-        const hoverIndex = props.index;
-
-        // Don't replace items with themselves
-        if (dragIndex === hoverIndex) {
-            return;
-        }
-
-        // Time to actually perform the action
-        props.moveRow(dragIndex, hoverIndex);
-
-        // Note: we're mutating the monitor item here!
-        // Generally it's better to avoid mutations,
-        // but it's good here for the sake of performance
-        // to avoid expensive index searches.
-        monitor.getItem().index = hoverIndex;
-    },
-};
-
-const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-}))(
-    DragSource('row', rowSource, connect => ({
-        connectDragSource: connect.dragSource(),
-    }))(BodyRow),
-);
-
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-    },
-];
-
-class DragSortingTable extends React.Component {
-    state = {
-        data: [
+class EditableTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.columns = [
             {
-                key: '1',
-                name: 'John Brown',
-                age: 32,
-                address: 'New York No. 1 Lake Park',
+                title: 'name',
+                dataIndex: 'name',
+                width: '30%',
+                editable: true,
             },
             {
-                key: '2',
-                name: 'Jim Green',
-                age: 42,
-                address: 'London No. 1 Lake Park',
+                title: 'age',
+                dataIndex: 'age',
             },
             {
-                key: '3',
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
+                title: 'address',
+                dataIndex: 'address',
             },
-        ],
-    };
+            {
+                title: 'operation',
+                dataIndex: 'operation',
+                render: (text, record) =>
+                    this.state.dataSource.length >= 1 ? (
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                            <a>Delete</a>
+                        </Popconfirm>
+                    ) : null,
+            },
+        ];
 
-    components = {
-        body: {
-            row: DragableBodyRow,
-        },
-    };
-
-    moveRow = (dragIndex, hoverIndex) => {
-        const { data } = this.state;
-        const dragRow = data[dragIndex];
-
-        this.setState(
-            update(this.state, {
-                data: {
-                    $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
+        this.state = {
+            dataSource: [
+                {
+                    key: '0',
+                    name: 'Edward King 0',
+                    age: '32',
+                    address: 'London, Park Lane no. 0',
                 },
-            }),
-        );
+                {
+                    key: '1',
+                    name: 'Edward King 1',
+                    age: '32',
+                    address: 'London, Park Lane no. 1',
+                },
+            ],
+            count: 2,
+        };
+    }
+
+    handleDelete = key => {
+        const dataSource = [...this.state.dataSource];
+        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    };
+
+    handleAdd = () => {
+        const { count, dataSource } = this.state;
+        const newData = {
+            key: count,
+            name: `Edward King ${count}`,
+            age: 32,
+            address: `London, Park Lane no. ${count}`,
+        };
+        this.setState({
+            dataSource: [...dataSource, newData],
+            count: count + 1,
+        });
+    };
+
+    handleSave = row => {
+        const newData = [...this.state.dataSource];
+        const index = newData.findIndex(item => row.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, {
+            ...item,
+            ...row,
+        });
+        this.setState({ dataSource: newData });
     };
 
     render() {
+        const { dataSource } = this.state;
+        const components = {
+            body: {
+                row: EditableFormRow,
+                cell: EditableCell,
+            },
+        };
+
+        
+        const columns = this.columns.map(col => {
+            if (!col.editable) {
+                return col;
+            }
+            return {
+                ...col,
+                onCell: record => ({
+                    record,
+                    editable: col.editable,
+                    dataIndex: col.dataIndex,
+                    title: col.title,
+                    handleSave: this.handleSave,
+                }),
+            };
+        });
+
+
         return (
-            <DndProvider backend={HTML5Backend}>
+            <div>
+                <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+                    Add a row
+        </Button>
                 <Table
+                    components={components}
+                    rowClassName={() => 'editable-row'}
+                    bordered
+                    dataSource={dataSource}
                     columns={columns}
-                    dataSource={this.state.data}
-                    components={this.components}
-                    onRow={(record, index) => ({
-                        index,
-                        moveRow: this.moveRow,
-                    })}
                 />
-            </DndProvider>
+            </div>
         );
     }
 }

@@ -113,9 +113,9 @@ export const addNewNavi = (body) => {
 // 删除导航
 export const deleteNavi = (id) => {
     return {
-        apiPath: `admin/Menu/${id}`,
+        apiPath: `admin/delMenu/${id}`,
         request: {
-            method: 'POST',
+            method: 'GET',
         }
     }
 }

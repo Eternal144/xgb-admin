@@ -3,7 +3,8 @@ import {
     Table,
     Button,
     Card,
-    Spin
+    Spin,
+    message
 } from 'antd';
 import { Link } from 'react-router-dom'
 import { DndProvider, DragSource, DropTarget } from 'react-dnd';
@@ -105,9 +106,9 @@ export default class NaviList extends React.Component {
         },
     };
 
-    handleModify = () => {
+    // handleModify = () => {
 
-    }
+    // }
 
     getPath = (i) => {
         let data = this.state.data[i];
@@ -130,13 +131,25 @@ export default class NaviList extends React.Component {
         );
     };
 
+    // 先不能删除新加的
     handleDeleteNav = (id) => {
-        console.log(id)
+        // console.log(id)
+        const { data } = this.state;
         const { apiPath, request } = deleteNavi(id);
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(resData => {
-                console.log(resData)
+                // console.log(resData)
+                if (!resData.error_code) {
+                    message.success("删除成功")
+                }
+                let newNav = data.filter((x) => {
+                    return parseInt(x.id) !== id
+                })
+                this.setState({
+                    data: newNav
+                })
+                // console.log(resData)
             })
     }
 
