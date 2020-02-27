@@ -414,7 +414,7 @@ class NaviModify extends React.Component {
         const { data } = this.state;
         for (let i = 1; i < data.length; i++) {
             let id = data[i].link.split('=')[1]
-            data[i].link = `/${data[0].id}/${i}/column?columnId=${id}`
+            data[i].link = `/column?columnId=${id}&navf=${data[0].id}&navs=${i}`
         }
 
         let children = data.slice(1);
@@ -491,7 +491,7 @@ class NaviModify extends React.Component {
         if (parseInt(row.type) === 1) {
             let arr = ("" + row.link).split('=');
             let id = arr.length === 2 ? arr[1] : row.link
-            row.link = `/${data[0].id}/${index}/column?columnId=${id}`
+            row.link = `/column?columnId=${id}&navf=${data[0].id}&navs=${index}`
         }
         newData[index] = row
         this.setState({ data: newData });

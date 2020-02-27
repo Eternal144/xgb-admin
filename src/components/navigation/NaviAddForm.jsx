@@ -56,7 +56,7 @@ class NaviAdd extends React.Component {
         }
         return columns;
     }
-    
+
     handleSubmit = () => {
         const { form } = this.props
         form.validateFields((err, values) => {
@@ -102,7 +102,7 @@ class NaviAdd extends React.Component {
     // 绑定栏目改变
     handleCateChange = (e) => {
         this.setState({
-            content: `/${this.rank}/column?columnId=${e}`
+            content: `/column?columnId=${e}&navf=${this.rank}`
         })
     }
     componentDidMount = () => {
