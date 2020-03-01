@@ -17,9 +17,10 @@ import './customize.css';
 import { Collapse } from 'antd';
 import { Skeleton } from 'antd';
 import { fetchApi } from '../../../callApi';
-import { getNaviInfo } from '../../../constants/api/navi';
+// import { getNaviInfo } from '../../../constants/api/navi';
 import { showMessageList, addBanner, editBanner, delBanner } from '../../../constants/api/banner';
 import { messageList } from '../../../constants/api/model';
+import { getCateLists } from '../../../constants/api/category'
 import { notification } from 'antd';
 import UpLoader from '../../uploader/UpLoader';
 import ImgCropper from '../../uploader/Cropper';
@@ -64,7 +65,7 @@ class BannerForm extends Component {
     componentDidMount = () => {
         // console.log(fetchApi(apiPath, request))
         if (!this.state.isNaviLoaded) {
-            const { apiPath, request } = getNaviInfo();
+            const { apiPath, request } = getCateLists();
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
@@ -113,17 +114,10 @@ class BannerForm extends Component {
 
     listColumn(data) {
         let columns = [];
-        // console.log(data[0].children[0].title);
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
-                let opts = [];
-                for (let j = 0; j < data[i].children.length; j++) {
-                    opts.push(
-                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
-                    )
-                }
                 columns.push(
-                    <OptGroup label={data[i].title}>{opts}</OptGroup>
+                    <Option key={data[i].rank + '-' + data[i].id} value={data[i].id}>{data[i].title}</Option>
                 )
             }
         } else {
@@ -154,14 +148,13 @@ class BannerForm extends Component {
 
     //用nav_id匹配对应的栏目名称或
     getTitle = (index, opt) => {
-        let nav = this.props.data[index].nav_id;//nav_id
-        let pas = this.props.data[index].mes_id;
+        const { navData } = this.state;
+        let nav = this.props.data[index].nav_id; //绑定的栏目
+        let pas = this.props.data[index].mes_id; //绑定的文章
         if (opt === 1) {
-            for (let i = 0; i < this.state.navData.length; i++) {
-                for (let j = 0; j < this.state.navData[i].children.length; j++) {
-                    if (this.state.navData[i].children[j].id.toString() === pas) {
-                        return this.state.navData[i].children[j].title;
-                    }
+            for (let i = 0; i < navData.length; i++) {
+                if (navData[i].id.toString() === nav) {
+                    return navData[i].title;
                 }
             }
         } else if (opt === 2) {
@@ -329,6 +322,7 @@ class BannerForm extends Component {
                                         message: '请选择一篇文章',
                                     },
                                 ],
+                                // initialValue: this.getAtcTitle(index)
                             })(
                                 <Select id={index + '-2'} key={index + '-2'} style={{ width: '40%' }} placeholder="请选择一篇文章">
                                     {/* <Option value="-1">请选择</Option> */}

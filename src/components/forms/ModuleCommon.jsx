@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Form, Button, message } from 'antd';
 import { fetchApi } from '../../callApi';
-import { getNaviInfo, getArticleTitle } from '../../constants/api/navi';
+import { getArticleTitle } from '../../constants/api/navi';
 
 import { updateUpper } from '../../constants/api/model'
 

@@ -28,7 +28,7 @@ class Banners extends React.Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    // console.log(data.data)
+                    console.log(data)
                     this.setState({
                         data: data.data,
                         isLoaded: true,
@@ -64,7 +64,8 @@ class Banners extends React.Component {
                 sm: { span: 20, offset: 4 },
             },
         };
-
+        const { isLoaded } = this.state
+        console.log(isLoaded)
         return (
             <div className="gutter-example button-demo">
                 <BreadcrumbCustom first="轮播图管理" />

@@ -21,8 +21,8 @@ class AutoPlay extends React.Component {
             if (data.length > 0) {
                 for (let i = 0; i < data.length; i++) {
                     elements.push(
-                        <div className="bg-element" key="BgElement" style={{ backgroundImage: `url(${"https://xuegong.twtstudio.com/" + data[i].picture})` }}>
-                            <img key="bg-img" className="bg-img" alt="轮播图预览" src={"https://xuegong.twtstudio.com/" + data[i].picture} />
+                        <div className="bg-element" key="BgElement" style={{ backgroundImage: `url(${"https://xuegong.twt.edu.cn/" + data[i].picture})` }}>
+                            <img key="bg-img" className="bg-img" alt="轮播图预览" src={"https://xuegong.twt.edu.cn/" + data[i].picture} />
                             {/* <div className="bg-text">{data[i].title}</div> */}
                             {/* <div className="bg-info">
                                 <p>{"第" + data[i].rank + "张"}</p>

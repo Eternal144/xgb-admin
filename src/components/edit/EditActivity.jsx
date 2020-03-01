@@ -7,7 +7,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom';
 import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
-import { getNaviInfo } from '../../constants/api/navi';
+// import { getNaviInfo } from '../../constants/api/navi';
 import { getCategory } from '../../constants/api/category';
 import { postActivityMessage, editActivityMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
