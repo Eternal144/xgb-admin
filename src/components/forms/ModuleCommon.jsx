@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Select, Form, Button, message } from 'antd';
 import { fetchApi } from '../../callApi';
 import { getNaviInfo, getArticleTitle } from '../../constants/api/navi';
+
 import { updateUpper } from '../../constants/api/model'
 
 
@@ -18,12 +19,13 @@ class Module extends Component {
         super(props);
         this.state = {
             subordData: null,
-            navId: this.props.bindInfo.nav_id,
-            articleId: this.props.bindInfo.mes_id,
+            // navId: this.props.bindInfo.nav_id,
+            // articleId: this.props.bindInfo.mes_id,
         }
     }
     componentDidMount = () => {
         const { bindInfo } = this.props;
+        console.log(bindInfo)
         this.handleOnchange(bindInfo.nav_id);
     }
 
@@ -87,6 +89,7 @@ class Module extends Component {
                 }
             })
     }
+
     handleArticleChange = (id) => {
         // console.log(id);
         this.setState({
@@ -150,7 +153,6 @@ class Module extends Component {
                         </Select>)}
                     </Form.Item>
 
-                    {/* 自行决定我的key是id。 */}
                     <Form.Item label='置顶文章'>
                         {getFieldDecorator(`article_title`, {
                             rules: [
@@ -166,8 +168,6 @@ class Module extends Component {
                     </Form.Item>
                     <Button type="default" htmlType="submit" style={{ float: "right" }}>确认提交</Button>
                 </Form>
-
-
             </div >
         )
     }

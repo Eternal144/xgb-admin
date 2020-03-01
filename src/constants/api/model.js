@@ -21,7 +21,6 @@ export const upperModelPreview = () => {
     return {
         apiPath: 'admin/upper',
         request: {
-            // body: body,
             method: "GET",
         }
     }
