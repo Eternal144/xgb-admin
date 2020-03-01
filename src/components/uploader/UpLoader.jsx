@@ -92,7 +92,7 @@ class UpLoaderModel extends Component {
             this.setState({ fileList });
             if (info.file.status !== 'uploading') {
                 //文件上传中
-                console.log(info.file);
+                // console.log(info.file);
             }
             if (info.file.status === 'done') {
                 // console.log(info.fileList);

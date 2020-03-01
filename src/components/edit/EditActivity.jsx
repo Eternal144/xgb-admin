@@ -143,16 +143,12 @@ class EditorDemo extends React.Component {
     listColumn(data) {
         let columns = [];
         if (data.length > 0) {
-            let opts = [];
             for (let i = 0; i < data.length; i++) {
                 if (data[i].listType === "1")
-                    opts.push(
+                    columns.push(
                         <Option value={data[i].id}>{data[i].title}</Option>
                     )
             }
-            columns.push(
-                <OptGroup>{opts}</OptGroup>
-            )
         } else {
             return this.noNaviNotification();
         }

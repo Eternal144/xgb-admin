@@ -64,6 +64,8 @@ export default class CropperModal extends Component {
                     }
                     // 提示开始上传
                     this.setState({ submitting: true })
+                    console.log("aaa")
+                    console.log(url, settings)
                     // 上传图片
                     fetch(url, settings)
                         .then(res => res.json())

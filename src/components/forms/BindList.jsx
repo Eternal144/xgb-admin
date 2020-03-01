@@ -111,14 +111,8 @@ class BindMan extends Component {
         let columns = [];
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
-                let opts = [];
-                for (let j = 0; j < data[i].children.length; j++) {
-                    opts.push(
-                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
-                    )
-                }
                 columns.push(
-                    <OptGroup label={data[i].title}>{opts}</OptGroup>
+                    <Option key={data[i].rank + '-' + data[i].id} value={data[i].id}>{data[i].title}</Option>
                 )
             }
         } else {
@@ -147,6 +141,7 @@ class BindMan extends Component {
         const { type } = this.props
         const { getFieldsValue } = this.props.form;
         const { moduleData, articleData } = this.state;
+        console.log("更新前：", moduleData)
         let values = getFieldsValue();
         if (typeof (values.nav_id) === 'number') {
             moduleData.nav_id = values.nav_id;
@@ -179,6 +174,7 @@ class BindMan extends Component {
                     break;
             }
         }
+        // console.log("更新后：", moduleData)
         return moduleData;
     }
 
@@ -218,7 +214,6 @@ class BindMan extends Component {
 
     imageDisplay = (obj) => {
         if (obj && obj.picture) {
-
             let initial = [{
                 name: "缩略图",
                 uid: 1,

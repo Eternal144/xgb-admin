@@ -19,13 +19,13 @@ class Module extends Component {
         super(props);
         this.state = {
             subordData: null,
-            // navId: this.props.bindInfo.nav_id,
-            // articleId: this.props.bindInfo.mes_id,
+            navId: this.props.bindInfo.nav_id,
+            articleId: this.props.bindInfo.mes_id,
         }
     }
     componentDidMount = () => {
         const { bindInfo } = this.props;
-        console.log(bindInfo)
+        // console.log(bindInfo)
         this.handleOnchange(bindInfo.nav_id);
     }
 
@@ -36,14 +36,8 @@ class Module extends Component {
         let columns = [];
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
-                let opts = [];
-                for (let j = 0; j < data[i].children.length; j++) {
-                    opts.push(
-                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
-                    )
-                }
                 columns.push(
-                    <OptGroup label={data[i].title}>{opts}</OptGroup>
+                    <Option key={data[i].rank + '-' + data[i].id} value={data[i].id}>{data[i].title}</Option>
                 )
             }
         }
@@ -67,7 +61,7 @@ class Module extends Component {
 
     //初始值也应该变。
     handleOnchange = (id) => {
-        console.log(id);
+        // console.log(id);
         const { navId } = this.state;
         const { apiPath, request } = getArticleTitle(id);
         fetchApi(apiPath, request)
@@ -103,14 +97,16 @@ class Module extends Component {
         let formData = new FormData();
         formData.append("nav_id", navId);
         formData.append("mes_id", articleId);
-        // console.log(navId);
-        // console.log(articleId);
+        console.log(navId);
+        console.log(articleId);
         this.props.form.validateFieldsAndScroll((err, values) => { //还需要获取文章id鸭。
             if (!err) {
                 const { apiPath, request } = updateUpper(type, formData);
+                // console.log(request)
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
+                        // 更新成功也要改现在的值。
                         if (data.error_code === 0) {
                             success("更新成功");
                         } else {

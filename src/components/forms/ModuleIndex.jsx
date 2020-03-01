@@ -74,20 +74,8 @@ class BasicForms extends Component {
             .then(data => {
                 // console.log(data)
                 if (data.error_code === 0) {
-                    // this.setState({
-                    //     commonModuleData: data.data,
-                    // })
                     this.setState({
-                        commonModuleData: [
-                            {
-                                "id": 1,
-                                "nav_id": "5",
-                                "model": "1",
-                                "mes_id": "14",
-                                "title": "历届掌校人",
-                                "mes_title": "我又还是一个新闻标题"
-                            }
-                        ]
+                        commonModuleData: data.data,
                     })
                 }
             })
@@ -95,7 +83,6 @@ class BasicForms extends Component {
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => {
-                // console.log(data)
                 this.setState({
                     navData: data.data,
                 })
@@ -103,7 +90,7 @@ class BasicForms extends Component {
     }
     render() {
         const { commonModuleData, navData } = this.state;
-        console.log(commonModuleData, navData)
+        // console.log(commonModuleData, navData)
         return (
             <div>
                 <BreadcrumbCustom first="模块管理" />
@@ -137,33 +124,32 @@ class BasicForms extends Component {
                                             <ModuleCommon type={1} bindInfo={commonModuleData[0]} navData={navData} isReady={this.state.isUpperLoaded} />
                                         </Card>
                                     </Col>
-                                    {/* <Col span={12}>
-                                    {commonModuleData ? <Card className="banner-edit-card" title="管理模块B" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(1)}><Icon type="info-circle" />帮助</Button>}>
-                                        <ModuleCommon type={2} bindInfo={commonModuleData[1]} navData={navData} isReady={this.state.isUpperLoaded} />
-                                    </Card> : null}
-                                </Col>
-                                <Col span={12}>
-                                    {commonModuleData ? <Card className="banner-edit-card" title="管理模块C" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(2)}><Icon type="info-circle" />帮助</Button>}>
-                                        <ModuleCommon type={3} bindInfo={commonModuleData[2]} navData={navData} isReady={this.state.isUpperLoaded} />
-                                    </Card> : null}
+                                    <Col span={12}>
+                                        {commonModuleData ? <Card className="banner-edit-card" title="管理模块B" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(1)}><Icon type="info-circle" />帮助</Button>}>
+                                            <ModuleCommon type={2} bindInfo={commonModuleData[1]} navData={navData} isReady={this.state.isUpperLoaded} />
+                                        </Card> : null}
+                                    </Col>
+                                    <Col span={12}>
+                                        {commonModuleData ? <Card className="banner-edit-card" title="管理模块C" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(2)}><Icon type="info-circle" />帮助</Button>}>
+                                            <ModuleCommon type={3} bindInfo={commonModuleData[2]} navData={navData} isReady={this.state.isUpperLoaded} />
+                                        </Card> : null}
 
-                                </Col>
-                                <Col span={12}>
-                                    {commonModuleData ? <Card className="banner-edit-card" title="管理模块D" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(3)}><Icon type="info-circle" />帮助</Button>}>
-                                        <ModuleCommon type={4} bindInfo={commonModuleData[3]} navData={navData} isReady={this.state.isUpperLoaded} />
-                                    </Card> : null}
-
-                                </Col> */}
+                                    </Col>
+                                    <Col span={12}>
+                                        {commonModuleData ? <Card className="banner-edit-card" title="管理模块D" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(3)}><Icon type="info-circle" />帮助</Button>}>
+                                            <ModuleCommon type={4} bindInfo={commonModuleData[3]} navData={navData} isReady={this.state.isUpperLoaded} />
+                                        </Card> : null}
+                                    </Col>
                                 </Row>
-                                {/* <Card className="banner-edit-card" title="管理模块E" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(4)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModuleManager type={1} navData={navData} isReady={this.state.isModelEReady} />
-                            </Card>
-                            <Card className="banner-edit-card" title="管理模块G" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(6)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModuleManager type={3} navData={navData} isReady={this.state.isModelGReady} />
-                            </Card>
-                            <Card className="banner-edit-card" title="管理模块H" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(7)}><Icon type="info-circle" />帮助</Button>}>
-                                <ModuleManager type={4} navData={navData} isReady={this.state.isModelHReady} />
-                            </Card> */}
+                                <Card className="banner-edit-card" title="管理模块E" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(4)}><Icon type="info-circle" />帮助</Button>}>
+                                    <ModuleManager type={1} navData={navData} isReady={this.state.isModelEReady} />
+                                </Card>
+                                <Card className="banner-edit-card" title="管理模块G" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(6)}><Icon type="info-circle" />帮助</Button>}>
+                                    <ModuleManager type={3} navData={navData} isReady={this.state.isModelGReady} />
+                                </Card>
+                                <Card className="banner-edit-card" title="管理模块H" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(7)}><Icon type="info-circle" />帮助</Button>}>
+                                    <ModuleManager type={4} navData={navData} isReady={this.state.isModelHReady} />
+                                </Card>
                             </div>
                         </Col>
                     </Row> : <Spin size="large" />
