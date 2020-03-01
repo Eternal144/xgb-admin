@@ -326,11 +326,10 @@ class NaviModify extends React.Component {
                 },
             }),
         );
-        //更新link值。
     };
 
     concatNav = (data) => {
-        console.log(data)
+        // console.log(data)
         let children = data.children ? data.children : [];
         delete data.children;
         let container = [data];
@@ -409,13 +408,15 @@ class NaviModify extends React.Component {
         }
     }
 
-    // id和link,在这里更新总数据
+    // id和link,在这里更新总数据。type为
     saveSort = () => {
         const { data } = this.state;
-        for (let i = 1; i < data.length; i++) {
-            let id = data[i].link.split('=')[1]
-            data[i].link = `/column?columnId=${id}&navf=${data[0].id}&navs=${i}`
-        }
+        // for (let i = 1; i < data.length; i++) {
+        //     let id = data[i].link.split('=')[1]
+        //     // console.log(data)
+        //     // data[i].link = `/column?columnId=${id}&navf=${data[0].id}&navs=${i}`
+        //     data[i].link = `/column?columnId=${id}`
+        // }
 
         let children = data.slice(1);
         let sort = [];
@@ -491,7 +492,8 @@ class NaviModify extends React.Component {
         if (parseInt(row.type) === 1) {
             let arr = ("" + row.link).split('=');
             let id = arr.length === 2 ? arr[1] : row.link
-            row.link = `/column?columnId=${id}&navf=${data[0].id}&navs=${index}`
+            // row.link = `/column?columnId=${id}&navf=${data[0].id}&navs=${index}`
+            row.link = `/column?columnId=${id}`
         }
         newData[index] = row
         this.setState({ data: newData });
