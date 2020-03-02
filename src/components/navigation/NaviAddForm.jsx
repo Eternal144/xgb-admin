@@ -102,7 +102,7 @@ class NaviAdd extends React.Component {
     // 绑定栏目改变
     handleCateChange = (e) => {
         this.setState({
-            content: `/column?columnId=${e}&navf=${this.rank}`
+            content: `/column?columnId=${e}`
         })
     }
     componentDidMount = () => {

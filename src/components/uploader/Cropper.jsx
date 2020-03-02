@@ -55,7 +55,7 @@ export default class ImgCropper extends Component {
             resultImgUrl,
         } = this.state
         return (
-            <div className="app">
+            <div className="cropper">
                 <div className="half-area">
                     <label className="upload-input-label">
                         <span>上传图片</span>

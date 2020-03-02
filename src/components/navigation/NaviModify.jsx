@@ -492,7 +492,6 @@ class NaviModify extends React.Component {
         if (parseInt(row.type) === 1) {
             let arr = ("" + row.link).split('=');
             let id = arr.length === 2 ? arr[1] : row.link
-            // row.link = `/column?columnId=${id}&navf=${data[0].id}&navs=${index}`
             row.link = `/column?columnId=${id}`
         }
         newData[index] = row

@@ -1,115 +1,120 @@
-  .app {
-      display: flex;
-      //   height: 200px;
-      flex-direction: column;
-      margin-bottom: 20px;
+.ant-col-20 {
+    padding-left: 0;
+}
 
-      .half-area {
-          //   margin-top: 50px;
-          //   margin-right: 50px;
-          flex: 1;
-          width: 80px;
+.cropper {
+    display: flex;
+    //   height: 200px;
+    flex-direction: column;
+    margin-bottom: 10px;
+    margin-top: 10px;
 
-          .upload-input-label {
-              border: 1px solid #eaeaea;
-              border-radius: 4px;
-              padding: 8px;
+    .half-area {
+        //   margin-top: 50px;
+        //   margin-right: 50px;
+        flex: 1;
+        width: 80px;
 
-
-              .base-upload-input {
-                  display: none;
-              }
-          }
-
-          .upload-input-label:hover {
-              cursor: pointer;
-          }
-
-          .img-container {
-              //   height: 300px;
-              margin-top: 24px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-
-              .img {
-                  height: 100%;
-              }
-          }
-      }
-  }
-
-  .cropper-modal {
-      //   position: fixed;
-      background-color: rgba(255, 255, 255, 0.3);
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .modal-panel {
-
-          width: 480px;
-          height: 400px;
-          background: white;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
-
-          .button-row {
-              height: 50px;
-              flex-shrink: 0;
-              display: flex;
-              justify-content: center;
+        .upload-input-label {
+            border: 1px solid #eaeaea;
+            border-radius: 4px;
+            padding: 8px;
 
 
-          }
+            .base-upload-input {
+                display: none;
+            }
+        }
 
-          .cropper-container-container {
-              flex: 1;
-              display: flex;
-              align-items: stretch;
-              justify-content: space-between;
-              height: 100%;
+        .upload-input-label:hover {
+            cursor: pointer;
+        }
 
-              .cropper-container {
-                  flex: 0 0 600px;
-                  margin-right: 20px;
+        .img-container {
+            //   height: 300px;
+            margin-top: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-                  .cropper {
-                      width: 100%;
-                      height: 100%;
-                  }
-              }
+            .img {
+                height: 100%;
+            }
+        }
+    }
+}
 
-              .preview-container {
-                  flex: 1;
-                  display: flex;
-                  align-items: flex-end;
+.cropper-modal {
+    //   position: fixed;
+    background-color: rgba(255, 255, 255, 0.3);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-                  .cropper-preview {
-                      width: 180px;
-                      height: 180px;
-                      overflow: hidden;
-                      border: 1px solid #383838;
-                  }
-              }
-          }
-      }
-  }
+    .modal-panel {
 
-  .submit-button {
-      border: 1px solid #eaeaea;
-      text-align: center;
-      font-size: 1.2rem;
-      height: 100%;
-      color: #383838;
-  }
+        width: 480px;
+        height: 400px;
+        background: white;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
 
-  .submit-button:hover {
-      cursor: pointer;
-  }
+        .button-row {
+            height: 50px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+
+
+        }
+
+        .cropper-container-container {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            height: 100%;
+
+            .cropper-container {
+                flex: 0 0 600px;
+                margin-right: 20px;
+
+                .cropper {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
+            .preview-container {
+                flex: 1;
+                display: flex;
+                align-items: flex-end;
+
+                .cropper-preview {
+                    width: 180px;
+                    height: 180px;
+                    overflow: hidden;
+                    border: 1px solid #383838;
+                }
+            }
+        }
+    }
+}
+
+.submit-button {
+    border: 1px solid #eaeaea;
+    text-align: center;
+    font-size: 1.2rem;
+    height: 100%;
+    color: #383838;
+}
+
+.submit-button:hover {
+    cursor: pointer;
+}

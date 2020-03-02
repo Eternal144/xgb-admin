@@ -173,7 +173,7 @@ class EditableTable extends React.Component {
             },
         };
 
-        
+
         const columns = this.columns.map(col => {
             if (!col.editable) {
                 return col;

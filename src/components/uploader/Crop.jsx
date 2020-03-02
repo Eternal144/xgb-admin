@@ -57,14 +57,13 @@ export default class CropperModal extends Component {
                     // 添加要上传的文件
                     let filename = this.props.uploadedImageFile.name
                     formData.append('file', blob, filename)
-                    let url = `https://xuegong.twtstudio.com/api/uploadPic`;
+                    let url = `https://xuegong.twt.edu.cn/api/uploadPic`;
                     const settings = {
                         method: 'POST',
                         body: formData,
                     }
                     // 提示开始上传
                     this.setState({ submitting: true })
-                    console.log("aaa")
                     console.log(url, settings)
                     // 上传图片
                     fetch(url, settings)

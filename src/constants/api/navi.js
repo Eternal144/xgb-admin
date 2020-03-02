@@ -2,7 +2,7 @@
 
 export const getNaviInfo = () => {
     return {
-        apiPath: `admin/navigation`,
+        apiPath: `admin/menu`,
         request: {
             method: 'GET',
             // mode: 'no-cors',

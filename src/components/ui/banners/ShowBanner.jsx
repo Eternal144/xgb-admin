@@ -104,7 +104,7 @@ class BannerForm extends Component {
             for (let i = 0; i < this.props.data.length; i++) {
                 if (this.props.data[i].picture > 0) {
                     list.push({
-                        "url": "https://xuegong.twtstudio.com/" + this.props.data[i].picture,
+                        "url": "https://xuegong.twt.edu.cn/" + this.props.data[i].picture,
                     });
                 }
             }

@@ -9,7 +9,7 @@ import { fetchApi } from '../../../callApi';
 import { getBannerInfo } from '../../../constants/api/banner';
 import { BackTop } from 'antd';
 import './customize.css';
-import ShowBanner from './ShowBanner';
+import BannerList from './BannerList';
 
 // import Custom from './Custom';
 
@@ -28,32 +28,13 @@ class Banners extends React.Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
                     this.setState({
                         data: data.data,
                         isLoaded: true,
                     })
                 });
         }
-    }
-    handleAddItem = () => {
-        let { data } = this.state;
-        let lastData = data[data.length - 1];
-        let newDataId = 0;
-        let newRank = 0;
-        if (lastData) {
-            newDataId = lastData.id + 1;
-            newRank = parseInt(lastData.rank);
-        };
-        data.push({
-            "id": -1,
-            "title": undefined,
-            "rank": newRank + 1,
-            "isnew": true,
-        })
-        this.setState({
-            data: data,
-        })
     }
 
     render() {
@@ -65,7 +46,7 @@ class Banners extends React.Component {
             },
         };
         const { isLoaded } = this.state
-        console.log(isLoaded)
+        // console.log(isLoaded)
         return (
             <div className="gutter-example button-demo">
                 <BreadcrumbCustom first="轮播图管理" />
@@ -76,13 +57,8 @@ class Banners extends React.Component {
                                 <AutoPlay bannerData={data} isLoaded={this.state.isLoaded} />
                             </Card>
                             <Card className="banner-edit-card" title="编辑" bordered={false}>
-                                <ShowBanner data={data} isLoaded={this.state.isLoaded} />
-                                <Form onSubmit={this.handleSubmit}>
-                                    <Form.Item {...formItemLayoutWithOutLabel}>
-                                        <Button type="dashed" onClick={this.handleAddItem} style={{ width: '60%' }}>
-                                            <Icon type="plus" /> 添加轮播图</Button>
-                                    </Form.Item>
-                                </Form>
+                                <BannerList data={data} isLoaded={this.state.isLoaded} />
+
                             </Card>
                         </div>
                     </Col>
