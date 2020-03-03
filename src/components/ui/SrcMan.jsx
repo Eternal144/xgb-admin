@@ -11,7 +11,8 @@ import { CONFIRM_JUMP, CONFIRM_DELETE } from '../../constants/common';
 import { fetchApi } from '../../callApi';
 import { getSecNaviList, getNavAllArtivle } from '../../constants/api/navi';
 import { removeArticle, deleteArticle } from '../../constants/api/source';
-import { getAllCat } from '../../constants/api/category';
+import { getCateLists } from '../../constants/api/category';
+import { copySync } from 'fs-extra';
 const { TabPane } = Tabs;
 const { Option, OptGroup } = Select;
 const success = (content) => {
@@ -89,7 +90,8 @@ class Src extends React.Component {
         this.state = {
             chooseArticleId: null,
             chooseNavId: null, //选择跳转的id。
-            navData: null,
+            catData: null,
+            getCatData: false,
             sideMenu: null,
             introduct: [], //是一个存储右边数据的数组。如果有就直接拿。没有就请求。
             subordNavID: null, //二级标题ID
@@ -98,58 +100,29 @@ class Src extends React.Component {
     }
 
     componentDidMount() { //获取sideMenu和第一个数组的信息。
-        const { apiPath, request } = getSecNaviList(this.props.index);
-        fetchApi(apiPath, request)
-            .then(res => res.json())
-            .then(data => { //用来更新侧边栏。根据类型来调用Table三种Tabel
-                // console.log(data);
-                this.setState({
-                    sideMenu: data.data
-                })
-                const { sideMenu } = this.state; //获取请求第一个二级导航的简介信息。
-                let firstID = sideMenu[0].id;
-                //默认获取第一页的信息。 ??? 
-                const { apiPath, request } = getNavAllArtivle(firstID);
-                fetchApi(apiPath, request)
-                    .then(res => res.json())
-                    .then(data => { //有数据了。更新第一个二级导航的数据。
-                        // console.log(data)
-                        let arr = [];
-                        arr[0] = data.data;
-                        this.setState({
-                            introduct: arr,
-                            subordNavID: sideMenu[0].id,
-                            subordNavIndex: 0
-                        })
+        if (!this.state.getCatData) {
+            let api = getCateLists().apiPath;
+            let quest = getCateLists().request;
+            fetchApi(api, quest)
+                .then(res => res.json())
+                .then(data => {
+                    this.setState({
+                        catData: data.data,
+                        getCatData: true,
                     })
-            })
-        let api = getAllCat().apiPath;
-        let quest = getAllCat().request;
-        fetchApi(api, quest)
-            .then(res => res.json())
-            .then(data => {
-                this.setState({
-                    navData: data.data,
-                })
-            });
+                });
+        }
     }
 
     listColumn(data) {
         let columns = [];
-        if (data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-                let opts = [];
-                for (let j = 0; j < data[i].children.length; j++) {
-                    opts.push(
-                        <Option key={data[i].children[j].rank + '-' + data[i].children[j].id} value={data[i].children[j].id}>{data[i].children[j].title}</Option>
-                    )
-                }
-                columns.push(
-                    <OptGroup label={data[i].title}>{opts}</OptGroup>
-                )
-            }
-        } else {
-            return this.noNaviNotification();
+        columns.push(
+            <Option key="99-99" value={99}>未分类</Option>
+        )
+        for (let i = 0; i < data.length; i++) {
+            columns.push(
+                <Option key={data[i].rank + '-' + data[i].id} value={data[i].id}>{data[i].title}</Option>
+            )
         }
         return columns;
     }
@@ -246,19 +219,20 @@ class Src extends React.Component {
 
     //introduct包含所有的二级导航的信息。
     renderSideMenu() {
-        const { sideMenu, introduct } = this.state;
-        return sideMenu.map((key, i) => { // key是一个对象
+        const { catData, introduct } = this.state;
+        console.log(catData)
+        return catData.map((key, i) => { // key是一个对象
             let data;
             let listType = parseInt(key.listType);
             let contentType = parseInt(key.contentType);
-            if (listType === 2) { //图文类
+            if (listType === "2") { //图文类
                 if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.PicData(introduct[i]);
                     return this.Tab(key, i, data, columns3);
                 } else {
                     return this.Tab(key, i, null, columns3);
                 }
-            } else if (contentType === 1) { //活动类
+            } else if (contentType === "1") { //活动类
                 if (introduct[i] && introduct[i].message !== undefined) {
                     data = this.ActiData(introduct[i]);
                     return this.Tab(key, i, data, columns2);
@@ -278,20 +252,17 @@ class Src extends React.Component {
 
     callback = (key) => { //key为下标。二级标题id。
         // console.log(key)
-        let { introduct, sideMenu } = this.state;
-        if (sideMenu[key]) {
+        let { introduct, catData } = this.state;
+        if (catData[key]) {
             this.setState({
-                subordNavID: sideMenu[key].id,
+                subordNavID: catData[key].id,
             })
         }
         this.setState({
             subordNavIndex: key
         })
-        // console.log(sideMenu[key]);
-        // console.log(sideMenu[key].id);
-        // console.log(introduct);
         if (!introduct[key] || introduct[key].message === undefined) {
-            const { apiPath, request } = getNavAllArtivle(sideMenu[key].id);
+            const { apiPath, request } = getNavAllArtivle(catData[key].id);
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
@@ -371,20 +342,20 @@ class Src extends React.Component {
         return <LocalizedModal onConfirm={this.handleDelete} data={notify} />
     }
     render() {
-        const { sideMenu, navData, introduct, subordNavIndex } = this.state;
+        const { catData, introduct, subordNavIndex } = this.state;
         return (
             <div>
                 <BreadcrumbCustom first="资源管理" />
                 <div>
                     <Tabs defaultActiveKey="0" tabPosition="left" onChange={this.callback}>
-                        {sideMenu ? this.renderSideMenu() : <Spin tip="Loading..." size="large" />}
+                        {catData ? this.renderSideMenu() : <Spin tip="Loading..." size="large" />}
                     </Tabs>
                 </div>
                 <div className={introduct[subordNavIndex] && introduct[subordNavIndex].message.length > 0 ? "resource-jump" : "resource-margin"} >
-                    <Col span={4} offset={3}>
+                    <Col span={8} offset={5}>
                         <label>移动到：</label>
                         <Select id={1} style={{ width: "60%" }} onChange={this.handleSelect} key={1} required="true" placeholder="请选择一个栏目" >
-                            {navData ? this.listColumn(navData) : null}
+                            {catData ? this.listColumn(catData) : null}
                         </Select>
                     </Col>
                     <Col span={2}>

@@ -16,6 +16,8 @@ import Table from 'braft-extensions/dist/table';
 const { Option, OptGroup } = Select;
 const { MonthPicker } = DatePicker;
 
+//contentType:"2"
+
 let fList = [], pList = [];
 
 class EditorDemo extends React.Component {

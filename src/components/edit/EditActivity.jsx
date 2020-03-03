@@ -14,6 +14,8 @@ import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
 
+//contentType:"1"
+
 const { Option, OptGroup } = Select;
 const { MonthPicker } = DatePicker;
 

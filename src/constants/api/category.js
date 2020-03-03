@@ -20,6 +20,7 @@ export const getCategory = () => {
 
 export const getAllCat = () => {
     return {
+        apiPath: 'admin/allCat',//有些用这个
         url: 'admin/allCat',
         request: {
             method: 'GET',
