@@ -126,16 +126,26 @@ class Src extends React.Component {
             });
     }
 
+    getCurrentType(id, data) {
+        //根据columns数据和id返回列表类型
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].id === id) return data[i].contentType;
+        }
+    }
+
     listColumn(data) {
         let columns = [];
-        columns.push(<Option key={99 + "-" + 99} value={99}>未分类</Option>
-        )
+        columns.push(<Option key={99 + "-" + 99} value={99}>未分类</Option>)
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
-                columns.push(
-                    <Option key={data[i].rank + '-' + data[i].id} value={data[i].id}>{data[i].title}</Option>
-                )
-
+                let currentId = this.state.subordNavID;
+                console.log(currentId)
+                if (data[i].id !== currentId && data[i].contentType === this.getCurrentType(currentId, data)) {
+                    //筛掉栏目自己以及类型不匹配的栏目
+                    columns.push(
+                        <Option key={data[i].rank + '-' + data[i].id} value={data[i].id}>{data[i].title}</Option>
+                    )
+                }
             }
         } else {
             return this.noNaviNotification();
