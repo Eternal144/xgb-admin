@@ -2,7 +2,9 @@
 export default {
     menus: [ // 菜单相关路由
         { key: '/app/dashboard/index', title: '账户管理', icon: 'user', component: 'Dashboard', show: true },
-        { key: '/app/resource', title: '资源管理', icon: 'folder', component: 'SrcMan', show: true },
+        {
+            key: '/app/resource', title: '资源管理', icon: 'folder', component: 'SrcMan', show: true
+        },
         {
             key: '/app/edit', title: '发帖编辑', icon: 'edit', component: '', show: true,
             subs: [

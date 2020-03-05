@@ -3,20 +3,13 @@ import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
 import routes from '../routes/config'; //在这里也要处理那个嘛。。。怕是哦
 import SiderMenu from './SiderMenu';
+import { fetchApi } from '../callApi'
+import { getNaviInfo } from '../constants/api/navi'
 
 const { Sider } = Layout;
 
 class SiderCustom extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            renderSrcMan: false,
-            mode: 'inline',
-            openKey: '',
-            selectedKey: '',
-            // firstHide: true, // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
-        }
-    }
+
     static getDerivedStateFromProps(props, state) {
         if (props.collapsed !== state.collapsed) {
             const state1 = SiderCustom.setMenuOpen(props);
@@ -24,7 +17,7 @@ class SiderCustom extends Component {
             return {
                 ...state1,
                 ...state2,
-                // firstHide: state.collapsed !== props.collapsed && props.collapsed, // 两个不等时赋值props属性值否则为false
+                firstHide: state.collapsed !== props.collapsed && props.collapsed, // 两个不等时赋值props属性值否则为false
                 openKey: state.openKey || (!props.collapsed && state1.openKey)
             }
         }
@@ -44,6 +37,49 @@ class SiderCustom extends Component {
             mode: collapsed ? 'vertical' : 'inline',
         };
     };
+    state = {
+        mode: 'inline',
+        openKey: '',
+        selectedKey: '',
+        firstHide: true, // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
+        routesConfig: routes
+    };
+
+    componentDidMount = () => {
+        const { apiPath, request } = getNaviInfo();
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                let aaa = data.data;
+                //在这里要获取一级所有的一级。
+                let defClass = {
+                    id: 99,
+                    title: "未分类",
+                    icon: 'database',
+                    component: 'SrcMan',
+                    key: `/app/resource/99`
+                };
+                aaa.push(defClass);
+                let arr = aaa.map((key, i) => {
+                    //应该是返回一个对象。key component?
+                    let obj = {
+                        id: key.id,
+                        title: key.title,
+                        icon: 'database',
+                        component: 'SrcMan',
+                        key: `/app/resource/${key.id}`
+                    };
+                    return obj;
+                })
+                let { routesConfig } = this.state;
+                routesConfig.menus[1].subs = arr;
+                this.setState({
+                    routesConfig: routesConfig
+                });
+                const state = SiderCustom.setMenuOpen(this.props);
+                this.setState(state);
+            })
+    }
 
     menuClick = e => {
         this.setState({
@@ -56,13 +92,12 @@ class SiderCustom extends Component {
     openMenu = v => {
         this.setState({
             openKey: v[v.length - 1],
-            // firstHide: false,
+            firstHide: false,
         })
     };
 
     render() {
-        const { selectedKey, openKey, collapsed } = this.state;
-        // console.log(routes.menus)
+        const { selectedKey, openKey, firstHide, collapsed, routesConfig } = this.state;
         return (
             <Sider
                 trigger={null}
@@ -70,13 +105,15 @@ class SiderCustom extends Component {
                 collapsed={collapsed}
                 style={{ overflowY: 'auto' }}
             >
-                <div className="logo" ></div>
+                <div className="logo" >
+
+                </div>
                 <SiderMenu
-                    menus={routes.menus}
+                    menus={routesConfig.menus}
                     onClick={this.menuClick}
                     mode="inline"
                     selectedKeys={[selectedKey]}
-                    openKeys={[openKey]}
+                    openKeys={firstHide ? null : [openKey]}
                     onOpenChange={this.openMenu}
                 />
                 <style>

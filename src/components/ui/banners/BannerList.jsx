@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Input, Icon, Select, Button, Card, Col, message, } from 'antd';
 import './customize.css';
 import { fetchApi } from '../../../callApi';
-import { getAllCat } from '../../../constants/api/category'
+import { getCateLists } from '../../../constants/api/category'
 import BannerModify from './BannerModify';
 import { getBannerInfo } from '../../../constants/api/banner';
 
@@ -56,7 +56,7 @@ class BannerList extends Component {
 
     componentDidMount = () => {
         if (!this.state.isCatLoaded) {
-            const { apiPath, request } = getAllCat();
+            const { apiPath, request } = getCateLists();
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
