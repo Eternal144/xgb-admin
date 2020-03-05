@@ -3,7 +3,7 @@ import { Form, Input, Icon, Select, Button, Card, Col, message, } from 'antd';
 import { showMessageList, addBanner, editBanner, delBanner } from '../../../constants/api/banner';
 import { fetchApi } from '../../../callApi';
 import ImgCropper from '../../uploader/Cropper';
-import { messageList } from '../../../constants/api/model';
+import { getNavAllArticle } from '../../../constants/api/navi';
 
 const { Option, OptGroup } = Select;
 const formItemLayout = {
@@ -39,14 +39,15 @@ class BannerModify extends Component {
 
     handleColumnSelectChange = (columnValue) => {
         this.setState({ isListLoaded: false })
-        let { apiPath, request } = messageList(columnValue);
+        let { apiPath, request } = getNavAllArticle(columnValue);
         fetchApi(apiPath, request)
             .then(res => res.json())
             .then(data => {
                 let temp = [];
-                for (let i = 0; i < data.data.length; i++) {
+                let mes = data.data.message;
+                for (let i = 0; i < mes.length; i++) {
                     temp.push(
-                        <Option key={columnValue + "--" + data.data[i].id} value={data.data[i].id}>{data.data[i].title}</Option>
+                        <Option key={columnValue + "--" + mes[i].id} value={mes[i].id}>{mes[i].title}</Option>
                     )
                 }
                 this.setState({
