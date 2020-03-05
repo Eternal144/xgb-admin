@@ -20,28 +20,28 @@ export default class CRouter extends Component {
 
 
     componentDidMount = () => {
-        const { apiPath, request } = getNaviInfo();
-        fetchApi(apiPath, request)
-            .then(res => res.json())
-            .then(data => {
-                const aaa = data.data;
-                //在这里要获取一级所有的一级。
-                let arr = aaa.map((key, i) => { //
-                    let obj = {
-                        id: key.id,
-                        title: key.title,
-                        icon: 'database',
-                        component: 'SrcMan',
-                        key: `/app/resource/${key.id}`
-                    };
-                    return obj;
-                })
-                let { routesConfig } = this.state;
-                routesConfig.menus[1].subs = arr;
-                this.setState({
-                    routesConfig: routesConfig
-                })
-            })
+        // const { apiPath, request } = getNaviInfo();
+        // fetchApi(apiPath, request)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         const aaa = data.data;
+        //         //在这里要获取一级所有的一级。
+        //         let arr = aaa.map((key, i) => { //
+        //             let obj = {
+        //                 id: key.id,
+        //                 title: key.title,
+        //                 icon: 'database',
+        //                 component: 'SrcMan',
+        //                 key: `/app/resource/${key.id}`
+        //             };
+        //             return obj;
+        //         })
+        //         let { routesConfig } = this.state;
+        //         routesConfig.menus[1].subs = arr;
+        //         this.setState({
+        //             routesConfig: routesConfig
+        //         })
+        //     })
     }
     render() {
         const { routesConfig } = this.state;

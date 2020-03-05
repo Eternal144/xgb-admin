@@ -49,7 +49,7 @@ export const getmessageList = (id, page) => {
     }
 }
 //获取二级导航下所有文章
-export const getNavAllArtivle = (id) => {
+export const getNavAllArticle = (id) => {
     return {
         apiPath: `admin/allMessage/${id}`,
         request: {

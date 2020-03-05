@@ -47,7 +47,7 @@ class EditorDemo extends React.Component {
 
     myUploadFn = (param) => {
         //富文本编辑器媒体库文件的上传
-        const serverURL = 'https://xuegong.twtw.edu.cn/api/uploadPic';
+        const serverURL = 'https://xuegong.twt.edu.cn/api/uploadPic';
         const xhr = new XMLHttpRequest;
         const fd = new FormData();
         const successFn = (res) => {
