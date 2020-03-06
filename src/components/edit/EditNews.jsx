@@ -93,6 +93,8 @@ class EditorDemo extends React.Component {
                 });
             if (this.props.location.state) {
                 const { apiPath, request } = editMessage(this.props.location.state.navID, this.props.location.state.articleID);
+                console.log(this.props.location.state.navID)
+                console.log(this.props.location.state.articleID)
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
@@ -126,16 +128,12 @@ class EditorDemo extends React.Component {
     listColumn(data) {
         let columns = [];
         if (data.length > 0) {
-            let opts = [];
             for (let i = 0; i < data.length; i++) {
-                if (data[i].listType === "2")
-                    opts.push(
+                if (data[i].contentType === "2")
+                    columns.push(
                         <Option value={data[i].id}>{data[i].title}</Option>
                     )
             }
-            columns.push(
-                <OptGroup>{opts}</OptGroup>
-            )
         } else {
             return this.noNaviNotification();
         }

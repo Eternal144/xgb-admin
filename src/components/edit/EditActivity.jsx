@@ -94,6 +94,8 @@ class EditorDemo extends React.Component {
                 });
             if (this.props.location.state) {
                 const { apiPath, request } = editMessage(this.props.location.state.navID, this.props.location.state.articleID);
+                console.log(this.props.location.state.navID)
+                console.log(this.props.location.state.articleID)
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
@@ -144,7 +146,7 @@ class EditorDemo extends React.Component {
         let columns = [];
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
-                if (data[i].listType === "1")
+                if (data[i].contentType === "1")
                     columns.push(
                         <Option value={data[i].id}>{data[i].title}</Option>
                     )
@@ -263,6 +265,7 @@ class EditorDemo extends React.Component {
                         appendix = this.state.flist[1];
                     }
                 }
+                console.log(imglink)
                 if (this.props.location.state) {
                     // console.log("保存修改");
                     const { apiPath, request } = editActivityMessage(this.state.initialId, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
@@ -354,6 +357,7 @@ class EditorDemo extends React.Component {
                                     required: true,
                                     message: "请选择栏目"
                                 }],
+                                initialValue: this.state.initialColumn,
                             })(
                                 <Select key="editActCat" required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.catData) : null}
