@@ -35,6 +35,7 @@ class EditorDemo extends React.Component {
             flist: null,
             imglist: null,
             iconlist: null,
+            isPosting: false,
         }
     }
 
@@ -226,6 +227,7 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                this.setState({ isPosting: true })
                 let imglink = null;
                 let appendix = null;
                 let icon = null;
@@ -267,11 +269,12 @@ class EditorDemo extends React.Component {
                 }
                 // console.log(this.props.location.state)
                 if (this.props.location.state) {
-                    console.log("保存修改");
+                    // console.log("保存修改");
                     const { apiPath, request } = editActivityMessage(this.props.location.state.articleID, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
+                            this.setState({ isPosting: false })
                             if (data.error_code === 0) {
                                 message.success("文章发表成功");
                             } else {
@@ -286,6 +289,7 @@ class EditorDemo extends React.Component {
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
+                            this.setState({ isPosting: false })
                             if (data.error_code === 0) {
                                 message.success("文章发表成功");
                             } else {
@@ -300,6 +304,7 @@ class EditorDemo extends React.Component {
     }
 
     render() {
+        console.log(this.state.isPosting)
         const { editorState } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const PlaceDefault = "50字以内";
@@ -469,7 +474,7 @@ class EditorDemo extends React.Component {
                             </Col>
                         </Row>
                         <Col span={20} style={{ textAlign: 'right' }}>
-                            <Button size="default" type="default" htmlType="submit" >保存</Button>
+                            <Button loading={this.state.isPosting} size="default" type="default" htmlType="submit" >保存</Button>
                         </Col>
 
                     </Form>

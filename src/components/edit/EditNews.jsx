@@ -38,6 +38,7 @@ class EditorDemo extends React.Component {
             flist: null,
             imglist: null,
             iconlist: null,
+            isPosting: false,
         }
     }
 
@@ -264,6 +265,7 @@ class EditorDemo extends React.Component {
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
+                            this.setState({ isPosting: false })
                             if (data.error_code === 0) {
                                 message.success("文章发表成功");
                             } else {
@@ -278,6 +280,7 @@ class EditorDemo extends React.Component {
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
+                            this.setState({ isPosting: false })
                             if (data.error_code === 0) {
                                 message.success("文章发表成功");
                             } else {
@@ -309,6 +312,7 @@ class EditorDemo extends React.Component {
     }
 
     render() {
+        console.log(this.state.isPosting)
         let appendixList = sessionStorage.getItem('filepath');
         // console.log(appendixList);
         // console.log(this.props.location.state);
@@ -427,7 +431,7 @@ class EditorDemo extends React.Component {
                             </Col>
                         </Row>
                         <Col span={20} style={{ textAlign: 'right' }}>
-                            <Button size="default" type="default" htmlType="submit" >保存</Button>
+                            <Button loading={this.state.isPosting} size="default" type="default" htmlType="submit" >保存</Button>
                         </Col>
                     </Form>
                 </Card>
