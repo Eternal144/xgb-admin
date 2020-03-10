@@ -40,6 +40,7 @@ class UpLoaderModel extends Component {
     }
 
     componentDidMount = () => {
+        console.log(this.props.initialData)
         if (this.props.initialData) {
             // console.log(this.props.initialData)
             let data = this.props.initialData;

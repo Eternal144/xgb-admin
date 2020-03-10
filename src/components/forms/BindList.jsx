@@ -280,8 +280,8 @@ class BindMan extends Component {
                     <div className="dynamic-box" >
                         <Row>
                             <div>PART {index + 1}:</div>
-                            {/* {this.imageDisplay(obj)} */}
-                            <ImgCropper w={300} h={300} />
+                            {this.imageDisplay(obj)}
+                            {/* <ImgCropper w={300} h={300} /> */}
                         </Row>
 
                         {getFieldDecorator(`${index}-content1`, {
