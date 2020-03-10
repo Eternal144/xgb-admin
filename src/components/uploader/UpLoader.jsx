@@ -42,7 +42,6 @@ class UpLoaderModel extends Component {
     componentDidMount = () => {
         console.log(this.props.initialData)
         if (this.props.initialData) {
-            // console.log(this.props.initialData)
             let data = this.props.initialData;
             let list = [];
             for (let i = 0; i < data.length; i++) {
@@ -55,7 +54,6 @@ class UpLoaderModel extends Component {
                     }
                 )
             }
-            // console.log(list)
         }
     }
 
@@ -87,16 +85,16 @@ class UpLoaderModel extends Component {
             flist.push(this.props.bindTo)
             //控制列表长度
             let listLimit = 0 - parseInt(sessionStorage.getItem("listLimit"));
-            // console.log(listLimit);
+            console.log(listLimit);
             let fileList = [...info.fileList];
             fileList = fileList.slice(listLimit);
             this.setState({ fileList });
             if (info.file.status !== 'uploading') {
                 //文件上传中
-                // console.log(info.file);
+                console.log(info.file);
             }
             if (info.file.status === 'done') {
-                // console.log(info.fileList);
+                console.log(info.fileList);
                 flist.push(info.fileList[0].response.data.path);
                 if (info.fileList.length > 0) {
                     for (let i = 1; i < info.fileList.length; i++) {
@@ -135,7 +133,7 @@ class UpLoaderModel extends Component {
                 if (info.file.response.data.path && getLink) {
                     getLink(flist);
                 }
-                // console.log(info.fileList);
+                console.log(info.fileList);
                 // let filelist = JSON.stringify(info.fileList);
             } else if (info.file.status === 'error') {
                 message.error(`文件上传失败：${info.file.name}`);
@@ -154,7 +152,7 @@ class UpLoaderModel extends Component {
         // const { getLink } = this.props;
         const imageReqSettings = {
             name: 'file',
-            method: 'post',
+            // method: 'post',
             action: switchModel(this.props.type).url,
             beforeUpload: this.beforeImageUpload,
             listType: 'picture',
@@ -162,7 +160,7 @@ class UpLoaderModel extends Component {
         }
         const fileReqSettings = {
             name: 'file',
-            method: 'post',
+            // method: 'post',
             action: switchModel(this.props.type).url,
             beforeUpload: this.beforeFileUpload,
             listType: 'text',
