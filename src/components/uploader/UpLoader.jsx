@@ -7,9 +7,9 @@
 
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
-import ContentLoader from 'react-content-loader';
+import reqwest from "reqwest";
 
-const switchModel = (type, file) => {
+const switchModel = (type) => {
     if (type === "image") {
         return ({
             "url": "https://xuegong.twt.edu.cn/api/uploadPic",
@@ -56,9 +56,46 @@ class UpLoaderModel extends Component {
         }
     }
 
+    // customImgRequest = (option) => {
+    //     //自定义上传方式
+    //     const formData = new FormData();
+    //     const fileUrl = "https://xuegong.twt.edu.cn/api/uploadPic";
+    //     console.log("customImgReq:" + option.file);
+    //     formData.append('file', option.file, option.file.name);
+    //     console.log(option)
+    //     reqwest({
+    //         url: fileUrl,
+    //         method: 'post',
+    //         processData: false,
+    //         data: formData,
+    //         success: (res) => {
+    //             //res为文件上传成功之后返回的信息，res.responseText为接口返回的值
+    //             console.log("服务器返回：" + res);
+    //             let fileInfo = JSON.parse(res);
+    //             if (res) {
+    //                 this.setState({
+    //                     fileInfo: fileInfo,
+    //                     loading: false,
+    //                     uploading: false,
+    //                     defaultFile: false
+    //                 })
+    //             }
+
+    //         },
+    //         error: () => {
+    //             this.setState({
+    //                 loading: false,
+    //                 uploading: false
+    //             })
+    //             message.error("文件上传失败！");
+    //         },
+    //     });
+    // }
+
     beforeImageUpload(file) {
         let isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         const isLt8M = file.size / 1024 / 1024 < 8;
+        // console.log(file.size)
         if (!isJpgOrPng) {
             message.error('请上传JPG/PNG格式的图片文件!');
         }
@@ -76,24 +113,28 @@ class UpLoaderModel extends Component {
         return limit;
     }
 
-    handleChange = (info) => {
+    handleChange = info => {
+        // console.log(info.file, info.fileList)
         const { getLink } = this.props;
+        console.log(info.file.originFileObj)
         if (this.props.type === "image") {
             let flist = [];
             //flist 的第0项用来表示绑定的列表
             flist.push(this.props.bindTo)
             //控制列表长度
             let listLimit = 0 - parseInt(sessionStorage.getItem("listLimit"));
-            console.log(listLimit);
+            // console.log(listLimit);
             let fileList = [...info.fileList];
             fileList = fileList.slice(listLimit);
             this.setState({ fileList });
             if (info.file.status !== 'uploading') {
                 //文件上传中
                 console.log(info.file);
+                this.setState({ loading: true });
             }
             if (info.file.status === 'done') {
                 console.log(info.fileList);
+                this.setState({ loading: false });
                 flist.push(info.fileList[0].response.data.path);
                 if (info.fileList.length > 0) {
                     for (let i = 1; i < info.fileList.length; i++) {
@@ -151,19 +192,24 @@ class UpLoaderModel extends Component {
         // const { getLink } = this.props;
         const imageReqSettings = {
             name: 'file',
-            // method: 'post',
-            action: switchModel(this.props.type).url,
+            accept: "image/png, image/jpeg",
+            action: switchModel("image").url,
             beforeUpload: this.beforeImageUpload,
             listType: 'picture',
             onChange: this.handleChange,
+            headers: {
+                "X-Requested-With": null,
+            }
         }
         const fileReqSettings = {
             name: 'file',
-            // method: 'post',
-            action: switchModel(this.props.type).url,
+            action: switchModel("file").url,
             beforeUpload: this.beforeFileUpload,
             listType: 'text',
             onChange: this.handleChange,
+            headers: {
+                "X-Requested-With": null,
+            }
         }
 
         const { getFieldDecorator } = this.props.form;
@@ -181,7 +227,7 @@ class UpLoaderModel extends Component {
                         })(
                             <Row>
                                 <Col span={8}>
-                                    <Upload {...imageReqSettings} fileList={this.state.fileList} >
+                                    <Upload {...imageReqSettings} fileList={this.state.fileList}>
                                         <Tooltip placement="top" title="小于8MB的图片 格式为jpg/png">
                                             <Button><Icon type={this.state.loading ? "loading" : "upload"} />上传图片</Button>
                                         </Tooltip>

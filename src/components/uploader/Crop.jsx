@@ -51,7 +51,7 @@ export default class CropperModal extends Component {
                     //             this.props.onClose();
                     //         }
                     //     )
-                    console.log(blob)
+                    // console.log(blob)
                     // 创造提交表单数据对象
                     const formData = new FormData()
                     // 添加要上传的文件
@@ -64,7 +64,7 @@ export default class CropperModal extends Component {
                     }
                     // 提示开始上传
                     this.setState({ submitting: true })
-                    console.log(url, settings)
+                    // console.log(url, settings)
                     // 上传图片
                     fetch(url, settings)
                         .then(res => res.json())
