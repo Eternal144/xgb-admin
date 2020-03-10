@@ -135,11 +135,11 @@ class Src extends React.Component {
 
     listColumn(data) {
         let columns = [];
-        columns.push(<Option key={99 + "-" + 99} value={99}>未分类</Option>)
+        // columns.push(<Option key={99 + "-" + 99} value={99}>未分类</Option>)
         if (data.length > 0) {
             for (let i = 0; i < data.length; i++) {
                 let currentId = this.state.subordNavID;
-                console.log(currentId)
+                // console.log(currentId)
                 if (data[i].id !== currentId && data[i].contentType === this.getCurrentType(currentId, data)) {
                     //筛掉栏目自己以及类型不匹配的栏目
                     columns.push(

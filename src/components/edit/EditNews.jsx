@@ -98,7 +98,7 @@ class EditorDemo extends React.Component {
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
-                        // console.log(data);
+                        console.log(data);
                         this.setState({
                             initialId: data.data.message.id,
                             initialColumn: data.data.message.nav_id,
@@ -368,7 +368,6 @@ class EditorDemo extends React.Component {
                                     required: true,
                                     message: "请选择栏目"
                                 }],
-                                initialValue: this.state.initialColumn,
                             })(
                                 <Select key="editNewsCat" required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.catData) : null}

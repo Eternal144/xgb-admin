@@ -9,7 +9,7 @@ import { Menu, Icon, Layout, Badge, Popover } from 'antd';
 import { gitOauthToken, gitOauthInfo } from '../axios';
 import { queryString } from '../utils';
 import { withRouter } from 'react-router-dom';
-import { PwaInstaller } from './widget';
+// import { PwaInstaller } from './widget';
 import { connectAlita } from 'redux-alita';
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -82,9 +82,9 @@ class HeaderCustom extends Component {
                     style={{ lineHeight: '64px', float: 'right' }}
                     onClick={this.menuClick}
                 >
-                    <Menu.Item key="pwa">
+                    {/* <Menu.Item key="pwa">
                         <PwaInstaller />
-                    </Menu.Item>
+                    </Menu.Item> */}
                     {/* <Menu.Item key="full" onClick={this.screenFull} >
                         <Icon type="arrows-alt" onClick={this.screenFull} />
                     </Menu.Item> */}

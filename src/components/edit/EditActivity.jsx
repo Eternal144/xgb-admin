@@ -94,8 +94,8 @@ class EditorDemo extends React.Component {
                 });
             if (this.props.location.state) {
                 const { apiPath, request } = editMessage(this.props.location.state.navID, this.props.location.state.articleID);
-                console.log(this.props.location.state.navID)
-                console.log(this.props.location.state.articleID)
+                // console.log(this.props.location.state.navID)
+                // console.log(this.props.location.state.articleID)
                 fetchApi(apiPath, request)
                     .then(res => res.json())
                     .then(data => {
@@ -265,10 +265,10 @@ class EditorDemo extends React.Component {
                         appendix = this.state.flist[1];
                     }
                 }
-                console.log(imglink)
+                // console.log(this.props.location.state)
                 if (this.props.location.state) {
-                    // console.log("保存修改");
-                    const { apiPath, request } = editActivityMessage(this.state.initialId, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    console.log("保存修改");
+                    const { apiPath, request } = editActivityMessage(this.props.location.state.articleID, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -281,7 +281,7 @@ class EditorDemo extends React.Component {
                     // console.log('Received values of form: ', values);
                     // console.log(this.state.editorState)
                 } else {
-                    // console.log("发布新闻");
+                    console.log("发布新闻");
                     const { apiPath, request } = postActivityMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
@@ -357,7 +357,6 @@ class EditorDemo extends React.Component {
                                     required: true,
                                     message: "请选择栏目"
                                 }],
-                                initialValue: this.state.initialColumn,
                             })(
                                 <Select key="editActCat" required="true" style={{ width: '20%' }} placeholder="请选择一个栏目">
                                     {this.state.isNaviLoaded ? this.listColumn(this.state.catData) : null}
@@ -458,7 +457,13 @@ class EditorDemo extends React.Component {
                                             }
                                         }],
                                     })(
-                                        <BraftEditor media={{ uploadFn: this.myUploadFn }} value={this.state.editorState} className="my-editor" controls={editorControls} onChange={this.handleEditorChange} extendControls={extendControls} />
+                                        <BraftEditor
+                                            media={{ uploadFn: this.myUploadFn }}
+                                            value={this.state.editorState}
+                                            className="my-editor"
+                                            controls={editorControls}
+                                            onChange={this.handleEditorChange}
+                                            extendControls={extendControls} />
                                     )}
                                 </Form.Item>
                             </Col>
