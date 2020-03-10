@@ -40,9 +40,12 @@ export default class ImgCropper extends Component {
     }
 
     handleGetresultImgUrl = (src) => {
+        console.log("aaaa")
+        console.log(src)
         // const str = URL.createObjectURL(blob);
         const { getLink } = this.props;
         getLink(src);
+        // this.props.getLink()
         // this.setState({
         //     [key]: str
         // })
@@ -66,7 +69,7 @@ export default class ImgCropper extends Component {
                             onChange={this.handleFileChange}
                         />
                     </label>
-                    <div className="img-container">
+                    {/* <div className="img-container">
                         {resultImgUrl && (
                             <img
                                 className="img"
@@ -74,7 +77,7 @@ export default class ImgCropper extends Component {
                                 alt="resultImgUrl"
                             />
                         )}
-                    </div>
+                    </div> */}
                 </div>
                 {modalVisible && (
                     <CropperModal
@@ -84,7 +87,7 @@ export default class ImgCropper extends Component {
                         onClose={() => {
                             this.setState({ modalVisible: false })
                         }}
-                        getLink={this.handleGetresultImgUrl}
+                        getLink={obj => this.handleGetresultImgUrl(obj)}
                     />
                 )}
             </div>

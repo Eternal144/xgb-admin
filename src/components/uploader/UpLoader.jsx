@@ -7,7 +7,7 @@
 
 import React, { Component } from 'react';
 import { Form, Upload, Button, Icon, message, Col, Row, Tooltip } from 'antd';
-import reqwest from "reqwest";
+// import reqwest from "reqwest";
 
 const switchModel = (type) => {
     if (type === "image") {

@@ -212,19 +212,28 @@ class BindMan extends Component {
         })
     }
 
-    imageDisplay = (obj) => {
-        if (obj && obj.picture) {
-            let initial = [{
-                name: "缩略图",
-                uid: 1,
-                url: root + obj.picture,
-                status: "done"
-            }]
-            return < Uploader initialData={initial} numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }
-            } type="image" bindTo={"MessageCover"} />
-        } else {
-            return <Uploader numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }} type="image" bindTo={"MessageCover"} />
-        }
+    // imageDisplay = (obj) => {
+    //     console.log(obj)
+    //     // if (obj && obj.picture) {
+    //     //     let initial = [{
+    //     //         name: "缩略图",
+    //     //         uid: 1,
+    //     //         url: root + obj.picture,
+    //     //         status: "done"
+    //     //     }]
+    //     //     return < Uploader initialData={initial} numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }
+    //     //     } type="image" bindTo={"MessageCover"} />
+    //     // } else {
+    //     //     return <Uploader numberLimit={1} disLabel={true} necessary={true} getLink={(values) => { this.handlegetLink(values, obj) }} type="image" bindTo={"MessageCover"} />
+    //     // }
+    // }
+
+    handleShowImage = (obj, i) => {
+        let d = this.state.moduleData;
+        d.children[i].picture = "https://xuegong.twt.edu.cn/" + obj
+        this.setState({
+            moduleData: d
+        })
     }
 
     //当二级标题框。更新了栏目全清空好吧？
@@ -266,6 +275,7 @@ class BindMan extends Component {
         const { articleData, moduleData, subIdRecord } = this.state; //详细信息？
         const { children } = moduleData
         let childArr = [];
+        console.log(children)
         // console.log(children)
         //根据本地数据渲染。删除的时候根据id删除。
         children.map((obj, index) => {
@@ -280,8 +290,8 @@ class BindMan extends Component {
                     <div className="dynamic-box" >
                         <Row>
                             <div>PART {index + 1}:</div>
-                            {this.imageDisplay(obj)}
-                            {/* <ImgCropper w={300} h={300} /> */}
+                            <ImgCropper w={300} h={300} getLink={obj => this.handleShowImage(obj, index)} />
+                            {obj.picture ? <img key="sm-img" style={{ height: '100px', width: '100px', margin: '10px 0' }} alt="模块图预览" src={obj.picture} /> : null}
                         </Row>
 
                         {getFieldDecorator(`${index}-content1`, {
