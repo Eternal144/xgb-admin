@@ -227,6 +227,9 @@ class EditorDemo extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                // console.log(values.time._i);
+                let date = `${values.date._d.getFullYear()}-${values.date._d.getMonth() + 1}-${values.date._d.getDate()}`;
+                // console.log(`${values.date._d.getFullYear()}-${values.date._d.getMonth() + 1}-${values.date._d.getDate()}`)
                 this.setState({ isPosting: true })
                 let imglink = null;
                 let appendix = null;
@@ -270,7 +273,7 @@ class EditorDemo extends React.Component {
                 // console.log(this.props.location.state)
                 if (this.props.location.state) {
                     // console.log("保存修改");
-                    const { apiPath, request } = editActivityMessage(this.props.location.state.articleID, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    const { apiPath, request } = editActivityMessage(this.props.location.state.articleID, values.section, values.title, imglink, icon, this.state.editorState.toHTML(), values.people, values.place, values.time._i, date, appendix, values.tips);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -281,11 +284,11 @@ class EditorDemo extends React.Component {
                                 message.error("文章发布失败，请检查网络");
                             }
                         });
-                    // console.log('Received values of form: ', values);
+                    console.log('Received values of form: ', values);
                     // console.log(this.state.editorState)
                 } else {
                     console.log("发布新闻");
-                    const { apiPath, request } = postActivityMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), appendix);
+                    const { apiPath, request } = postActivityMessage(values.section, values.title, imglink, icon, this.state.editorState.toHTML(), values.people, values.place, values.time._i, date, appendix, values.tips);
                     fetchApi(apiPath, request)
                         .then(res => res.json())
                         .then(data => {
@@ -296,7 +299,7 @@ class EditorDemo extends React.Component {
                                 message.error("文章发布失败，请检查网络");
                             }
                         });
-                    // console.log('Received values of form: ', values);
+                    console.log('Received values of form: ', values);
                     // console.log(this.state.editorState)
                 }
             }
@@ -390,7 +393,7 @@ class EditorDemo extends React.Component {
                                 },
                                 ],
                                 defaultPickerValue: this.state.initialDate,
-                            })(<DatePicker style={{ width: "40%" }} />)}
+                            })(<DatePicker style={{ width: "40%" }} allowClear={true} />)}
                         </Form.Item>
 
                         <Form.Item label="活动时间">
@@ -399,7 +402,7 @@ class EditorDemo extends React.Component {
                                     required: false,
                                 }],
                                 defaultValue: this.state.initialTime,
-                            })(<TimePicker style={{ width: "40%" }} />)}
+                            })(<TimePicker style={{ width: "40%" }} allowClear={true} />)}
                         </Form.Item>
 
                         <Form.Item {...formItemLayout} label="活动地点" >
@@ -424,7 +427,7 @@ class EditorDemo extends React.Component {
                                     max: 50,
                                     message: "人物介绍过长,请酌情删减",
                                 }],
-                                initialValue: this.state.initialJournalist,
+                                initialValue: this.state.initialPeople,
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
 
@@ -436,7 +439,7 @@ class EditorDemo extends React.Component {
                                     max: 50,
                                     message: "补充说明过长,请酌情删减",
                                 }],
-                                initialValue: this.state.initialPeople,
+                                initialValue: this.state.initialJournalist,
                             })(<Input placeholder={PlaceDefault} style={{ width: "40%" }} />)}
                         </Form.Item>
 
