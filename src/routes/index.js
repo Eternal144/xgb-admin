@@ -1,14 +1,11 @@
-/**
- * Created by 叶子 on 2017/8/13.
- */
 import React, { Component } from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';
 import routesConfig from './config'; //在这里进行更改。
 import queryString from 'query-string';
-import { fetchApi } from '../callApi'
-import { getNaviInfo } from '../constants/api/navi'
+// import { fetchApi } from '../callApi'
+// import { getNaviInfo } from '../constants/api/navi'
 
 export default class CRouter extends Component {
     constructor(props) {
@@ -97,7 +94,6 @@ export default class CRouter extends Component {
                         }
                     })
                 )}
-                {/* <Route render={() => <Redirect to="/404" />} /> */}
             </Switch>
         )
     }

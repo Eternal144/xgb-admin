@@ -276,7 +276,6 @@ class BindMan extends Component {
         const { children } = moduleData
         let childArr = [];
         console.log(children)
-        // console.log(children)
         //根据本地数据渲染。删除的时候根据id删除。
         children.map((obj, index) => {
             // console.log(obj.content1);
