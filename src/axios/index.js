@@ -12,7 +12,7 @@ export const npmDependencies = () => axios.get('./npm.json').then(res => res.dat
 export const weibo = () => axios.get('./weibo.json').then(res => res.data).catch(err => console.log(err));
 
 export const gitOauthLogin = () => get({ url: `${config.GIT_OAUTH}/authorize?client_id=792cdcd244e98dcd2dee&redirect_uri=http://localhost:3006/&scope=user&state=reactAdmin` });
-export const gitOauthToken = code => post({ 
+export const gitOauthToken = code => post({
     url: `https://cors-anywhere.herokuapp.com/${config.GIT_OAUTH}/access_token`,
     data: {
         client_id: '792cdcd244e98dcd2dee',
@@ -20,7 +20,7 @@ export const gitOauthToken = code => post({
         redirect_uri: 'http://localhost:3006/',
         state: 'reactAdmin',
         code,
-    } 
+    }
 });
 // {headers: {Accept: 'application/json'}}
 export const gitOauthInfo = access_token => get({ url: `${config.GIT_USER}access_token=${access_token}` });

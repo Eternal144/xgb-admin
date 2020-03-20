@@ -1,4 +1,3 @@
-// SrcMan
 export default {
     menus: [ // 菜单相关路由
         { key: '/app/dashboard/index', title: '账户管理', icon: 'user', component: 'Dashboard', show: true },
