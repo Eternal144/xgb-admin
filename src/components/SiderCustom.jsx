@@ -44,43 +44,6 @@ class SiderCustom extends Component {
         firstHide: true, // 点击收缩菜单，第一次隐藏展开子菜单，openMenu时恢复
         routesConfig: routes
     };
-
-    componentDidMount = () => {
-        // const { apiPath, request } = getNaviInfo();
-        // fetchApi(apiPath, request)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         let aaa = data.data;
-        //         //在这里要获取一级所有的一级。
-        //         let defClass = {
-        //             id: 99,
-        //             title: "未分类",
-        //             icon: 'database',
-        //             component: 'SrcMan',
-        //             key: `/app/resource/99`
-        //         };
-        //         aaa.push(defClass);
-        //         let arr = aaa.map((key, i) => {
-        //             //应该是返回一个对象。key component?
-        //             let obj = {
-        //                 id: key.id,
-        //                 title: key.title,
-        //                 icon: 'database',
-        //                 component: 'SrcMan',
-        //                 key: `/app/resource/${key.id}`
-        //             };
-        //             return obj;
-        //         })
-        //         let { routesConfig } = this.state;
-        //         routesConfig.menus[1].subs = arr;
-        //         this.setState({
-        //             routesConfig: routesConfig
-        //         });
-        //         const state = SiderCustom.setMenuOpen(this.props);
-        //         this.setState(state);
-        //     })
-    }
-
     menuClick = e => {
         this.setState({
             selectedKey: e.key

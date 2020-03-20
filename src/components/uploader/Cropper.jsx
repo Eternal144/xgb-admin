@@ -69,15 +69,6 @@ export default class ImgCropper extends Component {
                             onChange={this.handleFileChange}
                         />
                     </label>
-                    {/* <div className="img-container">
-                        {resultImgUrl && (
-                            <img
-                                className="img"
-                                src={resultImgUrl}
-                                alt="resultImgUrl"
-                            />
-                        )}
-                    </div> */}
                 </div>
                 {modalVisible && (
                     <CropperModal
