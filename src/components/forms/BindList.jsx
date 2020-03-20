@@ -3,10 +3,8 @@ import { Form, Select, Button, Icon, Col, Popconfirm, Input, Skeleton, message, 
 import { fetchApi } from '../../callApi';
 import { getArticleTitle } from '../../constants/api/navi';
 import './customize.css';
-import Uploader from '../uploader/UpLoader';
 import { updateLowwer, addlowwer, lowwerModelPreview, upperModelPreview, messageList, updateUpper, } from '../../constants/api/model';
 import ImgCropper from '../uploader/Cropper';
-// import { getFileItem } from 'antd/lib/upload/utils';
 const { Option, OptGroup } = Select;
 const confirmSaveText = '是否保存设置?';
 

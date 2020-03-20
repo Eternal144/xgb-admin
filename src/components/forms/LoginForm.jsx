@@ -1,6 +1,3 @@
-/**
- * Created by hao.cheng on 2017/4/14.
- */
 import React, { Component } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { fetchApi } from '../../callApi';
@@ -13,7 +10,6 @@ class NormalLoginForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // console.log('Received values of form: ', values);
                 if (values.password !== values.confirmPass) {
                     message.error("两次密码输入不一致！请重新输入")
                 } else {
@@ -33,22 +29,6 @@ class NormalLoginForm extends Component {
     };
     render() {
         const { getFieldDecorator } = this.props.form;
-        // const formItemLayout = {
-        //     labelCol: {
-        //       xs: { span: 24 },
-        //       sm: { span: 4 },
-        //     },
-        //     wrapperCol: {
-        //       xs: { span: 24 },
-        //       sm: { span: 20 },
-        //     },
-        //   };
-        //   const formItemLayoutWithOutLabel = {
-        //     wrapperCol: {
-        //       xs: { span: 24, offset: 0 },
-        //       sm: { span: 20, offset: 4 },
-        //     },
-        //   };
         return (
             <div style={{ marginTop: "30px" }}>
                 <Form onSubmit={this.handleSubmit} style={{ maxWidth: '300px' }}>

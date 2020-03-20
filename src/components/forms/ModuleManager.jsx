@@ -5,17 +5,6 @@ import { lowwerModelPreview } from "../../constants/api/model";
 import { fetchApi } from '../../callApi';
 
 
-// const formItemLayout = {
-//     labelCol: {
-//         xs: { span: 24 },
-//         sm: { span: 4 },
-//     },
-//     wrapperCol: {
-//         xs: { span: 24 },
-//         sm: { span: 20 },
-//     },
-// };
-
 class ModelMan extends Component {
     constructor(props) {
         super(props);
@@ -40,7 +29,6 @@ class ModelMan extends Component {
     render() {
         const { data } = this.state
         const { type, navData } = this.props
-        // console.log(data)
         return (
             <div>
                 {data ? <BindList type={type} navData={navData} bindInfo={this.state.data} isReady={this.props.isReady} /> : null}

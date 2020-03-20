@@ -14,7 +14,6 @@ import update from 'immutability-helper';
 import { updateNavi, saveSecNavSort } from '../../constants/api/navi';
 import { getCateLists } from '../../constants/api/category'
 import { fetchApi } from '../../callApi';
-import { string } from 'prop-types';
 
 const { Option } = Select;
 // 可排序状态

@@ -129,7 +129,6 @@ export default class NaviList extends React.Component {
 
     // 先不能删除新加的
     handleDeleteNav = (id) => {
-        // console.log(id)
         const { data } = this.state;
         const { apiPath, request } = deleteNavi(id);
         fetchApi(apiPath, request)

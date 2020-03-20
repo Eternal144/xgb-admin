@@ -54,9 +54,6 @@ class EditorDemo extends React.Component {
             var json = JSON.parse(xhr.responseText)
             param.success({
                 url: 'https://xuegong.twt.edu.cn/' + json.data.path,
-                meta: {
-                    //相关配置
-                }
             })
         }
         const progressFn = (event) => {
