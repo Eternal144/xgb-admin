@@ -172,7 +172,7 @@ class BannerModify extends Component {
                         <Col span={4}></Col>
                         <Col span={20}>
                             {/* 图片上传 */}
-                            <ImgCropper w="1600" h="350" />
+                            <ImgCropper w="`1920`" h="600" />
                         </Col>
                         <Col span={24} style={{ textAlign: 'right' }}>
                             <Button key={index} type="danger" htmlType="button" onClick={this.delItem.bind(this, data.id)}><Icon type="delete" />删除</Button>

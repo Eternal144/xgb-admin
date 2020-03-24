@@ -10,6 +10,25 @@ import ImgCropper from '../uploader/Cropper';
 const { Option, OptGroup } = Select;
 const confirmSaveText = '是否保存设置?';
 
+const WH = [
+    //这里设置底部模块配图的长宽比
+    {
+        "type": 1,
+        "width": 270,
+        "height": 290,
+    },
+    {
+        "type": 3,
+        "width": 143,
+        "height": 200,
+    },
+    {
+        "type": 4,
+        "width": 273,
+        "height": 182,
+    },
+]
+
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -268,6 +287,18 @@ class BindMan extends Component {
         })
     }
 
+    setWidth(type) {
+        for (let i = 0; i < 2; i++) {
+            if (WH[i].type === type) return WH[i].width;
+        }
+    }
+
+    setHeight(type) {
+        for (let i = 0; i < 2; i++) {
+            if (WH[i].type === type) return WH[i].height;
+        }
+    }
+
     //根据child来渲染。
     getSubDetails = () => {
         const { getFieldDecorator } = this.props.form;
@@ -290,7 +321,8 @@ class BindMan extends Component {
                     <div className="dynamic-box" >
                         <Row>
                             <div>PART {index + 1}:</div>
-                            <ImgCropper w={300} h={300} getLink={obj => this.handleShowImage(obj, index)} />
+                            {/* {在这里设置图片长宽比} */}
+                            <ImgCropper w={this.setWidth(type)} h={this.setHeight(type)} getLink={obj => this.handleShowImage(obj, index)} />
                             {obj.picture ? <img key="sm-img" style={{ height: '100px', width: '100px', margin: '10px 0' }} alt="模块图预览" src={obj.picture} /> : null}
                         </Row>
 
