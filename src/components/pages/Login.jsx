@@ -70,20 +70,9 @@ class Login extends React.Component {
                             )}
                         </FormItem>
                         <FormItem>
-                            {/* {getFieldDecorator('remember', {
-                                valuePropName: 'checked',
-                                initialValue: true,
-                            })(
-                                <Checkbox>记住我</Checkbox>
-                            )} */}
-                            {/* <span className="login-form-forgot" href="" style={{float: 'right'}}>忘记密码</span> */}
                             <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>
                                 登录
                             </Button>
-                            {/* <p style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <span >或 现在就去注册!</span>
-                                <span onClick={this.gitHub} ><Icon type="github" />(第三方登录)</span>
-                            </p> */}
                         </FormItem>
                     </Form>
                 </div>

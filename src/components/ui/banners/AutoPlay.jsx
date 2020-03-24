@@ -23,10 +23,6 @@ class AutoPlay extends React.Component {
                     elements.push(
                         <div className="bg-element" key="BgElement" style={{ backgroundImage: `url(${"https://xuegong.twt.edu.cn/" + data[i].picture})` }}>
                             <img key="bg-img" className="bg-img" alt="轮播图预览" src={"https://xuegong.twt.edu.cn/" + data[i].picture} />
-                            {/* <div className="bg-text">{data[i].title}</div> */}
-                            {/* <div className="bg-info">
-                                <p>{"第" + data[i].rank + "张"}</p>
-                            </div> */}
                         </div>
                     )
                 }

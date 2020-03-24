@@ -44,13 +44,4 @@ class LocalizedModal extends React.Component {
   }
 }
 
-// function confirm() {
-//   Modal.confirm({
-//     title: 'Confirm',
-//     content: 'Bla bla ...',
-//     okText: '确认',
-//     cancelText: '取消',
-//   });
-// }
-
 export default LocalizedModal;

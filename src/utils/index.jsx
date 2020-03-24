@@ -11,7 +11,7 @@ export const queryString = () => {
         if (!_queryString.hasOwnProperty(_pair[0])) {
             _queryString[_pair[0]] = decodeURIComponent(_pair[1]);
         } else if (typeof _queryString[_pair[0]] === 'string') {
-            const _arr = [ _queryString[_pair[0]], decodeURIComponent(_pair[1])];
+            const _arr = [_queryString[_pair[0]], decodeURIComponent(_pair[1])];
             _queryString[_pair[0]] = _arr;
         } else {
             _queryString[_pair[0]].push(decodeURIComponent(_pair[1]));

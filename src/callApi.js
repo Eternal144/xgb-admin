@@ -27,13 +27,4 @@ export const fetchApi = (apiPath, request = {}) => {
         }
     }
     return fetch(fullUrl, customRequest)
-    // .then(res => res.json())
-    // .then(json => {
-    //     if (json.err) {
-    //         return Promise.reject(json);
-    //     }
-    //     const camelizedJson = camelizeKeys(json);
-    //     console.log(camelizedJson);
-    //     return camelizedJson;
-    // })
 };

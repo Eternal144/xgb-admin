@@ -7,10 +7,6 @@ import {
     Table,
 } from 'antd';
 import NaviModifyList from './NaviModify'
-import NaviAdd from './NaviAddForm'
-
-
-const { Column } = Table;
 
 class NaviModifyCon extends React.Component {
     state = {

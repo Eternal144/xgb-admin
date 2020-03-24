@@ -3,10 +3,8 @@ import { Form, Select, Button, Icon, Col, Popconfirm, Input, Skeleton, message, 
 import { fetchApi } from '../../callApi';
 import { getArticleTitle } from '../../constants/api/navi';
 import './customize.css';
-import Uploader from '../uploader/UpLoader';
 import { updateLowwer, addlowwer, lowwerModelPreview, upperModelPreview, messageList, updateUpper, } from '../../constants/api/model';
 import ImgCropper from '../uploader/Cropper';
-// import { getFileItem } from 'antd/lib/upload/utils';
 const { Option, OptGroup } = Select;
 const confirmSaveText = '是否保存设置?';
 
@@ -307,7 +305,6 @@ class BindMan extends Component {
         const { children } = moduleData
         let childArr = [];
         console.log(children)
-        // console.log(children)
         //根据本地数据渲染。删除的时候根据id删除。
         children.map((obj, index) => {
             // console.log(obj.content1);

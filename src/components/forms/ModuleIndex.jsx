@@ -1,34 +1,24 @@
-/**
- * Created by hao.cheng on 2017/4/13.
- */
 import React, { Component } from 'react';
 import {
     Card, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, BackTop, Skeleton, notification,
     Spin
 } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom';
-import { Collapse, Result } from 'antd';
 import './customize.css';
-import Preview from './PreviewModel';
-// import { getNaviInfo } from '../../constants/api/navi';
 import { getCateLists } from '../../constants/api/category';
-import { lowwerModelPreview, upperModelPreview } from '../../constants/api/model';
+import { upperModelPreview } from '../../constants/api/model';
 import { fetchApi } from '../../callApi';
 import ModuleCommon from "./ModuleCommon";
 import ModelHelp from './help';
 import ModuleManager from './ModuleManager';
 
 
-const { Panel } = Collapse;
-const FormItem = Form.Item;
-const Option = Select.Option;
-
 const openNotification = (index) => {
     const key = `open${Date.now()}`;
     const btn = (
         <Button type="primary" size="small" onClick={() => notification.close(key)}>
             知道了
-      </Button>
+        </Button>
     );
     notification.open({
         message: "使用说明",
@@ -98,26 +88,6 @@ class BasicForms extends Component {
                     <Row gutter={16}>
                         <Col className="gutter-row" md={24}>
                             <div className="gutter-box">
-                                {/* <Collapse bordered={false}>
-                                <Panel header="效果预览" key="model-preview" extra="修改后刷新生效">
-                                    {this.state.readyUpperModel && this.state.isUpperLoaded ?
-                                        <div>
-                                            <Col span={9}>
-                                                <Preview model="A" data={this.state.modelA} />
-                                            </Col>
-                                            <Col span={15}>
-                                                <Preview model="B" data={this.state.modelB} />
-                                            </Col>
-                                            <Col span={9}>
-                                                <Preview model="C" data={this.state.modelC} />
-                                            </Col>
-                                            <Col span={15}>
-                                                <Preview model="D" data={this.state.modelD} />
-                                            </Col>
-                                        </div>
-                                        : <Result title="有必要的设置未完成,请检查" extra="完成后此信息自动消失" />}
-                                </Panel>
-                            </Collapse> */}
                                 <Row gutter={16}>
                                     <Col span={12}>
                                         <Card className="banner-edit-card" title="管理模块A" bordered={false} extra={<Button type="link" size="small" onClick={() => openNotification(0)}><Icon type="info-circle" />帮助</Button>}>
@@ -154,7 +124,6 @@ class BasicForms extends Component {
                         </Col>
                     </Row> : <Spin size="large" />
                 }
-
                 <BackTop />
             </div>
         )

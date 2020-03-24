@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Select, Form, Button, message } from 'antd';
 import { fetchApi } from '../../callApi';
 import { getArticleTitle } from '../../constants/api/navi';
-
 import { updateUpper } from '../../constants/api/model'
 
 

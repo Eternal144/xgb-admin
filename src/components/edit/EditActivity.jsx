@@ -7,7 +7,6 @@ import BreadcrumbCustom from '../BreadcrumbCustom';
 import 'braft-editor/dist/index.css';
 import FileUpLoader from '../uploader/UpLoader';
 import { fetchApi } from '../../callApi';
-// import { getNaviInfo } from '../../constants/api/navi';
 import { getCategory } from '../../constants/api/category';
 import { postActivityMessage, editActivityMessage, editMessage } from '../../constants/api/edit';
 import 'braft-editor/dist/index.css';
@@ -15,7 +14,6 @@ import 'braft-extensions/dist/table.css';
 import Table from 'braft-extensions/dist/table';
 
 const { Option, OptGroup } = Select;
-const { MonthPicker } = DatePicker;
 
 class EditorDemo extends React.Component {
     constructor(props) {

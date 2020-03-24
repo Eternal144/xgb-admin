@@ -1,14 +1,9 @@
-/**
- * Created by 叶子 on 2017/8/13.
- */
 import React, { Component } from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import AllComponents from '../components';
 import routesConfig from './config'; //在这里进行更改。
 import queryString from 'query-string';
-import { fetchApi } from '../callApi'
-import { getNaviInfo } from '../constants/api/navi'
 
 export default class CRouter extends Component {
     constructor(props) {
@@ -18,31 +13,6 @@ export default class CRouter extends Component {
         }
     }
 
-
-    componentDidMount = () => {
-        // const { apiPath, request } = getNaviInfo();
-        // fetchApi(apiPath, request)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         const aaa = data.data;
-        //         //在这里要获取一级所有的一级。
-        //         let arr = aaa.map((key, i) => { //
-        //             let obj = {
-        //                 id: key.id,
-        //                 title: key.title,
-        //                 icon: 'database',
-        //                 component: 'SrcMan',
-        //                 key: `/app/resource/${key.id}`
-        //             };
-        //             return obj;
-        //         })
-        //         let { routesConfig } = this.state;
-        //         routesConfig.menus[1].subs = arr;
-        //         this.setState({
-        //             routesConfig: routesConfig
-        //         })
-        //     })
-    }
     render() {
         const { routesConfig } = this.state;
         return (
@@ -50,7 +20,6 @@ export default class CRouter extends Component {
                 {Object.keys(routesConfig).map(key =>
                     routesConfig[key].map(r => {
                         const route = r => {
-                            // console.log(index); //2级才有的
                             const Component = AllComponents[r.component];
                             return (
                                 <Route
@@ -81,8 +50,6 @@ export default class CRouter extends Component {
                                             </DocumentTitle>
                                         );
                                         return wrappedComponent
-                                        // ? 
-                                        // : this.requireLogin(wrappedComponent, r.auth);
                                     }}
                                 />
                             );
@@ -97,7 +64,6 @@ export default class CRouter extends Component {
                         }
                     })
                 )}
-                {/* <Route render={() => <Redirect to="/404" />} /> */}
             </Switch>
         )
     }

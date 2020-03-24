@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Icon, Select, Button, Card, Col, message, } from 'antd';
-import { showMessageList, addBanner, editBanner, delBanner } from '../../../constants/api/banner';
+import { addBanner, editBanner, delBanner } from '../../../constants/api/banner';
 import { fetchApi } from '../../../callApi';
 import ImgCropper from '../../uploader/Cropper';
 import { getNavAllArticle } from '../../../constants/api/navi';
