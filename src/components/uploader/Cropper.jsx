@@ -40,11 +40,11 @@ export default class ImgCropper extends Component {
     }
 
     handleGetresultImgUrl = (src) => {
-        console.log("aaaa")
-        console.log(src)
+        // console.log(src)
+        sessionStorage.setItem("imgUrl", src)
         // const str = URL.createObjectURL(blob);
-        const { getLink } = this.props;
-        getLink(src);
+        // const { getLink } = this.props;
+        // getLink(src);
         // this.props.getLink()
         // this.setState({
         //     [key]: str

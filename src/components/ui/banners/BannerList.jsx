@@ -60,7 +60,7 @@ class BannerList extends Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.setState({
                         catData: data.data,
                         isCatLoaded: true,
@@ -72,7 +72,7 @@ class BannerList extends Component {
             fetchApi(apiPath, request)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data)
+                    // console.log(data.data)
                     this.setState({
                         banData: data.data,
                         isBannerLoaded: true,

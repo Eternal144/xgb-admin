@@ -74,20 +74,7 @@ class BindMan extends Component {
     }
     //渲染该二级标题下所有文章题目。
 
-    //获取可选文章title
-    getArtiTitle = (id) => {
-        const { apiPath, request } = getArticleTitle(id);
-        fetchApi(apiPath, request)
-            .then(res => res.json())
-            .then(data => {
-                // console.log(data)
-                if (data.error_code === 0) {
-                    this.setState({
-                        articleData: data.data
-                    })
-                }
-            })
-    }
+
 
     noNaviNotification = () => {
         message.error("栏目列表获取失败");
@@ -279,6 +266,21 @@ class BindMan extends Component {
         }
     }
 
+    //获取可选文章title
+    getArtiTitle = (id) => {
+        const { apiPath, request } = getArticleTitle(id);
+        fetchApi(apiPath, request)
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data)
+                if (data.error_code === 0) {
+                    this.setState({
+                        articleData: data.data
+                    })
+                }
+            })
+    }
+
     handleChange = () => {
         this.setState({
             moduleData: this.resetModuleData()
@@ -390,8 +392,8 @@ class BindMan extends Component {
         const { moduleData } = this.state; //详细信息？
         return (
             <div>
-                <Form {...formItemLayout}  >
-                    <Form.Item label='栏目选择'>
+                <Form {...formItemLayout} >
+                    <Form.Item label="栏目选择">
                         {getFieldDecorator(`nav_id`, {
                             rules: [
                                 {
@@ -414,8 +416,7 @@ class BindMan extends Component {
                             ],
                             initialValue: moduleData ? moduleData.description : null
                         })(
-                            <Input style={{ width: '60%' }} placeholder="35字以内(选填)" onChange={this.handleChange} >
-                            </Input>
+                            <Input style={{ width: '60%' }} placeholder="35字以内(选填)" onChange={this.handleChange} />
                         )
                         }
                     </Form.Item> : null}
