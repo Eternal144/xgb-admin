@@ -56,16 +56,12 @@ class CateModifyCon extends React.Component {
                 .then(resData => {
                     if (!resData.error_code) {
                         message.success(msg + "成功")
-                        if (msg === "添加") {
-                            form.resetFields()
-                        }
+                        form.resetFields();
                     }
-
                 })
                 .catch(resData => {
                     message.error(msg + "失败,请检查网络环境后重试")
                 })
-
         });
     };
     //如果有props的话初始化数据。
@@ -122,13 +118,13 @@ class CateModifyCon extends React.Component {
                     <Col span={18} offset={3}>
                         <Card style={{ margin: "30px" }} >
                             <Form {...formItemLayout} onSubmit={this.handleSubmit} >
+                                {data && data.title ? <p>原标题为:{data.title}</p> : null}
                                 <Form.Item label="栏目标题">
                                     {getFieldDecorator('title', {
                                         rules: [{
                                             required: true,
                                             message: '请输入该栏目名称'
                                         }],
-                                        initialValue: data && data.title ? data.title : ""
                                     })(
                                         <Input
                                             placeholder="请输入栏目标题"

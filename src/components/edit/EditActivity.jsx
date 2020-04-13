@@ -305,7 +305,7 @@ class EditorDemo extends React.Component {
     }
 
     render() {
-        console.log(this.state.isPosting)
+        // console.log(this.state.isPosting)
         const { editorState } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const PlaceDefault = "50字以内";

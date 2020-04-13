@@ -173,6 +173,7 @@ class BannerModify extends Component {
                         <Col span={20}>
                             {/* 图片上传 */}
                             <ImgCropper w="1920" h="600" />
+                            <p>推荐尺寸为 ( 1920 x 600 ) 或同比例 ( 16 x 5 ) </p>
                         </Col>
                         <Col span={24} style={{ textAlign: 'right' }}>
                             <Button key={index} type="danger" htmlType="button" onClick={this.delItem.bind(this, data.id)}><Icon type="delete" />删除</Button>
